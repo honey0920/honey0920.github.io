@@ -28,7 +28,7 @@
 <meta property="og:image" content="http://chart.googleapis.com/chart?cht=tx&chl= d_c = \sqrt{(l_j-l_i)^2+(a_j-a_i)^2+(b_j-b_i)^2}">
 <meta property="og:image" content="http://chart.googleapis.com/chart?cht=tx&chl= d_s = \sqrt{(x_j-x_i)^2 + (y_j-y_i)^2}">
 <meta property="og:image" content="http://chart.googleapis.com/chart?cht=tx&chl= D' = \sqrt{(\frac{d_c}{N_c})^2 + (\frac{d_s}{N_s})^2}">
-<meta property="og:updated_time" content="2017-03-30T13:58:23.464Z">
+<meta property="og:updated_time" content="2017-03-30T14:00:02.855Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度估计&平面检测小结">
 <meta name="twitter:description" content="最近一段时间已知忙着赶图像分析与理解的项目，在三个星期内强行接触了CNN,MRF,Caffe,openCV在内的很多东西。现在项目已经完全结束了，反而有点怀念看论文写代码的日子～希望能用这篇博文将我这段时间的工作作一个整理，也方便我之后写报告。
@@ -219,7 +219,7 @@
 <h4 id="c-小结"><a href="#c-小结" class="headerlink" title="c.小结"></a>c.小结</h4><p>根据最后的实验结果，无论是室内的数据集NYU Depth还是室外的数据集KITTI这种方式都全面吊打make 3D。只要涉及到基于特征的分类或者回归，现在CNN似乎都处于王者地位。唯一的缺点可能就是训练的时间长吧。</p>
 <h3 id="3-代码实现"><a href="#3-代码实现" class="headerlink" title="3. 代码实现"></a>3. 代码实现</h3><p>最开始看的就是CNN那一篇，当时为我们实验室没有GPU而焦虑烦躁了很久很久。之后上github发现有这篇论文的<a href="https://github.com/janivanecky/Depth-Estimation" target="_blank" rel="external">重现代码</a>，于是我开始撸起袖子一点一点装caffe，opencv,从零开始接触这些，居然发现还挺顺利的，都被自己感动了。严格的说起来，这一个部分的代码不算是我实现的,我只是一个搬运工。但是为了能将代码运行成功我也是费了相当大的功夫的。</p>
 <p>我们项目里用到的是github博主已经训练好的<a href="https://dl.dropboxusercontent.com/u/65091385/model_norm_abs_100k.caffemodel" target="_blank" rel="external">caffemodel</a>，这个model是在NYU的训练集上训练的，也就是说我如果直接拿来用几乎是只符合室内的:( …这里的test script就是将输入图片resize成固定的大小，然后用吧input扔进训练好的模型就可以得到output了。</p>
-<figure class="highlight python"><figcaption><span>input = loadImage(imagename, 3, WIDTH, HEIGHT)</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">input *= <span class="number">255</span></div><div class="line">input -= <span class="number">127</span></div><div class="line">output = testNet(net, input)</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">input = loadImage(imagename, <span class="number">3</span>, WIDTH, HEIGHT)</div><div class="line">input *= <span class="number">255</span></div><div class="line">input -= <span class="number">127</span></div><div class="line">output = testNet(net, input)</div></pre></td></tr></table></figure>
 <p>ps：我发现原来这篇NIPS 2014的paper有<a href="http://www.cs.nyu.edu/~deigen/depth/" target="_blank" rel="external">项目网站</a>,而且其中还有source code~是在theado框架下写的，weights也在里面！我决定安装一波theado再做一次实验。</p>
 <h2 id="平面检测"><a href="#平面检测" class="headerlink" title="平面检测"></a>平面检测</h2><p>在做完深度估计之后，思考了蛮久深度估计和平面检测的共同之处。看了[5]之后才发现利用深度信息3D重建之后要探测平面就容易了很多。深度估计和平面检测结合起来在机器人技术，场景理解等方面都有所应用。</p>
 <h3 id="1-利用深度信息与超像素算法"><a href="#1-利用深度信息与超像素算法" class="headerlink" title="1. 利用深度信息与超像素算法"></a>1. 利用深度信息与超像素算法</h3><p>这篇论文([5])看了很多遍，前面一部分是按照前面提到的MRF模型得到了深度信息，后面一个部分则是用重建后的3D点和超像素算法判断共面。论文中用到的超像素算法是[6]，这是一个基于图的贪心聚类算法，实现比较简单，但是年代比较久远。在经过了一番调研之后，我决定利用PAMI 2012中一片论文[7]提到的SLIC方法来做过分割，这个方法的核心思想是利用颜色和位置的距离信息作KNN聚类。</p>
@@ -472,11 +472,11 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">技术</a>
+                <a href="javascript:void(0)" class="js-tag color3">生活</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">生活</a>
+                <a href="javascript:void(0)" class="js-tag color3">技术</a>
               </li>
             
             <div class="clearfix"></div>
