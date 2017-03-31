@@ -187,7 +187,7 @@
 <li><p>深度估计和平面检测的工作结合起来可以有很多应用，例如3D重建，场景理解，机器人技术以及SLAM<br> （Simutaneous Localization And Mapping）问题。</p>
 </li>
 </ul>
-<h2 id="深度估计"><a href="#深度估计" class="headerlink" title="深度估计"></a>深度估计</h2><h3 id="1-利用MRF-马尔科夫随机场-建模"><a href="#1-利用MRF-马尔科夫随机场-建模" class="headerlink" title="1. 利用MRF(马尔科夫随机场)建模"></a>1. 利用MRF(马尔科夫随机场)建模</h3><p>这里介绍的是参考文献[1]中提到的一种方法，之后同一波人写的论文包括[2],[3]等都是用到了相似的方式。关于这<br>相关的project还有一个网站<a href="http://www.cs.cornell.edu/~asaxena/learningdepth/" target="_blank" rel="external">Make 3D</a>,这个项目在[3]中有<br>较多介绍，这个网站里也有一些关于3D重建所需要的数据集。</p>
+<h2 id="深度估计"><a href="#深度估计" class="headerlink" title="深度估计"></a>深度估计</h2><h3 id="1-利用MRF-马尔科夫随机场-建模"><a href="#1-利用MRF-马尔科夫随机场-建模" class="headerlink" title="1. 利用MRF(马尔科夫随机场)建模"></a>1. 利用MRF(马尔科夫随机场)建模</h3><p>这里介绍的是参考文献[1]中提到的一种方法，之后同一波人写的论文包括[2],[3]等都是用到了相似的方式。关于这相关的project还有一个网站<a href="http://www.cs.cornell.edu/~asaxena/learningdepth/" target="_blank" rel="external">Make 3D</a>,这个项目在[3]中有较多介绍，这个网站里也有一些关于3D重建所需要的数据集。</p>
 <h4 id="ensp-a-特征提取"><a href="#ensp-a-特征提取" class="headerlink" title="&ensp;a.特征提取"></a>&ensp;a.特征提取</h4><p>作者表示，人类之所以可以很清楚的从单个的单目图像中获取深度信息，是因为用到了纹理变化，纹理梯度还有颜色等“单目线索”。所以只要我们从图片中提取了这些特征，并且有监督的让机器去学习它，那么就可以让机器从单幅的单目图像中获得深度信息。</p>
 <p>在这篇文章中，作者把一张图分割成很多patch，然后估计每一个patch的深度。而对于这些patch，有”绝对”和“相对”两对特征。绝对特征用了纹理变化，纹理梯度和雾霾信息。这里用到了9个3*3的Law’s Mask，6个方向的梯度filter，两个颜色通道（YCbCr颜色空间中的Cb和Cr一共十七个模板。而能量</p>
 <p><img src="http://chart.googleapis.com/chart?cht=tx&chl= E_i=\sum_{(x,y)\in patch(i))} |I(x,y)*F_n(x,y))|^k" style="border:none;">(k=1,2)<br>计算了模板和原图像卷积后的L1与L2距离当做是最初的34个特征向量。除此之外，为了更好的捕捉到全局的信息，在这34个特征向量的基础上还加上了三个不同尺度的四邻域mask。三个不同尺度的四领域机上4个列特征所以特征向量一共的维数是19*34=646维。为了表示相对深度，作者为17个特征中的每一个feature vector计算了10个bin的直方图。<br><img src="/img/blogImg/features-02.png" alt=""></p>
@@ -450,11 +450,11 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">技术</a>
+                <a href="javascript:void(0)" class="js-tag color3">生活</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">生活</a>
+                <a href="javascript:void(0)" class="js-tag color3">技术</a>
               </li>
             
             <div class="clearfix"></div>
