@@ -242,7 +242,7 @@
 <p>template负责的是展示的页面，我的项目中有一个demo.html页面负责选择图片上传，还有一个show_pic.html的页面负责展示原图，深度图，两种不同形式的平面检测图。具体参见我们的<a href="http://itec.hust.edu.cn/~chenghn/project/Depth_Estimation/material/Demo_Video.mp4" target="_blank" rel="external">Demo Video</a>这两个页面放在新建的template文件夹中。</p>
 <p>除此之外，还要在url.py里进行配置，这一步主要是将在浏览器地址栏中输入的url与views.py中渲染页面的函数对应起来。</p>
 <p>这一部分详细见 <a href="https://docs.djangoproject.com/en/1.10/intro/tutorial03/" target="_blank" rel="external">Part3:Views and templates</a>.</p>
-<h3 id="3-代码实现-2"><a href="#3-代码实现-2" class="headerlink" title="3. 代码实现"></a>3. 代码实现</h3><p>处理图片之后显示的代码在views.py中的get<em> pic 函数中，在get</em> epth 与get_ plane 两个函数中都把处理过后的图片保存下来了。</p>
+<h3 id="3-代码实现-2"><a href="#3-代码实现-2" class="headerlink" title="3. 代码实现"></a>3. 代码实现</h3><p>处理图片之后显示的代码在views.py中的get _pic 函数中，在get <em>depth 与get</em> plane 两个函数中都把处理过后的图片保存下来了。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_pic</span><span class="params">(request)</span>:</span></div><div class="line"><span class="keyword">if</span> request.method==<span class="string">'POST'</span>:</div><div class="line">	<span class="keyword">try</span>:</div><div class="line">		image = request.FILES[<span class="string">'image'</span>]</div><div class="line">		img = Image.open(image)</div><div class="line">		filepath=<span class="string">'media/origin.png'</span></div><div class="line">		img.save(filepath)</div><div class="line">		get_depth(filepath)</div><div class="line">		get_planar(<span class="string">'media/img.png'</span>,<span class="string">'media/depth.png'</span>)</div><div class="line">		<span class="keyword">return</span> render_to_response(<span class="string">'show_pic.html'</span>,&#123;<span class="string">'image'</span>:<span class="string">'/media/test.png'</span>&#125;)</div><div class="line">	<span class="keyword">except</span> Exception,e:</div><div class="line">		<span class="keyword">return</span> HttpResponse(e)</div></pre></td></tr></table></figure>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>前前后后大概花了三个星期来完成这个项目，又花了三天的时间码完这篇1w字的技术博客真是满满的成就感啊~这个项目的源码在<a href="https://github.com/honey0920/depth-estimation-plane-detection" target="_blank" rel="external">这里</a>，我们的项目网站在<a href="http://itec.hust.edu.cn/~chenghn/project/Depth_Estimation/index.html" target="_blank" rel="external">这里</a>。说起来我对机器学习和深度学习也并没有很了解，关于深度估计和平面检测这块我也是第一次接触，上文中很多提到的方法可能有错误或者不足，也希望大家能指出来。接下来自己想学习部分在<strong>python爬虫</strong> /  <strong>tensorflow写深度学习</strong>。立个flag吧，四月份还会写一篇技术博客。加油！</p>
 <h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
@@ -449,11 +449,11 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">技术</a>
+                <a href="javascript:void(0)" class="js-tag color3">生活</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">生活</a>
+                <a href="javascript:void(0)" class="js-tag color3">技术</a>
               </li>
             
             <div class="clearfix"></div>
