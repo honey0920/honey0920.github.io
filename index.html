@@ -158,6 +158,114 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-scrapy-03" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/25/scrapy-03/">网络爬虫的原理与应用</a>
+    </h1>
+  
+
+        
+        <a href="/2017/04/25/scrapy-03/" class="archive-article-date">
+  	<time datetime="2017-04-25T14:30:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>说起来想学python技术也有很久很久了。在大四python初入门时就觉得想爬啥就爬啥，一键保存所有图片掌握全世界的感觉真是太酷了。这次在完成了实验室项目和图像课的课程项目之后，想抽出来时间好好学习一下爬虫技术，一方面可以练练自己python代码的能力，另外也想玩转爬虫神器走上人生巅峰。本着这样的目标，我花了大概十天的时间写了一个爬取电影票价格的代码，当然撸代码能力有限代码并没有写的那么优雅，不过感觉自己还是进步了不少。</p>
+<h2 id="爬虫技术与Python"><a href="#爬虫技术与Python" class="headerlink" title="爬虫技术与Python"></a>爬虫技术与Python</h2><p>网络爬虫（又被称为网页蜘蛛，网络机器人，在FOAF社区中间，更经常的称为网页追逐者），是一种按照一定的规则，自动地抓取万维网信息的程序或者脚本。另外一些不常使用的名字还有蚂蚁、自动索引、模拟程序或者蠕虫。（摘自百度百科）简单的来说，爬虫就是获取浏览器中打开的html页面中你需要的信息，整个过程又分为获取页面，提取信息，存储信息三个部分。其实也就是在模拟输入url到浏览器返回页面的过程，即以下四个步骤：</p>
+<ul>
+<li>查找域名对应的IP地址。</li>
+<li>向IP对应的服务器发送请求。</li>
+<li>服务器响应请求，发回网页内容。</li>
+<li>浏览器解析网页内容</li>
+</ul>
+<p>之所以要用python来爬虫，当然是因为“人生苦短，我用Python”，python里涉及到许多获取网络信息的模块，最基础的urllib/urllib2，requestes等，另外python中也可以方便的利用正则表达式匹配各种有用信息。下面简单说说爬虫技术中核心的要素。以下内容参考：<a href="https://github.com/lining0806/PythonSpiderNotes" target="_blank" rel="external">PythonSpiderNotes</a>。</p>
+<h3 id="基本抓取"><a href="#基本抓取" class="headerlink" title="基本抓取"></a>基本抓取</h3><p>抓取大多数情况属于get请求，即直接从对方服务器上获取数据。此外，对于带有查询字段的url，get请求一般会将来请求的数据附在url之后，以?分割url和传输数据，多个参数用&amp;连接。</p>
+<h3 id="登录处理"><a href="#登录处理" class="headerlink" title="登录处理"></a>登录处理</h3><p>有一些网站需要用特定的用户名和密码登陆了之后才能获取网页信息。这里登陆处理有两种方式：利用表单登录和利用session登录。</p>
+<ul>
+<li>使用表单登陆属于post请求，即先向服务器发送表单数据，服务器再将返回的cookie存入本地。</li>
+<li>使用cookie登陆，服务器会认为你是一个已登陆的用户，所以就会返回给你一个已登陆的内容。因此，需要验证码的情况可以使用带验证码登陆的cookie解决。</li>
+</ul>
+<h3 id="关于反爬虫"><a href="#关于反爬虫" class="headerlink" title="关于反爬虫"></a>关于反爬虫</h3><p>现在有很多网站都采取了反爬虫机制，有几种方式可以避免IP被block掉。</p>
+<ul>
+<li>使用代理，通过维护代理池来限制IP地址情况。</li>
+<li>每爬取几条信息就让系统sleep一段时间</li>
+<li>利用headers伪装成浏览器</li>
+</ul>
+<h3 id="多线程抓取"><a href="#多线程抓取" class="headerlink" title="多线程抓取"></a>多线程抓取</h3><p>多线程爬虫可以提高爬虫的效率，scrapy与pyspider等框架都可以直接利用多线程。</p>
+<h2 id="几个常用的包"><a href="#几个常用的包" class="headerlink" title="几个常用的包"></a>几个常用的包</h2><p>这里我只写我在项目里接触到的一些包，还有其他的包在之后用到了再在这里更新。</p>
+<h3 id="urllib与urllib2与re"><a href="#urllib与urllib2与re" class="headerlink" title="urllib与urllib2与re"></a>urllib与urllib2与re</h3><p>urllib与urllib2两个模块可以访问网络上的文件。通过一个简单的函数调用就可以把几乎任何的URL所指向的东西作为程序的输入。urllib与urllib2两个模块的功能差不多，但是如果需要使用HTTP验证或是cookie，或是要为自己的协议编写扩展程序，那么urllib2会是更好的选择。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">request = urllib2.Request(url,headers = headers)</div><div class="line">response = urllib2.urlopen(request)</div><div class="line">content = response.read().decode(<span class="string">'utf-8'</span>)</div></pre></td></tr></table></figure>
+<p>这段代码得到的content是一个很长的字符串，其中的内容就是url对应的html页面。在得到了html内容的字符串，可以利用正则表达式提取content内容中感兴趣的部分。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">pattern = re.compile(<span class="string">'reqgular expression'</span>,re.S)</div><div class="line">items = re.findall(pattern,content)</div></pre></td></tr></table></figure></p>
+<h3 id="requests与beautifulsoup"><a href="#requests与beautifulsoup" class="headerlink" title="requests与beautifulsoup"></a>requests与beautifulsoup</h3><p>用urllib2还是比较繁琐，不仅需要好几行代码来获得content，由于url错误会抛出异常，用到urllib2的时候需要手动捕捉异常，这时requests神器就应运而生，一句话，哦不一行代码就可以搞定urllib十行代码才能搞定的。除此之外，requests中添加报头，使用代理和session都是很容易的。requests的文档在<a href="http://docs.python-requests.org/en/master/" target="_blank" rel="external">这里</a>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">content = requests.get(url).content</div></pre></td></tr></table></figure>
+<p>beautifulsoup可以将网页编变成结构化数据，免去了利用正则表达式来匹配数据的繁琐。具体来说，beautifulsoup里每一个标签都可以作为节点，而属性的名字和值作为字典的key和value。这样访问数据就变得很方便优雅和pythonic。除此之外，在bs中查询某个元素也十分的方便，利用find_all（）方法可以通过xpath/css选择器/类名等来定位元素。下面是一个简单的构造bs对象并查找节点的例子。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">html = requests.get(taobao_url,headers = headers).content.decode(<span class="string">'utf-8'</span>)</div><div class="line">soup = BeautifulSoup(html,<span class="string">'html.parser'</span>)</div><div class="line">items = soup.find_all(<span class="string">'div'</span>,attrs=&#123;<span class="string">'class'</span>:<span class="string">"tab-movie-list"</span>&#125;)</div></pre></td></tr></table></figure>
+<p>bs4的文档在<a href="http://beautifulsoup.readthedocs.io/zh_CN/latest/" target="_blank" rel="external">这里</a>。</p>
+<h3 id="phantomjs与selenium"><a href="#phantomjs与selenium" class="headerlink" title="phantomjs与selenium"></a>phantomjs与selenium</h3><p>爬取静态页面可能用上面的工具就够了，然而网页上很多内容是通过js加载的，利用urllib或是requests只能得到静态显示的页面，一些动态加载的数据无法获取。这里可能就需要用到selenium与phantomjs两个神器了。</p>
+<ul>
+<li>PhantomJS是一个无界面的,可脚本编程的WebKit浏览器引擎。它原生支持多种web 标准：DOM 操作，CSS选择器，JSON，Canvas 以及SVG。它可以像浏览器一样渲染js页面。</li>
+<li>Selenium 是自动化测试工具。它支持各种浏览器，包括 Chrome，Safari，Firefox 等主流界面式浏览器，如果你在这些浏览器里面安装一个 Selenium 的插件，那么便可以方便地实现Web界面的测试。</li>
+</ul>
+<p>如果将PhantomJS和Selenium结合在一起，那么就可以用一个快速方便的浏览器解析动态页面，再用Selenium来进行拖拽，点击，输入等自动操作，这样你想要的信息就可以轻松获取啦~ 下面是我用到的用这两个工具定位元素的小段代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">driver = webdriver.PhantomJS()  </div><div class="line">   driver.get(url)</div><div class="line">   time.sleep(<span class="number">1</span>)</div><div class="line">   dateItems = driver.find_elements_by_xpath(<span class="string">"//div[@class='dates clearfix J-dates']/a"</span>)</div></pre></td></tr></table></figure>
+<p>由于js执行时需要时间的，所以不管是在渲染页面或是进行其他点击操作时，可能需要sleep一段时间来等待js的渲染。除了Selenium自带的通过xpath/css/class定位元素的功能以及点击，拖拽等功能，webdriver还可以直接用driver.execute_script（）方法来执行js语句。phantomjs的文档在<a href="http://phantomjs.org/quick-start.html" target="_blank" rel="external">这里</a>,selenium的文档在<a href="http://selenium-python.readthedocs.io/index.html" target="_blank" rel="external">这里</a>。</p>
+<h2 id="实战：爬取电影票"><a href="#实战：爬取电影票" class="headerlink" title="实战：爬取电影票"></a>实战：爬取电影票</h2><p>上面的一些知识都是我在实际写代码的碰到问题解决问题然后收获的知识点。一开始写爬虫其实就是平时特别喜欢看电影，想找到一个平台的票价是最低的。结果我很幸运的发现了<a href="https://github.com/LiangCY/MovieTickets" target="_blank" rel="external">MovieTickets</a>项目，这是一个用js爬虫的电影票价项目，我用到了这个项目中的架构开始撸起了我自己的python代码。主要想法就是先上 淘宝/美团/点评/格瓦拉 爬取最近上映的电影信息，然后在上这四个平台爬取相应位置（我爬取的是洪山区）的电影院信息，最后根据不同平台对应的电影和电影院信息查询到相关的票价信息。爬取的信息用mangodb存储，前端用flask框架展示了爬取的电影票价信息。</p>
+<p>思路还是比较简单，但是过程中我也踩了不少坑。</p>
+<ul>
+<li>不同平台中电影的名字和电影院的名字有时候会有差异，电影的名字主要就是大小写，转换一下问题不大，但是电影院的名字差别就有点大。我想到了两个解决方案：用去掉了范围信息（如XX市XX区）的位置信息来匹配，还有就是用动态规划的<a href="http://blog.csdn.net/zzran/article/details/8274735" target="_blank" rel="external">字符串相似度</a><br>方法来匹配。两种方法的结果都没有特别好。最后还是手动自己补充了一些电影院和对应ID。</li>
+<li>爬取电影票的时候，当时因为老爬取上映不久的速激8，一爬应该一百多条数据了，然后IP经常被block了，突然出现找不到元素整个人懵逼，各种检查才发现是反爬虫机制让我掉坑了。这里一定要注意爬了一条数据就给他sleep一下。嗯，爬虫与反爬虫的斗争永无止境。</li>
+<li>在<a href="https://github.com/LiangCY/MovieTickets" target="_blank" rel="external">MovieTickets</a>项目中是定时爬取电影票价，全部存在mangodb中，等访问url时再搜索出相应条目显示。我这里只是在项目刚run的时候从网上爬取了电影和电影院的信息，存储在了mangodb中，然后点击一个电影+电影院链接之后再去爬取对应的票价信息，这样会导致响应很慢，也不够工程化。可是这个定时爬取我觉得实现起来可能还有点难度，所以暂时就放弃。：）</li>
+</ul>
+<p>最后，我的项目在<a href="https://github.com/honey0920/TicketPrices" target="_blank" rel="external">这里</a>。在三月底立下的四月写一篇博客的flag实现了，也算是又get了一项技能。接下来的计划是更深入了解SVM/DB/NN/LR等机器学习算法，scikit-learn源码解读与应用。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技术</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/04/25/scrapy-03/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-depth-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -449,11 +557,11 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">生活</a>
+                <a href="javascript:void(0)" class="js-tag color3">技术</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">技术</a>
+                <a href="javascript:void(0)" class="js-tag color3">生活</a>
               </li>
             
             <div class="clearfix"></div>

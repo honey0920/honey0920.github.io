@@ -6,39 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://honey0920.github.io">
-  <title>深度估计&amp;平面检测小结 | 野草集</title>
+  <title>网络爬虫的原理与应用 | 野草集</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近一段时间已知忙着赶图像分析与理解的项目，在三个星期内强行接触了CNN,MRF,Caffe,openCV在内的很多东西。现在项目已经完全结束了，反而有点怀念看论文写代码的日子～希望能用这篇博文将我这段时间的工作作一个整理，也方便我之后写报告。
-问题描述
-深度估计是从2D图片中得到深度信息，深度估计主要分为两种形式：从单个的单目图像中获得深度信息，从一系列不同角度的单目图像中得到深度信息。在这个项">
+  <meta name="description" content="说起来想学python技术也有很久很久了。在大四python初入门时就觉得想爬啥就爬啥，一键保存所有图片掌握全世界的感觉真是太酷了。这次在完成了实验室项目和图像课的课程项目之后，想抽出来时间好好学习一下爬虫技术，一方面可以练练自己python代码的能力，另外也想玩转爬虫神器走上人生巅峰。本着这样的目标，我花了大概十天的时间写了一个爬取电影票价格的代码，当然撸代码能力有限代码并没有写的那么优雅，不过">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深度估计&平面检测小结">
-<meta property="og:url" content="https://honey0920.github.io/2017/03/30/depth-02/index.html">
+<meta property="og:title" content="网络爬虫的原理与应用">
+<meta property="og:url" content="https://honey0920.github.io/2017/04/25/scrapy-03/index.html">
 <meta property="og:site_name" content="野草集">
-<meta property="og:description" content="最近一段时间已知忙着赶图像分析与理解的项目，在三个星期内强行接触了CNN,MRF,Caffe,openCV在内的很多东西。现在项目已经完全结束了，反而有点怀念看论文写代码的日子～希望能用这篇博文将我这段时间的工作作一个整理，也方便我之后写报告。
-问题描述
-深度估计是从2D图片中得到深度信息，深度估计主要分为两种形式：从单个的单目图像中获得深度信息，从一系列不同角度的单目图像中得到深度信息。在这个项">
-<meta property="og:image" content="http://chart.googleapis.com/chart?cht=tx&chl= E_i=\sum_{(x,y)\in patch(i))} |I(x,y)*F_n(x,y))|^k">
-<meta property="og:image" content="https://honey0920.github.io/img/blogImg/features-02.png">
-<meta property="og:image" content="http://chart.googleapis.com/chart?cht=tx&chl= P(d|X;\theta,\sigma)=\frac{1}{Z}exp(-\sum_{i=1}^{M}\frac{(d_i(1)-x_i^T\theta_r)^2}{2\sigma^2_{1r}}-\sum_{s=1}^{3} \sum_{i=1}^{M} \sum_{j \in N_s(i)} \frac{(d_i(s)-d_j(s))^2}{2\sigma_{2rs}^{2} })">
-<meta property="og:image" content="http://chart.googleapis.com/chart?cht=tx&chl= \sigma_{2rs}^{2}=u_{rs}^{T}|y_{ijs}|">
-<meta property="og:image" content="https://honey0920.github.io/img/blogImg/model_structure-02.png">
-<meta property="og:image" content="http://chart.googleapis.com/chart?cht=tx&chl= D(y,y^*)=\frac{1}{2n^2}\sum_{i,j}((\log{y_i}-\log{y_j}-(\log{y_{i}^{*}- \log{y_{j}^{*}}}))^2">
-<meta property="og:image" content="http://chart.googleapis.com/chart?cht=tx&chl= \frac{1}{n}\sum_i d_i^2 - \frac{1}{n^2}\sum_{i,j}d_id_j = \frac{1}{n}\sum_id_i^2-\frac{1}{n^2}(\sum_i d_i)^2">
-<meta property="og:image" content="http://latex.codecogs.com/svg.latex? d_c = \sqrt{(l_j-l_i)^2 + (a_j-a_i)^2 + (b_j-b_i)^2}">
-<meta property="og:image" content="http://latex.codecogs.com/svg.latex?d_s = \sqrt{(x_j-x_i)^2 + (y_j-y_i)^2}">
-<meta property="og:image" content="http://latex.codecogs.com/svg.latex? D' = \sqrt{(\frac{d_c}{N_c})^2 + (\frac{d_s}{N_s})^2}">
-<meta property="og:image" content="http://latex.codecogs.com/svg.latex? \rho(S^A,S^B)">
-<meta property="og:image" content="http://latex.codecogs.com/svg.latex? K_S(S^A,S^B)=\sum_{q=1}^{Q}{\rho(S^A,S^B)^q}">
-<meta property="og:image" content="http://latex.codecogs.com/svg.latex? U(p)=\sum_{i\in S}V_1(p_i,r_i)+\sum_{i \in S}\sum_{j \in N_i}V_2(p_i,p_j)">
-<meta property="og:image" content="http://latex.codecogs.com/svg.latex? E(n)=\sum_{i\in S'}F_1(n_i,d_i)+\sum_{i \in S'}\sum_{j \in N_i}F_2(n_i,n_j)">
-<meta property="og:updated_time" content="2017-04-25T14:12:24.020Z">
+<meta property="og:description" content="说起来想学python技术也有很久很久了。在大四python初入门时就觉得想爬啥就爬啥，一键保存所有图片掌握全世界的感觉真是太酷了。这次在完成了实验室项目和图像课的课程项目之后，想抽出来时间好好学习一下爬虫技术，一方面可以练练自己python代码的能力，另外也想玩转爬虫神器走上人生巅峰。本着这样的目标，我花了大概十天的时间写了一个爬取电影票价格的代码，当然撸代码能力有限代码并没有写的那么优雅，不过">
+<meta property="og:updated_time" content="2017-04-25T14:53:59.658Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="深度估计&平面检测小结">
-<meta name="twitter:description" content="最近一段时间已知忙着赶图像分析与理解的项目，在三个星期内强行接触了CNN,MRF,Caffe,openCV在内的很多东西。现在项目已经完全结束了，反而有点怀念看论文写代码的日子～希望能用这篇博文将我这段时间的工作作一个整理，也方便我之后写报告。
-问题描述
-深度估计是从2D图片中得到深度信息，深度估计主要分为两种形式：从单个的单目图像中获得深度信息，从一系列不同角度的单目图像中得到深度信息。在这个项">
-<meta name="twitter:image" content="http://chart.googleapis.com/chart?cht=tx&chl= E_i=\sum_{(x,y)\in patch(i))} |I(x,y)*F_n(x,y))|^k">
+<meta name="twitter:title" content="网络爬虫的原理与应用">
+<meta name="twitter:description" content="说起来想学python技术也有很久很久了。在大四python初入门时就觉得想爬啥就爬啥，一键保存所有图片掌握全世界的感觉真是太酷了。这次在完成了实验室项目和图像课的课程项目之后，想抽出来时间好好学习一下爬虫技术，一方面可以练练自己python代码的能力，另外也想玩转爬虫神器走上人生巅峰。本着这样的目标，我花了大概十天的时间写了一个爬取电影票价格的代码，当然撸代码能力有限代码并没有写的那么优雅，不过">
   
     <link rel="alternative" href="/atom.xml" title="野草集" type="application/atom+xml">
   
@@ -178,103 +157,73 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-depth-02" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-scrapy-03" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      深度估计&amp;平面检测小结
+      网络爬虫的原理与应用
     </h1>
   
 
         
-        <a href="/2017/03/30/depth-02/" class="archive-article-date">
-  	<time datetime="2017-03-30T13:49:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-30</time>
+        <a href="/2017/04/25/scrapy-03/" class="archive-article-date">
+  	<time datetime="2017-04-25T14:30:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-25</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近一段时间已知忙着赶图像分析与理解的项目，在三个星期内强行接触了CNN,MRF,Caffe,openCV在内的很多东西。<br>现在项目已经完全结束了，反而有点怀念看论文写代码的日子～希望能用这篇博文将我这段时间的工作作一个整理，<br>也方便我之后写报告。</p>
-<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><ul>
-<li><p>深度估计是从2D图片中得到深度信息，深度估计主要分为两种形式：从<strong>单个</strong>的单目图像中获得深度信息，从一系列<br>不同角度的单目图像中得到深度信息。在这个项目中我用到的方式主要是第一种。</p>
-</li>
-<li><p>平面检测的目标是识别2D图像中属于同一个平面的一部分。</p>
-</li>
-<li><p>深度估计和平面检测的工作结合起来可以有很多应用，例如3D重建，场景理解，机器人技术以及SLAM<br> （Simutaneous Localization And Mapping）问题。</p>
-</li>
+        <p>说起来想学python技术也有很久很久了。在大四python初入门时就觉得想爬啥就爬啥，一键保存所有图片掌握全世界的感觉真是太酷了。这次在完成了实验室项目和图像课的课程项目之后，想抽出来时间好好学习一下爬虫技术，一方面可以练练自己python代码的能力，另外也想玩转爬虫神器走上人生巅峰。本着这样的目标，我花了大概十天的时间写了一个爬取电影票价格的代码，当然撸代码能力有限代码并没有写的那么优雅，不过感觉自己还是进步了不少。</p>
+<h2 id="爬虫技术与Python"><a href="#爬虫技术与Python" class="headerlink" title="爬虫技术与Python"></a>爬虫技术与Python</h2><p>网络爬虫（又被称为网页蜘蛛，网络机器人，在FOAF社区中间，更经常的称为网页追逐者），是一种按照一定的规则，自动地抓取万维网信息的程序或者脚本。另外一些不常使用的名字还有蚂蚁、自动索引、模拟程序或者蠕虫。（摘自百度百科）简单的来说，爬虫就是获取浏览器中打开的html页面中你需要的信息，整个过程又分为获取页面，提取信息，存储信息三个部分。其实也就是在模拟输入url到浏览器返回页面的过程，即以下四个步骤：</p>
+<ul>
+<li>查找域名对应的IP地址。</li>
+<li>向IP对应的服务器发送请求。</li>
+<li>服务器响应请求，发回网页内容。</li>
+<li>浏览器解析网页内容</li>
 </ul>
-<h2 id="深度估计"><a href="#深度估计" class="headerlink" title="深度估计"></a>深度估计</h2><h3 id="1-利用MRF-马尔科夫随机场-建模"><a href="#1-利用MRF-马尔科夫随机场-建模" class="headerlink" title="1. 利用MRF(马尔科夫随机场)建模"></a>1. 利用MRF(马尔科夫随机场)建模</h3><p>这里介绍的是参考文献[1]中提到的一种方法，之后同一波人写的论文包括[2],[3]等都是用到了相似的方式。关于这相关的project还有一个网站<a href="http://www.cs.cornell.edu/~asaxena/learningdepth/" target="_blank" rel="external">Make 3D</a>,这个项目在[3]中有较多介绍，这个网站里也有一些关于3D重建所需要的数据集。</p>
-<h4 id="ensp-a-特征提取"><a href="#ensp-a-特征提取" class="headerlink" title="&ensp;a.特征提取"></a>&ensp;a.特征提取</h4><p>作者表示，人类之所以可以很清楚的从单个的单目图像中获取深度信息，是因为用到了纹理变化，纹理梯度还有颜色等“单目线索”。所以只要我们从图片中提取了这些特征，并且有监督的让机器去学习它，那么就可以让机器从单幅的单目图像中获得深度信息。</p>
-<p>在这篇文章中，作者把一张图分割成很多patch，然后估计每一个patch的深度。而对于这些patch，有”绝对”和“相对”两对特征。绝对特征用了纹理变化，纹理梯度和雾霾信息。这里用到了9个3*3的Law’s Mask，6个方向的梯度filter，两个颜色通道（YCbCr颜色空间中的Cb和Cr一共十七个模板。而能量</p>
-<p><img src="http://chart.googleapis.com/chart?cht=tx&chl= E_i=\sum_{(x,y)\in patch(i))} |I(x,y)*F_n(x,y))|^k" style="border:none;">(k=1,2)<br>计算了模板和原图像卷积后的L1与L2距离当做是最初的34个特征向量。除此之外，为了更好的捕捉到全局的信息，在这34个特征向量的基础上还加上了三个不同尺度的四邻域mask。三个不同尺度的四领域机上4个列特征所以特征向量一共的维数是19*34=646维。为了表示相对深度，作者为17个特征中的每一个feature vector计算了10个bin的直方图。<br><img src="/img/blogImg/features-02.png" alt=""></p>
-<h4 id="ensp-b-概率模型"><a href="#ensp-b-概率模型" class="headerlink" title="&ensp;b.概率模型"></a>&ensp;b.概率模型</h4><p>为了表示相邻patch之间的深度关系，这里用到了MRF。除此之外，还对不同尺度邻域间的相互影响进行了建模。</p>
-<p><img src="http://chart.googleapis.com/chart?cht=tx&chl= P(d|X;\theta,\sigma)=\frac{1}{Z}exp(-\sum_{i=1}^{M}\frac{(d_i(1)-x_i^T\theta_r)^2}{2\sigma^2_{1r}}-\sum_{s=1}^{3} \sum_{i=1}^{M} \sum_{j \in N_s(i)} \frac{(d_i(s)-d_j(s))^2}{2\sigma_{2rs}^{2} })" style="border:none;"></p>
-<p>这里d表示不同尺度的目标像素与四邻域的均值，x表示的是上节获得的特征向量，而方差σ则与则与第i个patch与第j个patch的相对深度成正比，具体说来：<br><img src="http://chart.googleapis.com/chart?cht=tx&chl= \sigma_{2rs}^{2}=u_{rs}^{T}|y_{ijs}|" style="border:none;">，其中参数u的目的是使σ与d(i)-d(j)的平方更为接近。</p>
-<h4 id="ensp-c-小结"><a href="#ensp-c-小结" class="headerlink" title="&ensp;c.小结"></a>&ensp;c.小结</h4><p>这篇paper用到了在图像分析领域用的比较多的MRF模型来更好的表示图像中邻域之间的关系。而且除了一般使用的高斯MRF模型，还提出了拉普拉斯的MRF建模方式。这两种模型都有各适用之处。作者最后提出这种模型在分析相对深度比绝对深度效果好，绝对深度最多能够估计到81m。不得不提这篇在05年出的论文实验的performance已经非常好了，在CNN还没出来之前这种方式应该是业内很流行的。要说缺点，可能就是特征太多，参数也多，我真的是看了好几遍才看明白。= =|||。本来很想把MRF这种方式自己实现一遍都已经在网上下好数据集了，看着这么多要提取的特征又望而却步了（哭泣脸）。</p>
-<h3 id="2-利用CNN（卷积神经网络）"><a href="#2-利用CNN（卷积神经网络）" class="headerlink" title="2. 利用CNN（卷积神经网络）"></a>2. 利用CNN（卷积神经网络）</h3><p>12年CNN开始流行起来之后，似乎无论是分类还是回归都可以用CNN搞定，这篇用CNN估计深度的论文也出现的正是时候。利用AlexNet得到粗粒度的深度图再自己训练一个三层的神经网络得到细节部分工作量看起来也并不是特别大，当然不出意料的也得到了state-of-art的结果。[4]</p>
-<h4 id="a-网络结构"><a href="#a-网络结构" class="headerlink" title="a.网络结构"></a>a.网络结构</h4><p>这张图片就很清楚的说明了整个网络的结构，上面是把AlexNet的前五层拿出来，然后后面套了两个全连接层，得到了一个很coarse的深度图，只能看出一些模糊的特征。为了让它更清楚的表示局部特征，把原图再通过一个三层的神经网络训练，得到一些局部特征。最后与上面的coarse深度图结合一下，就可以得到最终的深度图。<br><img src="/img/blogImg/model_structure-02.png" alt=""> </p>
-<h4 id="b-Loss-function"><a href="#b-Loss-function" class="headerlink" title="b.Loss function"></a>b.Loss function</h4><p>为了评判得到的depth map与groud truth之间的差异，这篇paper运用了下面的误差函数：<br><img src="http://chart.googleapis.com/chart?cht=tx&chl= D(y,y^*)=\frac{1}{2n^2}\sum_{i,j}((\log{y_i}-\log{y_j}-(\log{y_{i}^{*}- \log{y_{j}^{*}}}))^2" style="border:none;"></p>
-<p>其中y表示的是通过神经网络得到的预测值，而y*表示的是真实值，这个式子化简之后得：<br><img src="http://chart.googleapis.com/chart?cht=tx&chl= \frac{1}{n}\sum_i d_i^2 - \frac{1}{n^2}\sum_{i,j}d_id_j = \frac{1}{n}\sum_id_i^2-\frac{1}{n^2}(\sum_i d_i)^2" style="border:none;"></p>
-<p>其实表示的就是每一个点的局部误差之和减去整张图片的整体误差，可以看做是一个归一化的处理。</p>
-<h4 id="c-小结"><a href="#c-小结" class="headerlink" title="c.小结"></a>c.小结</h4><p>根据最后的实验结果，无论是室内的数据集NYU Depth还是室外的数据集KITTI这种方式都全面吊打make 3D。只要涉及到基于特征的分类或者回归，现在CNN似乎都处于王者地位。唯一的缺点可能就是训练的时间长吧。</p>
-<h3 id="3-代码实现"><a href="#3-代码实现" class="headerlink" title="3. 代码实现"></a>3. 代码实现</h3><p>最开始看的就是CNN那一篇，当时为我们实验室没有GPU而焦虑烦躁了很久很久。之后上github发现有这篇论文的<a href="https://github.com/janivanecky/Depth-Estimation" target="_blank" rel="external">重现代码</a>，于是我开始撸起袖子一点一点装caffe，opencv,从零开始接触这些，居然发现还挺顺利的，都被自己感动了。严格的说起来，这一个部分的代码不算是我实现的,我只是一个搬运工。但是为了能将代码运行成功我也是费了相当大的功夫的。</p>
-<p>我们项目里用到的是github博主已经训练好的<a href="https://dl.dropboxusercontent.com/u/65091385/model_norm_abs_100k.caffemodel" target="_blank" rel="external">caffemodel</a>，这个model是在NYU的训练集上训练的，也就是说我如果直接拿来用几乎是只符合室内的:( …这里的test script就是将输入图片resize成固定的大小，然后用吧input扔进训练好的模型就可以得到output了。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">input = loadImage(imagename, <span class="number">3</span>, WIDTH, HEIGHT)</div><div class="line">input *= <span class="number">255</span></div><div class="line">input -= <span class="number">127</span></div><div class="line">output = testNet(net, input)</div></pre></td></tr></table></figure>
-<p>ps：我发现原来这篇NIPS 2014的paper有<a href="http://www.cs.nyu.edu/~deigen/depth/" target="_blank" rel="external">项目网站</a>,而且其中还有source code~是在theano框架下写的，weights也在里面！我决定安装一波theano再做一次实验。</p>
-<h2 id="平面检测"><a href="#平面检测" class="headerlink" title="平面检测"></a>平面检测</h2><p>在做完深度估计之后，思考了蛮久深度估计和平面检测的共同之处。看了[5]之后才发现利用深度信息3D重建之后要探测平面就容易了很多。深度估计和平面检测结合起来在机器人技术，场景理解等方面都有所应用。</p>
-<h3 id="1-利用深度信息与超像素算法"><a href="#1-利用深度信息与超像素算法" class="headerlink" title="1. 利用深度信息与超像素算法"></a>1. 利用深度信息与超像素算法</h3><p>这篇论文([5])看了很多遍，前面一部分是按照前面提到的MRF模型得到了深度信息，后面一个部分则是用重建后的3D点和超像素算法判断共面。论文中用到的超像素算法是[6]，这是一个基于图的贪心聚类算法，实现比较简单，但是年代比较久远。在经过了一番调研之后，我决定利用PAMI 2012中一片论文[7]提到的SLIC方法来做过分割，这个方法的核心思想是利用颜色和位置的距离信息作KNN聚类。</p>
-<h4 id="a-超像素算法SLIC"><a href="#a-超像素算法SLIC" class="headerlink" title="a.超像素算法SLIC"></a>a.超像素算法SLIC</h4><p>SLIC 即simple linear iterative clustering。分簇的依据是像素之间的颜色相似性与邻近性。其中颜色相<br>似性的度量因子是lab 颜色空间的L2 范数，颜色邻近性的度量因子是图像二维坐标空间xy。因而综合的度量因子<br>是[labxy]五维空间。下面所述的距离度量因子由下式计算得到：</p>
-<p><img src="http://latex.codecogs.com/svg.latex? d_c = \sqrt{(l_j-l_i)^2 + (a_j-a_i)^2 + (b_j-b_i)^2}" style="border:none;"></p>
-<p><img src="http://latex.codecogs.com/svg.latex?d_s = \sqrt{(x_j-x_i)^2 + (y_j-y_i)^2}" style="border:none;"></p>
-<p><img src="http://latex.codecogs.com/svg.latex? D' = \sqrt{(\frac{d_c}{N_c})^2 + (\frac{d_s}{N_s})^2}" style="border:none;"></p>
-<p>其中Ns与Nc分别是距离与颜色的权重。</p>
-<p>算法思路是对种子坐标为中心的2S*2S范围内所有像素，求这些像素到种子坐标像素的距离度量因子dist，相邻簇之间的重叠区域像素按照距离最小的种子编号（BlockIndex）标记。整幅图像扫描一遍之后，每个像素点都对应一个BlockIndex，相同BlockIndex 的像素属于同一个簇。接下来进入迭代，对上一次划分的每一个簇，求出每一个簇的labxy 均值，作为新的簇心（种子），按照上述规则重新标记，当迭代一定次数之后，分簇结果基本不发生改变即划分完成，迭代结束。（这里摘自<a href="http://blog.chinaunix.net/uid-29431466-id-4831314.html" target="_blank" rel="external">SLIC图像超像素分割算法解析</a>）</p>
-<h4 id="b-平面估计"><a href="#b-平面估计" class="headerlink" title="b.平面估计"></a>b.平面估计</h4><p>在获取了超像素分割的cluster，以及通过获取的深度信息<strong>重建了3D坐标</strong>之后，就可以来进行平面估计了。主要分三步：</p>
-<ol>
-<li>对于过分割的每一个cluster，根据cluster中的3D点拟合出一个平面并求出一个法向量</li>
-<li>根据超像素分割的结果建立一个邻接矩阵判断BlockIndex之间是否相邻</li>
-<li>根据BFS算法遍历邻接矩阵，通过每个cluster拟合平面法向量的夹角余弦来判断相邻cluster之间是否共面。</li>
-</ol>
-<p>主要流程是这样，其中拟合平面的部分我用到了SVD降维的方法，即求出取样点的协方差矩阵，对角化后最小的特征值对应的特征向量就是平面的法向量。</p>
-<h4 id="c-小结-1"><a href="#c-小结-1" class="headerlink" title="c.小结"></a>c.小结</h4><p>这一部分算法还是很好理解的，看懂算法我基本上就可以开始撸代码了。这个算法的优点在于简单，直观，但是缺点在于有很多参数影响（SLIC的参数，夹角余弦共面的阈值），而且这种方法是极其依赖于深度图的效果（我们组做presentation的时候老师说就是因为深度图不够好所以结果差强人意）。下面提到的方法比较复杂，但是实现的效果也会好一些。</p>
-<h3 id="2-RVM-MRF建模"><a href="#2-RVM-MRF建模" class="headerlink" title="2. RVM+MRF建模"></a>2. RVM+MRF建模</h3><p>这个方法出自[8].这个paper我觉得可读性真的是不太好，读了几遍才总算是把它的方法给看明白了，核心思想和NIPS 2005深度估计那篇paper类似，提取特征，马尔科夫建模得到每个像素点是否处于平面区域以及每个平面的方向，之后又用滑动窗口再去检测那些不同方向之间重叠的区域的具体方向，这样就能得到一个比较准确的结果。</p>
-<h4 id="a-平面评估"><a href="#a-平面评估" class="headerlink" title="a.平面评估"></a>a.平面评估</h4><p>这篇paper提到的Depth Estimation的方法主要出自[9],通过这种方式可以粗略估计独立区域的方向。</p>
-<p>首先提取特征，这里主要用Gaussian descriptor提取了纹理和颜色特征，具体说来纹理体征用到12个bin的梯度直方图，而颜色特征则是用到了20个bin的红绿蓝三通道的密度直方图。由于得到的特征维度太大，所以利用bag of words的方法把这些特征KNN聚类减少维度（<a href="https://en.wikipedia.org/wiki/Bag-of-words_model" target="_blank" rel="external">Bag-of-words model</a>）。为了合并得到的纹理和颜色两个词典，用NOMF（<a href="https://en.wikipedia.org/wiki/Non-negative_matrix_factorization" target="_blank" rel="external">Non-negative matrix factorization</a>）将两个文档矩阵合并起来。最后对于图像的每一个区域根据提取的特征词典创建空域图，而空域图Sa，Sb的相似度<img src="http://latex.codecogs.com/svg.latex? \rho(S^A,S^B)" style="border:none;">也是之后作回归和分类的基础。</p>
-<p>在得到了相似度ρ之后，可以用一个基于ρ的核函数</p>
-<p><img src="http://latex.codecogs.com/svg.latex? K_S(S^A,S^B)=\sum_{q=1}^{Q}{\rho(S^A,S^B)^q}" style="border:none;"></p>
-<p>来进行RVM（<a href="https://en.wikipedia.org/wiki/Relevance_vector_machine" target="_blank" rel="external">Relevance vector machine</a>）进行回归得到角度值以及进行二值分类得到它是否为一个平面。</p>
-<h4 id="b-平面检测"><a href="#b-平面检测" class="headerlink" title="b.平面检测"></a>b.平面检测</h4><p>前面的RVM只能做到平面的评估，在边缘细节方面的方向估计可能还不够精确。所以来要用MRF建模对上一步中得到的结果进一步改进。</p>
-<p>首先用sweep window在整张图像上滑动，对于那些显著特性（over-lapping area）的点，把这些点作为圆心，利用周围的点的特性来判断圆心的点是否为平面以及角度。利用多组半径做实验，取中位数得到的属于平面的概率ri,以及它的方向di。</p>
-<p>之后利用MRF进行建模，对于是否为平面只需做二值分类，而方向判定则转换为属于一张图中有限平面之一，其中ri和di用的是sweep window得到的结果，n表示图像中每一个可能的平面对应的方向。</p>
-<p><img src="http://latex.codecogs.com/svg.latex? U(p)=\sum_{i\in S}V_1(p_i,r_i)+\sum_{i \in S}\sum_{j \in N_i}V_2(p_i,p_j)" style="border:none;"></p>
-<p><img src="http://latex.codecogs.com/svg.latex? E(n)=\sum_{i\in S'}F_1(n_i,d_i)+\sum_{i \in S'}\sum_{j \in N_i}F_2(n_i,n_j)" style="border:none;"></p>
-<h4 id="c-小结-2"><a href="#c-小结-2" class="headerlink" title="c.小结"></a>c.小结</h4><p>最后这个实验得到的结果是，88%对是否为平面的判断是正确的，而对于角度有18.3°的误差，此外，这种方法对于检测小区域的效果比较差。总体说来，这里的平面检测没有用到重构得到的3D坐标，直接用2D坐标建模，应该比之前的方式实现起来更容易。但是这里用了两个模型一共三次，RVM+MRF+RVM，而且篇paper的整个算法流程真的讲的很难明白。对于用如此复杂的方式得到一个并不算好的结果，我对这种方法是不喜欢的。</p>
-<h3 id="3-代码实现-1"><a href="#3-代码实现-1" class="headerlink" title="3. 代码实现"></a>3. 代码实现</h3><p>这里用到的是前面一篇paper的方式，slic算法+BFS遍历+共面判断，实现起来也不复杂。在验收的时候老师问我在重建了3D点之后为什么不用ransac，当时回答没有想到，但是现在细细想想，我觉得在一个重建的3D图里用ransac应该只能检测出一个最大的平面（就我理解ransac应该是整张图符合一个模型，而使outliner尽可能少），如果需要多个平面应该要提前分割对每一块去拟合平面。这样想想我还是没有办法用一个尽可能简单清晰的方式用ransac得到这种算法的效果。<br>在这边列几个函数，首先是多个3D点拟合平面的：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">fit_plane</span><span class="params">(samples)</span>:</span></div><div class="line"> <span class="string">"""</span></div><div class="line"> To fit a plane according to a series of 3D points</div><div class="line"> Args: </div><div class="line">     samples</div><div class="line"> Returns: </div><div class="line">     norm_vec: the normal vector of the fitted plane</div><div class="line"> """</div><div class="line"> centroid = np.mean(samples, axis=<span class="number">0</span>)</div><div class="line"> <span class="keyword">for</span> i <span class="keyword">in</span> range(samples.shape[<span class="number">0</span>]):</div><div class="line">     samples[i] = samples[i] - centroid</div><div class="line"> cov = np.dot(np.transpose(samples),samples)</div><div class="line"> U,s,V = np.linalg.svd(cov)</div><div class="line"> norm_vec = V[<span class="number">2</span>][:]</div><div class="line"> <span class="keyword">return</span> norm_vec</div></pre></td></tr></table></figure></p>
-<p>然后是BFS遍历的部分：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(seg_num): <span class="comment">#begin BFS</span></div><div class="line">	<span class="keyword">if</span>(visited[i]==<span class="keyword">False</span>):</div><div class="line">		visited[i] = <span class="keyword">True</span></div><div class="line">		qNode.append(i)</div><div class="line">		<span class="keyword">while</span>(len(qNode)!=<span class="number">0</span>):</div><div class="line">			current = qNode.pop(<span class="number">0</span>)</div><div class="line">			<span class="keyword">for</span> j <span class="keyword">in</span> range(seg_num):</div><div class="line">				<span class="keyword">if</span>(adj_matrix[current][j]!=<span class="number">0</span> <span class="keyword">and</span> visited[j]==<span class="keyword">False</span>):</div><div class="line">					visited[j] = <span class="keyword">True</span></div><div class="line">					qNode.append(j)</div><div class="line">					sample1 = get_samples(idx_clusters,current,sample_num,depth)</div><div class="line">					sample2 = get_samples(idx_clusters,j,sample_num,depth)</div><div class="line">					<span class="keyword">if</span>(is_coplanar(sample1,sample2)):</div><div class="line">						root[j] = root[current] <span class="comment">#end BFS</span></div></pre></td></tr></table></figure></p>
-<h2 id="网站建设"><a href="#网站建设" class="headerlink" title="网站建设"></a>网站建设</h2><p>网站建设其实是项目一开始没有考虑到的。一刚开始我就只是git clone了两个项目<a href="https://github.com/PSMM/SLIC-Superpixels" target="_blank" rel="external">SLIC-Superpixels</a>（in C++)和<a href="https://github.com/janivanecky/Depth-Estimation" target="_blank" rel="external">Depth-estimation</a>(in python)，在SLIC算法之中增加了[5]这篇paper的实现。也就是说核心算法部分用到了python和C++两种语言。本来觉得能跑出结果就很好了，可是在验收的前一周突然又想到可以做一个demo展示一下，不然还有一个星期的时间很浪费。最后大胆的决定用python将plane-detection的部分完全重构一遍，最后用<a href="https://en.wikipedia.org/wiki/Django_(web_framework)" target="_blank" rel="external">Django</a>框架写一个前端页面与后台可以连接起来。</p>
-<h3 id="1-Django简介"><a href="#1-Django简介" class="headerlink" title="1. Django简介"></a>1. Django简介</h3><p>Django是一个开放源代码的Web应用框架，由Python写成。采用了MVC的框架模式，即模型M，视图V和控制器C。利用Django开发可以省去很多web开发的麻烦，程序员可以专注于写应用而不用去造轮子。并且它是开源且免费的。（<a href="https://www.djangoproject.com/start/overview/" target="_blank" rel="external">Django Overview</a>）</p>
-<h3 id="2-view与template"><a href="#2-view与template" class="headerlink" title="2. view与template"></a>2. view与template</h3><p>关于django我了解的不多，也主要是现学现卖了。这里我的项目主要用到了template和view方面的知识，简单的说一下我用到的功能，如需更系统学习django可以访问<a href="https://docs.djangoproject.com/en/1.10/" target="_blank" rel="external">django Documentation</a>.</p>
-<p>view负责的是对视图的渲染，一个页面中有一个内容是动态的，不是静态写在html中而是要需要一定的操作（譬如从数据库中提取，或是经过一定处理）才能够展现在静态页面里的。访问了一个views.py中的函数就相当于提前把要在页面上显示的内容准备一下，之后再返回一个已经写好的html页面，并把html中相关的动态内容替换成处理后的内容。在本项目中，Views.py中的 get<em> pic 函数调用了 get</em> depth 与 get_ plane   两个函数得到了所需要的深度图和平面检测图，并以一定的名称保存到本地。</p>
-<p>template负责的是展示的页面，我的项目中有一个demo.html页面负责选择图片上传，还有一个show_pic.html的页面负责展示原图，深度图，两种不同形式的平面检测图。具体参见我们的<a href="http://itec.hust.edu.cn/~chenghn/project/Depth_Estimation/material/Demo_Video.mp4" target="_blank" rel="external">Demo Video</a>这两个页面放在新建的template文件夹中。</p>
-<p>除此之外，还要在url.py里进行配置，这一步主要是将在浏览器地址栏中输入的url与views.py中渲染页面的函数对应起来。</p>
-<p>这一部分详细见 <a href="https://docs.djangoproject.com/en/1.10/intro/tutorial03/" target="_blank" rel="external">Part3:Views and templates</a>.</p>
-<h3 id="3-代码实现-2"><a href="#3-代码实现-2" class="headerlink" title="3. 代码实现"></a>3. 代码实现</h3><p>处理图片之后显示的代码在views.py中的get _pic 函数中，在get <em>depth 与get</em> plane 两个函数中都把处理过后的图片保存下来了。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_pic</span><span class="params">(request)</span>:</span></div><div class="line"><span class="keyword">if</span> request.method==<span class="string">'POST'</span>:</div><div class="line">	<span class="keyword">try</span>:</div><div class="line">		image = request.FILES[<span class="string">'image'</span>]</div><div class="line">		img = Image.open(image)</div><div class="line">		filepath=<span class="string">'media/origin.png'</span></div><div class="line">		img.save(filepath)</div><div class="line">		get_depth(filepath)</div><div class="line">		get_planar(<span class="string">'media/img.png'</span>,<span class="string">'media/depth.png'</span>)</div><div class="line">		<span class="keyword">return</span> render_to_response(<span class="string">'show_pic.html'</span>,&#123;<span class="string">'image'</span>:<span class="string">'/media/test.png'</span>&#125;)</div><div class="line">	<span class="keyword">except</span> Exception,e:</div><div class="line">		<span class="keyword">return</span> HttpResponse(e)</div></pre></td></tr></table></figure>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>前前后后大概花了三个星期来完成这个项目，又花了三天的时间码完这篇1w字的技术博客真是满满的成就感啊~这个项目的源码在<a href="https://github.com/honey0920/depth-estimation-plane-detection" target="_blank" rel="external">这里</a>，我们的项目网站在<a href="http://itec.hust.edu.cn/~chenghn/project/Depth_Estimation/index.html" target="_blank" rel="external">这里</a>。说起来我对机器学习和深度学习也并没有很了解，关于深度估计和平面检测这块我也是第一次接触，上文中很多提到的方法可能有错误或者不足，也希望大家能指出来。接下来自己想学习部分在<strong>python爬虫</strong> /  <strong>tensorflow写深度学习</strong>。立个flag吧，四月份还会写一篇技术博客。加油！</p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
-<li>Learning Depth from Single Monocular Images, Ashutosh Saxena, Sung H. Chung, Andrew Y. Ng. NIPS 2005. </li>
-<li>3-D Depth Reconstruction from a Single Still Image, Ashutosh Saxena, Sung H. Chung, Andrew Y. Ng. In IJCV 2007.</li>
-<li>Make3D: Learning 3D Scene Structure from a Single Still Image, Ashutosh Saxena, Min Sun, Andrew Y. Ng. IEEE Transactions of Pattern Analysis and Machine Intelligence (PAMI), vol. 30, no. 5, pp 824-840, 2009. </li>
-<li>Depth Map Prediction from a Single Image using a Multi-Scale Deep Network.(Nips 2014)</li>
-<li>Accurate 3D ground plane estimation from a single image(ICRA 2009)</li>
-<li>Efficient Graph-Based Image Segmentation,IJCV 2004,MIT</li>
-<li>SLIC Superpixels Compared to State-of-the-art Superpixel Methods, IEEE Transactions on Pattern Analysis and Machine Intelligence</li>
-<li>Detecting planes and estimating their orientation from a single image, In Proc. of BMVC 2011.</li>
-</ol>
+<p>之所以要用python来爬虫，当然是因为“人生苦短，我用Python”，python里涉及到许多获取网络信息的模块，最基础的urllib/urllib2，requestes等，另外python中也可以方便的利用正则表达式匹配各种有用信息。下面简单说说爬虫技术中核心的要素。以下内容参考：<a href="https://github.com/lining0806/PythonSpiderNotes" target="_blank" rel="external">PythonSpiderNotes</a>。</p>
+<h3 id="基本抓取"><a href="#基本抓取" class="headerlink" title="基本抓取"></a>基本抓取</h3><p>抓取大多数情况属于get请求，即直接从对方服务器上获取数据。此外，对于带有查询字段的url，get请求一般会将来请求的数据附在url之后，以?分割url和传输数据，多个参数用&amp;连接。</p>
+<h3 id="登录处理"><a href="#登录处理" class="headerlink" title="登录处理"></a>登录处理</h3><p>有一些网站需要用特定的用户名和密码登陆了之后才能获取网页信息。这里登陆处理有两种方式：利用表单登录和利用session登录。</p>
+<ul>
+<li>使用表单登陆属于post请求，即先向服务器发送表单数据，服务器再将返回的cookie存入本地。</li>
+<li>使用cookie登陆，服务器会认为你是一个已登陆的用户，所以就会返回给你一个已登陆的内容。因此，需要验证码的情况可以使用带验证码登陆的cookie解决。</li>
+</ul>
+<h3 id="关于反爬虫"><a href="#关于反爬虫" class="headerlink" title="关于反爬虫"></a>关于反爬虫</h3><p>现在有很多网站都采取了反爬虫机制，有几种方式可以避免IP被block掉。</p>
+<ul>
+<li>使用代理，通过维护代理池来限制IP地址情况。</li>
+<li>每爬取几条信息就让系统sleep一段时间</li>
+<li>利用headers伪装成浏览器</li>
+</ul>
+<h3 id="多线程抓取"><a href="#多线程抓取" class="headerlink" title="多线程抓取"></a>多线程抓取</h3><p>多线程爬虫可以提高爬虫的效率，scrapy与pyspider等框架都可以直接利用多线程。</p>
+<h2 id="几个常用的包"><a href="#几个常用的包" class="headerlink" title="几个常用的包"></a>几个常用的包</h2><p>这里我只写我在项目里接触到的一些包，还有其他的包在之后用到了再在这里更新。</p>
+<h3 id="urllib与urllib2与re"><a href="#urllib与urllib2与re" class="headerlink" title="urllib与urllib2与re"></a>urllib与urllib2与re</h3><p>urllib与urllib2两个模块可以访问网络上的文件。通过一个简单的函数调用就可以把几乎任何的URL所指向的东西作为程序的输入。urllib与urllib2两个模块的功能差不多，但是如果需要使用HTTP验证或是cookie，或是要为自己的协议编写扩展程序，那么urllib2会是更好的选择。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">request = urllib2.Request(url,headers = headers)</div><div class="line">response = urllib2.urlopen(request)</div><div class="line">content = response.read().decode(<span class="string">'utf-8'</span>)</div></pre></td></tr></table></figure>
+<p>这段代码得到的content是一个很长的字符串，其中的内容就是url对应的html页面。在得到了html内容的字符串，可以利用正则表达式提取content内容中感兴趣的部分。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">pattern = re.compile(<span class="string">'reqgular expression'</span>,re.S)</div><div class="line">items = re.findall(pattern,content)</div></pre></td></tr></table></figure></p>
+<h3 id="requests与beautifulsoup"><a href="#requests与beautifulsoup" class="headerlink" title="requests与beautifulsoup"></a>requests与beautifulsoup</h3><p>用urllib2还是比较繁琐，不仅需要好几行代码来获得content，由于url错误会抛出异常，用到urllib2的时候需要手动捕捉异常，这时requests神器就应运而生，一句话，哦不一行代码就可以搞定urllib十行代码才能搞定的。除此之外，requests中添加报头，使用代理和session都是很容易的。requests的文档在<a href="http://docs.python-requests.org/en/master/" target="_blank" rel="external">这里</a>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">content = requests.get(url).content</div></pre></td></tr></table></figure>
+<p>beautifulsoup可以将网页编变成结构化数据，免去了利用正则表达式来匹配数据的繁琐。具体来说，beautifulsoup里每一个标签都可以作为节点，而属性的名字和值作为字典的key和value。这样访问数据就变得很方便优雅和pythonic。除此之外，在bs中查询某个元素也十分的方便，利用find_all（）方法可以通过xpath/css选择器/类名等来定位元素。下面是一个简单的构造bs对象并查找节点的例子。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">html = requests.get(taobao_url,headers = headers).content.decode(<span class="string">'utf-8'</span>)</div><div class="line">soup = BeautifulSoup(html,<span class="string">'html.parser'</span>)</div><div class="line">items = soup.find_all(<span class="string">'div'</span>,attrs=&#123;<span class="string">'class'</span>:<span class="string">"tab-movie-list"</span>&#125;)</div></pre></td></tr></table></figure>
+<p>bs4的文档在<a href="http://beautifulsoup.readthedocs.io/zh_CN/latest/" target="_blank" rel="external">这里</a>。</p>
+<h3 id="phantomjs与selenium"><a href="#phantomjs与selenium" class="headerlink" title="phantomjs与selenium"></a>phantomjs与selenium</h3><p>爬取静态页面可能用上面的工具就够了，然而网页上很多内容是通过js加载的，利用urllib或是requests只能得到静态显示的页面，一些动态加载的数据无法获取。这里可能就需要用到selenium与phantomjs两个神器了。</p>
+<ul>
+<li>PhantomJS是一个无界面的,可脚本编程的WebKit浏览器引擎。它原生支持多种web 标准：DOM 操作，CSS选择器，JSON，Canvas 以及SVG。它可以像浏览器一样渲染js页面。</li>
+<li>Selenium 是自动化测试工具。它支持各种浏览器，包括 Chrome，Safari，Firefox 等主流界面式浏览器，如果你在这些浏览器里面安装一个 Selenium 的插件，那么便可以方便地实现Web界面的测试。</li>
+</ul>
+<p>如果将PhantomJS和Selenium结合在一起，那么就可以用一个快速方便的浏览器解析动态页面，再用Selenium来进行拖拽，点击，输入等自动操作，这样你想要的信息就可以轻松获取啦~ 下面是我用到的用这两个工具定位元素的小段代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">driver = webdriver.PhantomJS()  </div><div class="line">   driver.get(url)</div><div class="line">   time.sleep(<span class="number">1</span>)</div><div class="line">   dateItems = driver.find_elements_by_xpath(<span class="string">"//div[@class='dates clearfix J-dates']/a"</span>)</div></pre></td></tr></table></figure>
+<p>由于js执行时需要时间的，所以不管是在渲染页面或是进行其他点击操作时，可能需要sleep一段时间来等待js的渲染。除了Selenium自带的通过xpath/css/class定位元素的功能以及点击，拖拽等功能，webdriver还可以直接用driver.execute_script（）方法来执行js语句。phantomjs的文档在<a href="http://phantomjs.org/quick-start.html" target="_blank" rel="external">这里</a>,selenium的文档在<a href="http://selenium-python.readthedocs.io/index.html" target="_blank" rel="external">这里</a>。</p>
+<h2 id="实战：爬取电影票"><a href="#实战：爬取电影票" class="headerlink" title="实战：爬取电影票"></a>实战：爬取电影票</h2><p>上面的一些知识都是我在实际写代码的碰到问题解决问题然后收获的知识点。一开始写爬虫其实就是平时特别喜欢看电影，想找到一个平台的票价是最低的。结果我很幸运的发现了<a href="https://github.com/LiangCY/MovieTickets" target="_blank" rel="external">MovieTickets</a>项目，这是一个用js爬虫的电影票价项目，我用到了这个项目中的架构开始撸起了我自己的python代码。主要想法就是先上 淘宝/美团/点评/格瓦拉 爬取最近上映的电影信息，然后在上这四个平台爬取相应位置（我爬取的是洪山区）的电影院信息，最后根据不同平台对应的电影和电影院信息查询到相关的票价信息。爬取的信息用mangodb存储，前端用flask框架展示了爬取的电影票价信息。</p>
+<p>思路还是比较简单，但是过程中我也踩了不少坑。</p>
+<ul>
+<li>不同平台中电影的名字和电影院的名字有时候会有差异，电影的名字主要就是大小写，转换一下问题不大，但是电影院的名字差别就有点大。我想到了两个解决方案：用去掉了范围信息（如XX市XX区）的位置信息来匹配，还有就是用动态规划的<a href="http://blog.csdn.net/zzran/article/details/8274735" target="_blank" rel="external">字符串相似度</a><br>方法来匹配。两种方法的结果都没有特别好。最后还是手动自己补充了一些电影院和对应ID。</li>
+<li>爬取电影票的时候，当时因为老爬取上映不久的速激8，一爬应该一百多条数据了，然后IP经常被block了，突然出现找不到元素整个人懵逼，各种检查才发现是反爬虫机制让我掉坑了。这里一定要注意爬了一条数据就给他sleep一下。嗯，爬虫与反爬虫的斗争永无止境。</li>
+<li>在<a href="https://github.com/LiangCY/MovieTickets" target="_blank" rel="external">MovieTickets</a>项目中是定时爬取电影票价，全部存在mangodb中，等访问url时再搜索出相应条目显示。我这里只是在项目刚run的时候从网上爬取了电影和电影院的信息，存储在了mangodb中，然后点击一个电影+电影院链接之后再去爬取对应的票价信息，这样会导致响应很慢，也不够工程化。可是这个定时爬取我觉得实现起来可能还有点难度，所以暂时就放弃。：）</li>
+</ul>
+<p>最后，我的项目在<a href="https://github.com/honey0920/TicketPrices" target="_blank" rel="external">这里</a>。在三月底立下的四月写一篇博客的flag实现了，也算是又get了一项技能。接下来的计划是更深入了解SVM/DB/NN/LR等机器学习算法，scikit-learn源码解读与应用。</p>
 
       
 
@@ -365,7 +314,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=https://honey0920.github.io/2017/03/30/depth-02/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://honey0920.github.io/2017/04/25/scrapy-03/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -379,18 +328,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/04/25/scrapy-03/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          网络爬虫的原理与应用
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/01/27/diary-01/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">写在2016年的最后一天</div>
+    <a href="/2017/03/30/depth-02/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">深度估计&amp;平面检测小结</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -404,7 +344,7 @@
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="depth-02" data-title="深度估计&amp;平面检测小结" data-url="https://honey0920.github.io/2017/03/30/depth-02/"></div>
+	<div class="ds-thread" data-thread-key="scrapy-03" data-title="网络爬虫的原理与应用" data-url="https://honey0920.github.io/2017/04/25/scrapy-03/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
