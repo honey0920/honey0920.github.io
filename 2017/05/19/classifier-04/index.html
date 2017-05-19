@@ -6,39 +6,33 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://honey0920.github.io">
-  <title>深度估计&amp;平面检测小结 | 野草集</title>
+  <title>cs231n assignment1-几种分类算法 | 野草集</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近一段时间已知忙着赶图像分析与理解的项目，在三个星期内强行接触了CNN,MRF,Caffe,openCV在内的很多东西。现在项目已经完全结束了，反而有点怀念看论文写代码的日子～希望能用这篇博文将我这段时间的工作作一个整理，也方便我之后写报告。
-问题描述
-深度估计是从2D图片中得到深度信息，深度估计主要分为两种形式：从单个的单目图像中获得深度信息，从一系列不同角度的单目图像中得到深度信息。在这个项">
+  <meta name="description" content="最近开始上斯坦福大学cs231n的公开课。其实上学期已经过了一遍cs224d了，当时看的是无字幕的视频，感觉收获并不是特别大，可能是由于学弟的时候断断续续很多实现的细节还是没有理解。这次学习cs231n就只是看了课程网站上的lecture note，跟着写了写作业。cs231n的内容涉及到机器学习中的多种算法以及 cnn/rnn等多种神经网络，之后的作业也还都比较有趣。现在写了第一周的作业，主要涉">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深度估计&平面检测小结">
-<meta property="og:url" content="https://honey0920.github.io/2017/03/30/depth-02/index.html">
+<meta property="og:title" content="cs231n assignment1-几种分类算法">
+<meta property="og:url" content="https://honey0920.github.io/2017/05/19/classifier-04/index.html">
 <meta property="og:site_name" content="野草集">
-<meta property="og:description" content="最近一段时间已知忙着赶图像分析与理解的项目，在三个星期内强行接触了CNN,MRF,Caffe,openCV在内的很多东西。现在项目已经完全结束了，反而有点怀念看论文写代码的日子～希望能用这篇博文将我这段时间的工作作一个整理，也方便我之后写报告。
-问题描述
-深度估计是从2D图片中得到深度信息，深度估计主要分为两种形式：从单个的单目图像中获得深度信息，从一系列不同角度的单目图像中得到深度信息。在这个项">
-<meta property="og:image" content="http://chart.googleapis.com/chart?cht=tx&chl= E_i=\sum_{(x,y)\in patch(i))} |I(x,y)*F_n(x,y))|^k">
-<meta property="og:image" content="https://honey0920.github.io/img/blogImg/features-02.png">
-<meta property="og:image" content="http://chart.googleapis.com/chart?cht=tx&chl= P(d|X;\theta,\sigma)=\frac{1}{Z}exp(-\sum_{i=1}^{M}\frac{(d_i(1)-x_i^T\theta_r)^2}{2\sigma^2_{1r}}-\sum_{s=1}^{3} \sum_{i=1}^{M} \sum_{j \in N_s(i)} \frac{(d_i(s)-d_j(s))^2}{2\sigma_{2rs}^{2} })">
-<meta property="og:image" content="http://chart.googleapis.com/chart?cht=tx&chl= \sigma_{2rs}^{2}=u_{rs}^{T}|y_{ijs}|">
-<meta property="og:image" content="https://honey0920.github.io/img/blogImg/model_structure-02.png">
-<meta property="og:image" content="http://chart.googleapis.com/chart?cht=tx&chl= D(y,y^*)=\frac{1}{2n^2}\sum_{i,j}((\log{y_i}-\log{y_j}-(\log{y_{i}^{*}- \log{y_{j}^{*}}}))^2">
-<meta property="og:image" content="http://chart.googleapis.com/chart?cht=tx&chl= \frac{1}{n}\sum_i d_i^2 - \frac{1}{n^2}\sum_{i,j}d_id_j = \frac{1}{n}\sum_id_i^2-\frac{1}{n^2}(\sum_i d_i)^2">
-<meta property="og:image" content="http://latex.codecogs.com/svg.latex? d_c = \sqrt{(l_j-l_i)^2 + (a_j-a_i)^2 + (b_j-b_i)^2}">
-<meta property="og:image" content="http://latex.codecogs.com/svg.latex?d_s = \sqrt{(x_j-x_i)^2 + (y_j-y_i)^2}">
-<meta property="og:image" content="http://latex.codecogs.com/svg.latex? D' = \sqrt{(\frac{d_c}{N_c})^2 + (\frac{d_s}{N_s})^2}">
-<meta property="og:image" content="http://latex.codecogs.com/svg.latex? \rho(S^A,S^B)">
-<meta property="og:image" content="http://latex.codecogs.com/svg.latex? K_S(S^A,S^B)=\sum_{q=1}^{Q}{\rho(S^A,S^B)^q}">
-<meta property="og:image" content="http://latex.codecogs.com/svg.latex? U(p)=\sum_{i\in S}V_1(p_i,r_i)+\sum_{i \in S}\sum_{j \in N_i}V_2(p_i,p_j)">
-<meta property="og:image" content="http://latex.codecogs.com/svg.latex? E(n)=\sum_{i\in S'}F_1(n_i,d_i)+\sum_{i \in S'}\sum_{j \in N_i}F_2(n_i,n_j)">
-<meta property="og:updated_time" content="2017-04-25T14:12:24.020Z">
+<meta property="og:description" content="最近开始上斯坦福大学cs231n的公开课。其实上学期已经过了一遍cs224d了，当时看的是无字幕的视频，感觉收获并不是特别大，可能是由于学弟的时候断断续续很多实现的细节还是没有理解。这次学习cs231n就只是看了课程网站上的lecture note，跟着写了写作业。cs231n的内容涉及到机器学习中的多种算法以及 cnn/rnn等多种神经网络，之后的作业也还都比较有趣。现在写了第一周的作业，主要涉">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?d_1(I_1,I_2)=\sum_{p}|I_1^p&space;-&space;I_2^p|">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?d_2(I_1,I_2)=\sqrt{\sum_{p}(I_1^p&space;-&space;I_2^p)^2">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?f(x_i,W,b)&space;=&space;Wx_i&space;+&space;b">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?f(x_i,W)&space;=&space;Wx_i">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?f(x_i,W)">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?L_i=\sum_{j\neq y_i}\max(0,s_j-s_{y_i}+\Delta)">
+<meta property="og:image" content="http://cs231n.github.io/assets/margin.jpg
+">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?f(x_i,W)&space;=&space;Wx_i">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?L_i=-\log(\frac{e^{f_{y_i}}}{\sum_j{e^{f_j}}})">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?f_j(z)&space;=&space;\frac{e^{z_j}}{\sum_k{e^{z_k}}}">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?\frac{e^{f_{y_i}}}{\sum_j e^{f_j}}
+= \frac{Ce^{f_{y_i}}}{C\sum_j e^{f_j}}
+= \frac{e^{f_{y_i} + \log C}}{\sum_j e^{f_j + \log C}}">
+<meta property="og:updated_time" content="2017-05-19T11:25:38.359Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="深度估计&平面检测小结">
-<meta name="twitter:description" content="最近一段时间已知忙着赶图像分析与理解的项目，在三个星期内强行接触了CNN,MRF,Caffe,openCV在内的很多东西。现在项目已经完全结束了，反而有点怀念看论文写代码的日子～希望能用这篇博文将我这段时间的工作作一个整理，也方便我之后写报告。
-问题描述
-深度估计是从2D图片中得到深度信息，深度估计主要分为两种形式：从单个的单目图像中获得深度信息，从一系列不同角度的单目图像中得到深度信息。在这个项">
-<meta name="twitter:image" content="http://chart.googleapis.com/chart?cht=tx&chl= E_i=\sum_{(x,y)\in patch(i))} |I(x,y)*F_n(x,y))|^k">
+<meta name="twitter:title" content="cs231n assignment1-几种分类算法">
+<meta name="twitter:description" content="最近开始上斯坦福大学cs231n的公开课。其实上学期已经过了一遍cs224d了，当时看的是无字幕的视频，感觉收获并不是特别大，可能是由于学弟的时候断断续续很多实现的细节还是没有理解。这次学习cs231n就只是看了课程网站上的lecture note，跟着写了写作业。cs231n的内容涉及到机器学习中的多种算法以及 cnn/rnn等多种神经网络，之后的作业也还都比较有趣。现在写了第一周的作业，主要涉">
+<meta name="twitter:image" content="http://latex.codecogs.com/gif.latex?d_1(I_1,I_2)=\sum_{p}|I_1^p&space;-&space;I_2^p|">
   
     <link rel="alternative" href="/atom.xml" title="野草集" type="application/atom+xml">
   
@@ -178,104 +172,58 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-depth-02" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-classifier-04" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      深度估计&amp;平面检测小结
+      cs231n assignment1-几种分类算法
     </h1>
   
 
         
-        <a href="/2017/03/30/depth-02/" class="archive-article-date">
-  	<time datetime="2017-03-30T13:49:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-30</time>
+        <a href="/2017/05/19/classifier-04/" class="archive-article-date">
+  	<time datetime="2017-05-19T11:21:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-19</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近一段时间已知忙着赶图像分析与理解的项目，在三个星期内强行接触了CNN,MRF,Caffe,openCV在内的很多东西。<br>现在项目已经完全结束了，反而有点怀念看论文写代码的日子～希望能用这篇博文将我这段时间的工作作一个整理，<br>也方便我之后写报告。</p>
-<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><ul>
-<li><p>深度估计是从2D图片中得到深度信息，深度估计主要分为两种形式：从<strong>单个</strong>的单目图像中获得深度信息，从一系列<br>不同角度的单目图像中得到深度信息。在这个项目中我用到的方式主要是第一种。</p>
-</li>
-<li><p>平面检测的目标是识别2D图像中属于同一个平面的一部分。</p>
-</li>
-<li><p>深度估计和平面检测的工作结合起来可以有很多应用，例如3D重建，场景理解，机器人技术以及SLAM<br> （Simutaneous Localization And Mapping）问题。</p>
-</li>
+        <p>最近开始上斯坦福大学<a href="http://cs231n.stanford.edu/" target="_blank" rel="external">cs231n</a>的公开课。其实上学期已经过了一遍cs224d了，当时看的是无字幕的视频，感觉收获并不是特别大，可能是由于学弟的时候断断续续很多实现的细节还是没有理解。这次学习cs231n就只是看了课程网站上的lecture note，跟着写了写作业。cs231n的内容涉及到机器学习中的多种算法以及 cnn/rnn等多种神经网络，之后的作业也还都比较有趣。现在写了第一周的作业，主要涉及到了几种分类算法，在这里小结一下。</p>
+<h2 id="knn算法"><a href="#knn算法" class="headerlink" title="knn算法"></a>knn算法</h2><p>一般来说，knn作为无监督学习(unsupervised learning)可以作聚类，这里把knn作为监督学习(supervised learning)，将<a href="http://www.cs.toronto.edu/~kriz/cifar.html" target="_blank" rel="external">CIFAR-10 dataset</a>中的图片作为训练集和测试集，将测试集中的每一张图片与训练集中的每一张比对，选出最相似的k张，这k个label中出现次数最多的就是测试集的判定分类结果。</p>
+<p>###L1与L2距离<br>为了计算两张图片之间的差距，把数据集中的32 <em> 32 </em> 3的原始图片延展成一个一维向量，共有32 <em> 32 </em>3维特征。<br>对于测试集与训练集的距离计算，有两种方式，L1距离与L2距离。</p>
+<p>L1距离：<br><img src="http://latex.codecogs.com/gif.latex?d_1(I_1,I_2)=\sum_{p}|I_1^p&space;-&space;I_2^p|" title="d_1(I_1,I_2)=\sum_{p}|I_1^p - I_2^p|"><br>L2距离：<br><img src="http://latex.codecogs.com/gif.latex?d_2(I_1,I_2)=\sqrt{\sum_{p}(I_1^p&space;-&space;I_2^p)^2"><br>基于L1距离的knn分类算法在CIFAR-10上的准确率可以达到38.6%，而基于L2距离的knn分类器准确率则为35.4%。对于L2距离而言，由于距离之间的差有平方，L2在距离差异较大时会产生更大的分歧。</p>
+<h3 id="knn分类的优缺点"><a href="#knn分类的优缺点" class="headerlink" title="knn分类的优缺点"></a>knn分类的优缺点</h3><ul>
+<li>knn的优点在于，算法非常简单直观，不需要额外的训练时间。</li>
+<li>缺点在于虽然缺少了训练过程，但是分类的测试时间非常长。且在每次做分类过程中都要与所有的训练数据比较，空间复杂度也很大。在图像分类中，由于维度特别高所以knn也使用不多。</li>
 </ul>
-<h2 id="深度估计"><a href="#深度估计" class="headerlink" title="深度估计"></a>深度估计</h2><h3 id="1-利用MRF-马尔科夫随机场-建模"><a href="#1-利用MRF-马尔科夫随机场-建模" class="headerlink" title="1. 利用MRF(马尔科夫随机场)建模"></a>1. 利用MRF(马尔科夫随机场)建模</h3><p>这里介绍的是参考文献[1]中提到的一种方法，之后同一波人写的论文包括[2],[3]等都是用到了相似的方式。关于这相关的project还有一个网站<a href="http://www.cs.cornell.edu/~asaxena/learningdepth/" target="_blank" rel="external">Make 3D</a>,这个项目在[3]中有较多介绍，这个网站里也有一些关于3D重建所需要的数据集。</p>
-<h4 id="ensp-a-特征提取"><a href="#ensp-a-特征提取" class="headerlink" title="&ensp;a.特征提取"></a>&ensp;a.特征提取</h4><p>作者表示，人类之所以可以很清楚的从单个的单目图像中获取深度信息，是因为用到了纹理变化，纹理梯度还有颜色等“单目线索”。所以只要我们从图片中提取了这些特征，并且有监督的让机器去学习它，那么就可以让机器从单幅的单目图像中获得深度信息。</p>
-<p>在这篇文章中，作者把一张图分割成很多patch，然后估计每一个patch的深度。而对于这些patch，有”绝对”和“相对”两对特征。绝对特征用了纹理变化，纹理梯度和雾霾信息。这里用到了9个3*3的Law’s Mask，6个方向的梯度filter，两个颜色通道（YCbCr颜色空间中的Cb和Cr一共十七个模板。而能量</p>
-<p><img src="http://chart.googleapis.com/chart?cht=tx&chl= E_i=\sum_{(x,y)\in patch(i))} |I(x,y)*F_n(x,y))|^k" style="border:none;">(k=1,2)<br>计算了模板和原图像卷积后的L1与L2距离当做是最初的34个特征向量。除此之外，为了更好的捕捉到全局的信息，在这34个特征向量的基础上还加上了三个不同尺度的四邻域mask。三个不同尺度的四领域机上4个列特征所以特征向量一共的维数是19*34=646维。为了表示相对深度，作者为17个特征中的每一个feature vector计算了10个bin的直方图。<br><img src="/img/blogImg/features-02.png" alt=""></p>
-<h4 id="ensp-b-概率模型"><a href="#ensp-b-概率模型" class="headerlink" title="&ensp;b.概率模型"></a>&ensp;b.概率模型</h4><p>为了表示相邻patch之间的深度关系，这里用到了MRF。除此之外，还对不同尺度邻域间的相互影响进行了建模。</p>
-<p><img src="http://chart.googleapis.com/chart?cht=tx&chl= P(d|X;\theta,\sigma)=\frac{1}{Z}exp(-\sum_{i=1}^{M}\frac{(d_i(1)-x_i^T\theta_r)^2}{2\sigma^2_{1r}}-\sum_{s=1}^{3} \sum_{i=1}^{M} \sum_{j \in N_s(i)} \frac{(d_i(s)-d_j(s))^2}{2\sigma_{2rs}^{2} })" style="border:none;"></p>
-<p>这里d表示不同尺度的目标像素与四邻域的均值，x表示的是上节获得的特征向量，而方差σ则与则与第i个patch与第j个patch的相对深度成正比，具体说来：<br><img src="http://chart.googleapis.com/chart?cht=tx&chl= \sigma_{2rs}^{2}=u_{rs}^{T}|y_{ijs}|" style="border:none;">，其中参数u的目的是使σ与d(i)-d(j)的平方更为接近。</p>
-<h4 id="ensp-c-小结"><a href="#ensp-c-小结" class="headerlink" title="&ensp;c.小结"></a>&ensp;c.小结</h4><p>这篇paper用到了在图像分析领域用的比较多的MRF模型来更好的表示图像中邻域之间的关系。而且除了一般使用的高斯MRF模型，还提出了拉普拉斯的MRF建模方式。这两种模型都有各适用之处。作者最后提出这种模型在分析相对深度比绝对深度效果好，绝对深度最多能够估计到81m。不得不提这篇在05年出的论文实验的performance已经非常好了，在CNN还没出来之前这种方式应该是业内很流行的。要说缺点，可能就是特征太多，参数也多，我真的是看了好几遍才看明白。= =|||。本来很想把MRF这种方式自己实现一遍都已经在网上下好数据集了，看着这么多要提取的特征又望而却步了（哭泣脸）。</p>
-<h3 id="2-利用CNN（卷积神经网络）"><a href="#2-利用CNN（卷积神经网络）" class="headerlink" title="2. 利用CNN（卷积神经网络）"></a>2. 利用CNN（卷积神经网络）</h3><p>12年CNN开始流行起来之后，似乎无论是分类还是回归都可以用CNN搞定，这篇用CNN估计深度的论文也出现的正是时候。利用AlexNet得到粗粒度的深度图再自己训练一个三层的神经网络得到细节部分工作量看起来也并不是特别大，当然不出意料的也得到了state-of-art的结果。[4]</p>
-<h4 id="a-网络结构"><a href="#a-网络结构" class="headerlink" title="a.网络结构"></a>a.网络结构</h4><p>这张图片就很清楚的说明了整个网络的结构，上面是把AlexNet的前五层拿出来，然后后面套了两个全连接层，得到了一个很coarse的深度图，只能看出一些模糊的特征。为了让它更清楚的表示局部特征，把原图再通过一个三层的神经网络训练，得到一些局部特征。最后与上面的coarse深度图结合一下，就可以得到最终的深度图。<br><img src="/img/blogImg/model_structure-02.png" alt=""> </p>
-<h4 id="b-Loss-function"><a href="#b-Loss-function" class="headerlink" title="b.Loss function"></a>b.Loss function</h4><p>为了评判得到的depth map与groud truth之间的差异，这篇paper运用了下面的误差函数：<br><img src="http://chart.googleapis.com/chart?cht=tx&chl= D(y,y^*)=\frac{1}{2n^2}\sum_{i,j}((\log{y_i}-\log{y_j}-(\log{y_{i}^{*}- \log{y_{j}^{*}}}))^2" style="border:none;"></p>
-<p>其中y表示的是通过神经网络得到的预测值，而y*表示的是真实值，这个式子化简之后得：<br><img src="http://chart.googleapis.com/chart?cht=tx&chl= \frac{1}{n}\sum_i d_i^2 - \frac{1}{n^2}\sum_{i,j}d_id_j = \frac{1}{n}\sum_id_i^2-\frac{1}{n^2}(\sum_i d_i)^2" style="border:none;"></p>
-<p>其实表示的就是每一个点的局部误差之和减去整张图片的整体误差，可以看做是一个归一化的处理。</p>
-<h4 id="c-小结"><a href="#c-小结" class="headerlink" title="c.小结"></a>c.小结</h4><p>根据最后的实验结果，无论是室内的数据集NYU Depth还是室外的数据集KITTI这种方式都全面吊打make 3D。只要涉及到基于特征的分类或者回归，现在CNN似乎都处于王者地位。唯一的缺点可能就是训练的时间长吧。</p>
-<h3 id="3-代码实现"><a href="#3-代码实现" class="headerlink" title="3. 代码实现"></a>3. 代码实现</h3><p>最开始看的就是CNN那一篇，当时为我们实验室没有GPU而焦虑烦躁了很久很久。之后上github发现有这篇论文的<a href="https://github.com/janivanecky/Depth-Estimation" target="_blank" rel="external">重现代码</a>，于是我开始撸起袖子一点一点装caffe，opencv,从零开始接触这些，居然发现还挺顺利的，都被自己感动了。严格的说起来，这一个部分的代码不算是我实现的,我只是一个搬运工。但是为了能将代码运行成功我也是费了相当大的功夫的。</p>
-<p>我们项目里用到的是github博主已经训练好的<a href="https://dl.dropboxusercontent.com/u/65091385/model_norm_abs_100k.caffemodel" target="_blank" rel="external">caffemodel</a>，这个model是在NYU的训练集上训练的，也就是说我如果直接拿来用几乎是只符合室内的:( …这里的test script就是将输入图片resize成固定的大小，然后用吧input扔进训练好的模型就可以得到output了。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">input = loadImage(imagename, <span class="number">3</span>, WIDTH, HEIGHT)</div><div class="line">input *= <span class="number">255</span></div><div class="line">input -= <span class="number">127</span></div><div class="line">output = testNet(net, input)</div></pre></td></tr></table></figure>
-<p>ps：我发现原来这篇NIPS 2014的paper有<a href="http://www.cs.nyu.edu/~deigen/depth/" target="_blank" rel="external">项目网站</a>,而且其中还有source code~是在theano框架下写的，weights也在里面！我决定安装一波theano再做一次实验。</p>
-<h2 id="平面检测"><a href="#平面检测" class="headerlink" title="平面检测"></a>平面检测</h2><p>在做完深度估计之后，思考了蛮久深度估计和平面检测的共同之处。看了[5]之后才发现利用深度信息3D重建之后要探测平面就容易了很多。深度估计和平面检测结合起来在机器人技术，场景理解等方面都有所应用。</p>
-<h3 id="1-利用深度信息与超像素算法"><a href="#1-利用深度信息与超像素算法" class="headerlink" title="1. 利用深度信息与超像素算法"></a>1. 利用深度信息与超像素算法</h3><p>这篇论文([5])看了很多遍，前面一部分是按照前面提到的MRF模型得到了深度信息，后面一个部分则是用重建后的3D点和超像素算法判断共面。论文中用到的超像素算法是[6]，这是一个基于图的贪心聚类算法，实现比较简单，但是年代比较久远。在经过了一番调研之后，我决定利用PAMI 2012中一片论文[7]提到的SLIC方法来做过分割，这个方法的核心思想是利用颜色和位置的距离信息作KNN聚类。</p>
-<h4 id="a-超像素算法SLIC"><a href="#a-超像素算法SLIC" class="headerlink" title="a.超像素算法SLIC"></a>a.超像素算法SLIC</h4><p>SLIC 即simple linear iterative clustering。分簇的依据是像素之间的颜色相似性与邻近性。其中颜色相<br>似性的度量因子是lab 颜色空间的L2 范数，颜色邻近性的度量因子是图像二维坐标空间xy。因而综合的度量因子<br>是[labxy]五维空间。下面所述的距离度量因子由下式计算得到：</p>
-<p><img src="http://latex.codecogs.com/svg.latex? d_c = \sqrt{(l_j-l_i)^2 + (a_j-a_i)^2 + (b_j-b_i)^2}" style="border:none;"></p>
-<p><img src="http://latex.codecogs.com/svg.latex?d_s = \sqrt{(x_j-x_i)^2 + (y_j-y_i)^2}" style="border:none;"></p>
-<p><img src="http://latex.codecogs.com/svg.latex? D' = \sqrt{(\frac{d_c}{N_c})^2 + (\frac{d_s}{N_s})^2}" style="border:none;"></p>
-<p>其中Ns与Nc分别是距离与颜色的权重。</p>
-<p>算法思路是对种子坐标为中心的2S*2S范围内所有像素，求这些像素到种子坐标像素的距离度量因子dist，相邻簇之间的重叠区域像素按照距离最小的种子编号（BlockIndex）标记。整幅图像扫描一遍之后，每个像素点都对应一个BlockIndex，相同BlockIndex 的像素属于同一个簇。接下来进入迭代，对上一次划分的每一个簇，求出每一个簇的labxy 均值，作为新的簇心（种子），按照上述规则重新标记，当迭代一定次数之后，分簇结果基本不发生改变即划分完成，迭代结束。（这里摘自<a href="http://blog.chinaunix.net/uid-29431466-id-4831314.html" target="_blank" rel="external">SLIC图像超像素分割算法解析</a>）</p>
-<h4 id="b-平面估计"><a href="#b-平面估计" class="headerlink" title="b.平面估计"></a>b.平面估计</h4><p>在获取了超像素分割的cluster，以及通过获取的深度信息<strong>重建了3D坐标</strong>之后，就可以来进行平面估计了。主要分三步：</p>
-<ol>
-<li>对于过分割的每一个cluster，根据cluster中的3D点拟合出一个平面并求出一个法向量</li>
-<li>根据超像素分割的结果建立一个邻接矩阵判断BlockIndex之间是否相邻</li>
-<li>根据BFS算法遍历邻接矩阵，通过每个cluster拟合平面法向量的夹角余弦来判断相邻cluster之间是否共面。</li>
-</ol>
-<p>主要流程是这样，其中拟合平面的部分我用到了SVD降维的方法，即求出取样点的协方差矩阵，对角化后最小的特征值对应的特征向量就是平面的法向量。</p>
-<h4 id="c-小结-1"><a href="#c-小结-1" class="headerlink" title="c.小结"></a>c.小结</h4><p>这一部分算法还是很好理解的，看懂算法我基本上就可以开始撸代码了。这个算法的优点在于简单，直观，但是缺点在于有很多参数影响（SLIC的参数，夹角余弦共面的阈值），而且这种方法是极其依赖于深度图的效果（我们组做presentation的时候老师说就是因为深度图不够好所以结果差强人意）。下面提到的方法比较复杂，但是实现的效果也会好一些。</p>
-<h3 id="2-RVM-MRF建模"><a href="#2-RVM-MRF建模" class="headerlink" title="2. RVM+MRF建模"></a>2. RVM+MRF建模</h3><p>这个方法出自[8].这个paper我觉得可读性真的是不太好，读了几遍才总算是把它的方法给看明白了，核心思想和NIPS 2005深度估计那篇paper类似，提取特征，马尔科夫建模得到每个像素点是否处于平面区域以及每个平面的方向，之后又用滑动窗口再去检测那些不同方向之间重叠的区域的具体方向，这样就能得到一个比较准确的结果。</p>
-<h4 id="a-平面评估"><a href="#a-平面评估" class="headerlink" title="a.平面评估"></a>a.平面评估</h4><p>这篇paper提到的Depth Estimation的方法主要出自[9],通过这种方式可以粗略估计独立区域的方向。</p>
-<p>首先提取特征，这里主要用Gaussian descriptor提取了纹理和颜色特征，具体说来纹理体征用到12个bin的梯度直方图，而颜色特征则是用到了20个bin的红绿蓝三通道的密度直方图。由于得到的特征维度太大，所以利用bag of words的方法把这些特征KNN聚类减少维度（<a href="https://en.wikipedia.org/wiki/Bag-of-words_model" target="_blank" rel="external">Bag-of-words model</a>）。为了合并得到的纹理和颜色两个词典，用NOMF（<a href="https://en.wikipedia.org/wiki/Non-negative_matrix_factorization" target="_blank" rel="external">Non-negative matrix factorization</a>）将两个文档矩阵合并起来。最后对于图像的每一个区域根据提取的特征词典创建空域图，而空域图Sa，Sb的相似度<img src="http://latex.codecogs.com/svg.latex? \rho(S^A,S^B)" style="border:none;">也是之后作回归和分类的基础。</p>
-<p>在得到了相似度ρ之后，可以用一个基于ρ的核函数</p>
-<p><img src="http://latex.codecogs.com/svg.latex? K_S(S^A,S^B)=\sum_{q=1}^{Q}{\rho(S^A,S^B)^q}" style="border:none;"></p>
-<p>来进行RVM（<a href="https://en.wikipedia.org/wiki/Relevance_vector_machine" target="_blank" rel="external">Relevance vector machine</a>）进行回归得到角度值以及进行二值分类得到它是否为一个平面。</p>
-<h4 id="b-平面检测"><a href="#b-平面检测" class="headerlink" title="b.平面检测"></a>b.平面检测</h4><p>前面的RVM只能做到平面的评估，在边缘细节方面的方向估计可能还不够精确。所以来要用MRF建模对上一步中得到的结果进一步改进。</p>
-<p>首先用sweep window在整张图像上滑动，对于那些显著特性（over-lapping area）的点，把这些点作为圆心，利用周围的点的特性来判断圆心的点是否为平面以及角度。利用多组半径做实验，取中位数得到的属于平面的概率ri,以及它的方向di。</p>
-<p>之后利用MRF进行建模，对于是否为平面只需做二值分类，而方向判定则转换为属于一张图中有限平面之一，其中ri和di用的是sweep window得到的结果，n表示图像中每一个可能的平面对应的方向。</p>
-<p><img src="http://latex.codecogs.com/svg.latex? U(p)=\sum_{i\in S}V_1(p_i,r_i)+\sum_{i \in S}\sum_{j \in N_i}V_2(p_i,p_j)" style="border:none;"></p>
-<p><img src="http://latex.codecogs.com/svg.latex? E(n)=\sum_{i\in S'}F_1(n_i,d_i)+\sum_{i \in S'}\sum_{j \in N_i}F_2(n_i,n_j)" style="border:none;"></p>
-<h4 id="c-小结-2"><a href="#c-小结-2" class="headerlink" title="c.小结"></a>c.小结</h4><p>最后这个实验得到的结果是，88%对是否为平面的判断是正确的，而对于角度有18.3°的误差，此外，这种方法对于检测小区域的效果比较差。总体说来，这里的平面检测没有用到重构得到的3D坐标，直接用2D坐标建模，应该比之前的方式实现起来更容易。但是这里用了两个模型一共三次，RVM+MRF+RVM，而且篇paper的整个算法流程真的讲的很难明白。对于用如此复杂的方式得到一个并不算好的结果，我对这种方法是不喜欢的。</p>
-<h3 id="3-代码实现-1"><a href="#3-代码实现-1" class="headerlink" title="3. 代码实现"></a>3. 代码实现</h3><p>这里用到的是前面一篇paper的方式，slic算法+BFS遍历+共面判断，实现起来也不复杂。在验收的时候老师问我在重建了3D点之后为什么不用ransac，当时回答没有想到，但是现在细细想想，我觉得在一个重建的3D图里用ransac应该只能检测出一个最大的平面（就我理解ransac应该是整张图符合一个模型，而使outliner尽可能少），如果需要多个平面应该要提前分割对每一块去拟合平面。这样想想我还是没有办法用一个尽可能简单清晰的方式用ransac得到这种算法的效果。<br>在这边列几个函数，首先是多个3D点拟合平面的：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">fit_plane</span><span class="params">(samples)</span>:</span></div><div class="line"> <span class="string">"""</span></div><div class="line"> To fit a plane according to a series of 3D points</div><div class="line"> Args: </div><div class="line">     samples</div><div class="line"> Returns: </div><div class="line">     norm_vec: the normal vector of the fitted plane</div><div class="line"> """</div><div class="line"> centroid = np.mean(samples, axis=<span class="number">0</span>)</div><div class="line"> <span class="keyword">for</span> i <span class="keyword">in</span> range(samples.shape[<span class="number">0</span>]):</div><div class="line">     samples[i] = samples[i] - centroid</div><div class="line"> cov = np.dot(np.transpose(samples),samples)</div><div class="line"> U,s,V = np.linalg.svd(cov)</div><div class="line"> norm_vec = V[<span class="number">2</span>][:]</div><div class="line"> <span class="keyword">return</span> norm_vec</div></pre></td></tr></table></figure></p>
-<p>然后是BFS遍历的部分：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(seg_num): <span class="comment">#begin BFS</span></div><div class="line">	<span class="keyword">if</span>(visited[i]==<span class="keyword">False</span>):</div><div class="line">		visited[i] = <span class="keyword">True</span></div><div class="line">		qNode.append(i)</div><div class="line">		<span class="keyword">while</span>(len(qNode)!=<span class="number">0</span>):</div><div class="line">			current = qNode.pop(<span class="number">0</span>)</div><div class="line">			<span class="keyword">for</span> j <span class="keyword">in</span> range(seg_num):</div><div class="line">				<span class="keyword">if</span>(adj_matrix[current][j]!=<span class="number">0</span> <span class="keyword">and</span> visited[j]==<span class="keyword">False</span>):</div><div class="line">					visited[j] = <span class="keyword">True</span></div><div class="line">					qNode.append(j)</div><div class="line">					sample1 = get_samples(idx_clusters,current,sample_num,depth)</div><div class="line">					sample2 = get_samples(idx_clusters,j,sample_num,depth)</div><div class="line">					<span class="keyword">if</span>(is_coplanar(sample1,sample2)):</div><div class="line">						root[j] = root[current] <span class="comment">#end BFS</span></div></pre></td></tr></table></figure></p>
-<h2 id="网站建设"><a href="#网站建设" class="headerlink" title="网站建设"></a>网站建设</h2><p>网站建设其实是项目一开始没有考虑到的。一刚开始我就只是git clone了两个项目<a href="https://github.com/PSMM/SLIC-Superpixels" target="_blank" rel="external">SLIC-Superpixels</a>（in C++)和<a href="https://github.com/janivanecky/Depth-Estimation" target="_blank" rel="external">Depth-estimation</a>(in python)，在SLIC算法之中增加了[5]这篇paper的实现。也就是说核心算法部分用到了python和C++两种语言。本来觉得能跑出结果就很好了，可是在验收的前一周突然又想到可以做一个demo展示一下，不然还有一个星期的时间很浪费。最后大胆的决定用python将plane-detection的部分完全重构一遍，最后用<a href="https://en.wikipedia.org/wiki/Django_(web_framework)" target="_blank" rel="external">Django</a>框架写一个前端页面与后台可以连接起来。</p>
-<h3 id="1-Django简介"><a href="#1-Django简介" class="headerlink" title="1. Django简介"></a>1. Django简介</h3><p>Django是一个开放源代码的Web应用框架，由Python写成。采用了MVC的框架模式，即模型M，视图V和控制器C。利用Django开发可以省去很多web开发的麻烦，程序员可以专注于写应用而不用去造轮子。并且它是开源且免费的。（<a href="https://www.djangoproject.com/start/overview/" target="_blank" rel="external">Django Overview</a>）</p>
-<h3 id="2-view与template"><a href="#2-view与template" class="headerlink" title="2. view与template"></a>2. view与template</h3><p>关于django我了解的不多，也主要是现学现卖了。这里我的项目主要用到了template和view方面的知识，简单的说一下我用到的功能，如需更系统学习django可以访问<a href="https://docs.djangoproject.com/en/1.10/" target="_blank" rel="external">django Documentation</a>.</p>
-<p>view负责的是对视图的渲染，一个页面中有一个内容是动态的，不是静态写在html中而是要需要一定的操作（譬如从数据库中提取，或是经过一定处理）才能够展现在静态页面里的。访问了一个views.py中的函数就相当于提前把要在页面上显示的内容准备一下，之后再返回一个已经写好的html页面，并把html中相关的动态内容替换成处理后的内容。在本项目中，Views.py中的 get<em> pic 函数调用了 get</em> depth 与 get_ plane   两个函数得到了所需要的深度图和平面检测图，并以一定的名称保存到本地。</p>
-<p>template负责的是展示的页面，我的项目中有一个demo.html页面负责选择图片上传，还有一个show_pic.html的页面负责展示原图，深度图，两种不同形式的平面检测图。具体参见我们的<a href="http://itec.hust.edu.cn/~chenghn/project/Depth_Estimation/material/Demo_Video.mp4" target="_blank" rel="external">Demo Video</a>这两个页面放在新建的template文件夹中。</p>
-<p>除此之外，还要在url.py里进行配置，这一步主要是将在浏览器地址栏中输入的url与views.py中渲染页面的函数对应起来。</p>
-<p>这一部分详细见 <a href="https://docs.djangoproject.com/en/1.10/intro/tutorial03/" target="_blank" rel="external">Part3:Views and templates</a>.</p>
-<h3 id="3-代码实现-2"><a href="#3-代码实现-2" class="headerlink" title="3. 代码实现"></a>3. 代码实现</h3><p>处理图片之后显示的代码在views.py中的get _pic 函数中，在get <em>depth 与get</em> plane 两个函数中都把处理过后的图片保存下来了。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_pic</span><span class="params">(request)</span>:</span></div><div class="line"><span class="keyword">if</span> request.method==<span class="string">'POST'</span>:</div><div class="line">	<span class="keyword">try</span>:</div><div class="line">		image = request.FILES[<span class="string">'image'</span>]</div><div class="line">		img = Image.open(image)</div><div class="line">		filepath=<span class="string">'media/origin.png'</span></div><div class="line">		img.save(filepath)</div><div class="line">		get_depth(filepath)</div><div class="line">		get_planar(<span class="string">'media/img.png'</span>,<span class="string">'media/depth.png'</span>)</div><div class="line">		<span class="keyword">return</span> render_to_response(<span class="string">'show_pic.html'</span>,&#123;<span class="string">'image'</span>:<span class="string">'/media/test.png'</span>&#125;)</div><div class="line">	<span class="keyword">except</span> Exception,e:</div><div class="line">		<span class="keyword">return</span> HttpResponse(e)</div></pre></td></tr></table></figure>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>前前后后大概花了三个星期来完成这个项目，又花了三天的时间码完这篇1w字的技术博客真是满满的成就感啊~这个项目的源码在<a href="https://github.com/honey0920/depth-estimation-plane-detection" target="_blank" rel="external">这里</a>，我们的项目网站在<a href="http://itec.hust.edu.cn/~chenghn/project/Depth_Estimation/index.html" target="_blank" rel="external">这里</a>。说起来我对机器学习和深度学习也并没有很了解，关于深度估计和平面检测这块我也是第一次接触，上文中很多提到的方法可能有错误或者不足，也希望大家能指出来。接下来自己想学习部分在<strong>python爬虫</strong> /  <strong>tensorflow写深度学习</strong>。立个flag吧，四月份还会写一篇技术博客。加油！</p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
-<li>Learning Depth from Single Monocular Images, Ashutosh Saxena, Sung H. Chung, Andrew Y. Ng. NIPS 2005. </li>
-<li>3-D Depth Reconstruction from a Single Still Image, Ashutosh Saxena, Sung H. Chung, Andrew Y. Ng. In IJCV 2007.</li>
-<li>Make3D: Learning 3D Scene Structure from a Single Still Image, Ashutosh Saxena, Min Sun, Andrew Y. Ng. IEEE Transactions of Pattern Analysis and Machine Intelligence (PAMI), vol. 30, no. 5, pp 824-840, 2009. </li>
-<li>Depth Map Prediction from a Single Image using a Multi-Scale Deep Network.(Nips 2014)</li>
-<li>Accurate 3D ground plane estimation from a single image(ICRA 2009)</li>
-<li>Efficient Graph-Based Image Segmentation,IJCV 2004,MIT</li>
-<li>SLIC Superpixels Compared to State-of-the-art Superpixel Methods, IEEE Transactions on Pattern Analysis and Machine Intelligence</li>
-<li>Detecting planes and estimating their orientation from a single image, In Proc. of BMVC 2011.</li>
-</ol>
-
+<p>##线性分类器<br>为了解决knn算法中出现的时间和空间开销太大的问题，这里提出了线性分类器。线性分类器分为两个部分，首先是一个得分函数将输入的原始数据映射到每一个分类label的得分，第二部分是一个可以量化预测得分和真实分类的损失函数。</p>
+<p>利用线性分类器进行分类的具体步骤如下：</p>
+<ul>
+<li>首先进行数据的预处理，一般来说在机器学习中输入特征总是会被归一化（在图像的情况下，每个像素就是一个特征）。具体来说每个像素都要减去所有像素的平均值，之后再缩放这些特征，使得所有特征的取值范围都在[-1,1]。</li>
+<li>在进行<img src="http://latex.codecogs.com/gif.latex?f(x_i,W,b)&space;=&space;Wx_i&space;&plus;&space;b" title="f(x_i,W,b) = Wx_i + b">计算时，可以将x向量增加一维并全置1，相应的把对应的权重矩阵W也增加一维，这样原本的W，b两个参数就可以变为一个参数。<img src="http://latex.codecogs.com/gif.latex?f(x_i,W)&space;=&space;Wx_i" title="f(x_i,W) = Wx_i"></li>
+<li>在通过得分函数计算出了每个变量分在每一个类的得分之后，得分最高的就应该是预测的分类结果。</li>
+</ul>
+<p>上面提到的是测试分类的过程，训练的过程就是通过大量的训练数据集不断调整W与b，使得其能有最好的分类结果。而W和b的调整标准就在于loss function，loss function在预测结果与真实结果最为接近时值最小，通过最优化算法（梯度下降，牛顿法/拟牛顿法）通过每次迭代loss function的函数值来更新W,b的值，使得在训练结束之后得到的W和b能较好反映图像的特征。下面提到的SVM与Softmax实质上就是两个不同的loss function。</p>
+<h3 id="SVM-loss"><a href="#SVM-loss" class="headerlink" title="SVM loss"></a>SVM loss</h3><p>这里的SVM与cs229等其他机器学习中提到的复杂SVM算法有一定区别，它采用SVM核心的hinge loss，没有讨论svm中涉及到的kernel,dual以及SMO算法。 SVM loss 希望每个图像正确分类的得分比不正确分类的得分高得至少一个固定Δ。</p>
+<p>具体来说，对于第i个例子，我们给出了图像的特征（即像素）与正确分类的标签。得分函数利用输入的像素计算<img src="http://latex.codecogs.com/gif.latex?f(x_i,W)" title="f(x_i,W) ">的分类得分。第i个训练数据多分类SVM的损失可以表示为：<img src="http://latex.codecogs.com/gif.latex?L_i=\sum_{j\neq y_i}\max(0,s_j-s_{y_i}+\Delta)" title="f(x_i,W) "></p>
+<p>从下图也可以看出，svm的loss希望分类正确的得分比分类错误的得分至少高Δ，如果没有做到，那么损失将会累积。<br><img src="http://cs231n.github.io/assets/margin.jpg
+" title="f(x_i,W) "><br>这里的Δ的取值一般为1，其实Δ的变化可能就是使W与b成倍放大和缩小，而不会对分类结果有很大影响。</p>
+<h3 id="Softmax-loss"><a href="#Softmax-loss" class="headerlink" title="Softmax loss"></a>Softmax loss</h3><p>softmax分类器是逻辑回归分类的一般情况。与SVM的loss相比，softmax将对分类得分有一个更直观的概率解释。得分函数<img src="http://latex.codecogs.com/gif.latex?f(x_i,W)&space;=&space;Wx_i" title="f(x_i,W) = Wx_i">不变，但是我们会用log概率处理这些得分并把svm中的hinge loss变为cross-entropy loss（交叉熵损失）：<br><img src="http://latex.codecogs.com/gif.latex?L_i=-\log(\frac{e^{f_{y_i}}}{\sum_j{e^{f_j}}})" title="f(x_i,W) "><br>Softmax函数的一般形式为<img src="http://latex.codecogs.com/gif.latex?f_j(z)&space;=&space;\frac{e^{z_j}}{\sum_k{e^{z_k}}}" title="f_j(z) = \frac{e^{z_j}}{\sum_k{e^{z_k}}}">, 它的输入为任意的实数向量，输出和输入相同维度向量，其中每一个数都在0与1之间且相加的和为1.从上式可以看出，当分类正确的得分越大，分类错误的得分越小，损失就越接近于0。这里借助了概率论中<a href="https://en.wikipedia.org/wiki/Cross_entropy" target="_blank" rel="external">交叉熵</a>的思想。</p>
+<p>在实现softmax算法时，为了计算的稳定性，通常令输入的实数向量中每个值都减去该向量中的最大值，因为：<br><img src="http://latex.codecogs.com/gif.latex?\frac{e^{f_{y_i}}}{\sum_j e^{f_j}}
+= \frac{Ce^{f_{y_i}}}{C\sum_j e^{f_j}}
+= \frac{e^{f_{y_i} + \log C}}{\sum_j e^{f_j + \log C}}" title="f(x_i,W)"></p>
+<h3 id="分析与比较"><a href="#分析与比较" class="headerlink" title="分析与比较"></a>分析与比较</h3><ul>
+<li>Softmax loss function的输出可以看作是分类的概率，而SVM的输出结果没有含义，但是softmax得到的分类概率与正则化参数λ有关。（后面将会提到正则化）</li>
+<li>与Softmax相比，SVM有”局部目的性”(<em>local</em> objective)。 对SVM而言，只要正确结果的得分比错误结果大Δ，那么loss将会为0.如 [10, -100, -100] 与 [10, 9, 9]两个得分（第一个为正确分类结果），SVM产生的loss是一样的，而Softmax则永远不会对分类结果“感到满意”,即Loss永远不会为0。它希望分类正确的得分越大越好，分类错误的得分越小越好。这样的特性也使SVM与Softmax分别有不同的应用领域。</li>
+</ul>
+<p>##神经网络</p>
+<p>###神经网络模型</p>
+<h3 id="反向传导算法"><a href="#反向传导算法" class="headerlink" title="反向传导算法"></a>反向传导算法</h3><p>##分类中的其他问题</p>
+<h3 id="正则化"><a href="#正则化" class="headerlink" title="正则化"></a>正则化</h3><h3 id="最优化算法"><a href="#最优化算法" class="headerlink" title="最优化算法"></a>最优化算法</h3><h3 id="validation-sets"><a href="#validation-sets" class="headerlink" title="validation sets"></a>validation sets</h3><h3 id="特征提取"><a href="#特征提取" class="headerlink" title="特征提取"></a>特征提取</h3><h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2>
       
 
       
@@ -365,7 +313,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=https://honey0920.github.io/2017/03/30/depth-02/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://honey0920.github.io/2017/05/19/classifier-04/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -379,18 +327,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/04/25/scrapy-03/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          网络爬虫的原理与应用
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/01/27/diary-01/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">写在2016年的最后一天</div>
+    <a href="/2017/04/25/scrapy-03/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">网络爬虫的原理与应用</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -404,7 +343,7 @@
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="depth-02" data-title="深度估计&amp;平面检测小结" data-url="https://honey0920.github.io/2017/03/30/depth-02/"></div>
+	<div class="ds-thread" data-thread-key="classifier-04" data-title="cs231n assignment1-几种分类算法" data-url="https://honey0920.github.io/2017/05/19/classifier-04/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
