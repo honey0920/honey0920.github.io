@@ -28,7 +28,7 @@
 <meta property="og:image" content="http://latex.codecogs.com/gif.latex?\frac{e^{f_{y_i}}}{\sum_j e^{f_j}}
 = \frac{Ce^{f_{y_i}}}{C\sum_j e^{f_j}}
 = \frac{e^{f_{y_i} + \log C}}{\sum_j e^{f_j + \log C}}">
-<meta property="og:updated_time" content="2017-05-19T11:25:38.359Z">
+<meta property="og:updated_time" content="2017-05-19T11:27:28.887Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="cs231n assignment1-几种分类算法">
 <meta name="twitter:description" content="最近开始上斯坦福大学cs231n的公开课。其实上学期已经过了一遍cs224d了，当时看的是无字幕的视频，感觉收获并不是特别大，可能是由于学弟的时候断断续续很多实现的细节还是没有理解。这次学习cs231n就只是看了课程网站上的lecture note，跟着写了写作业。cs231n的内容涉及到机器学习中的多种算法以及 cnn/rnn等多种神经网络，之后的作业也还都比较有趣。现在写了第一周的作业，主要涉">
@@ -194,7 +194,7 @@
       
         <p>最近开始上斯坦福大学<a href="http://cs231n.stanford.edu/" target="_blank" rel="external">cs231n</a>的公开课。其实上学期已经过了一遍cs224d了，当时看的是无字幕的视频，感觉收获并不是特别大，可能是由于学弟的时候断断续续很多实现的细节还是没有理解。这次学习cs231n就只是看了课程网站上的lecture note，跟着写了写作业。cs231n的内容涉及到机器学习中的多种算法以及 cnn/rnn等多种神经网络，之后的作业也还都比较有趣。现在写了第一周的作业，主要涉及到了几种分类算法，在这里小结一下。</p>
 <h2 id="knn算法"><a href="#knn算法" class="headerlink" title="knn算法"></a>knn算法</h2><p>一般来说，knn作为无监督学习(unsupervised learning)可以作聚类，这里把knn作为监督学习(supervised learning)，将<a href="http://www.cs.toronto.edu/~kriz/cifar.html" target="_blank" rel="external">CIFAR-10 dataset</a>中的图片作为训练集和测试集，将测试集中的每一张图片与训练集中的每一张比对，选出最相似的k张，这k个label中出现次数最多的就是测试集的判定分类结果。</p>
-<p>###L1与L2距离<br>为了计算两张图片之间的差距，把数据集中的32 <em> 32 </em> 3的原始图片延展成一个一维向量，共有32 <em> 32 </em>3维特征。<br>对于测试集与训练集的距离计算，有两种方式，L1距离与L2距离。</p>
+<h3 id="L1与L2距离"><a href="#L1与L2距离" class="headerlink" title="L1与L2距离"></a>L1与L2距离</h3><p>为了计算两张图片之间的差距，把数据集中的32 <em> 32 </em> 3的原始图片延展成一个一维向量，共有32 <em> 32 </em>3维特征。<br>对于测试集与训练集的距离计算，有两种方式，L1距离与L2距离。</p>
 <p>L1距离：<br><img src="http://latex.codecogs.com/gif.latex?d_1(I_1,I_2)=\sum_{p}|I_1^p&space;-&space;I_2^p|" title="d_1(I_1,I_2)=\sum_{p}|I_1^p - I_2^p|"><br>L2距离：<br><img src="http://latex.codecogs.com/gif.latex?d_2(I_1,I_2)=\sqrt{\sum_{p}(I_1^p&space;-&space;I_2^p)^2"><br>基于L1距离的knn分类算法在CIFAR-10上的准确率可以达到38.6%，而基于L2距离的knn分类器准确率则为35.4%。对于L2距离而言，由于距离之间的差有平方，L2在距离差异较大时会产生更大的分歧。</p>
 <h3 id="knn分类的优缺点"><a href="#knn分类的优缺点" class="headerlink" title="knn分类的优缺点"></a>knn分类的优缺点</h3><ul>
 <li>knn的优点在于，算法非常简单直观，不需要额外的训练时间。</li>
@@ -220,10 +220,7 @@
 <li>Softmax loss function的输出可以看作是分类的概率，而SVM的输出结果没有含义，但是softmax得到的分类概率与正则化参数λ有关。（后面将会提到正则化）</li>
 <li>与Softmax相比，SVM有”局部目的性”(<em>local</em> objective)。 对SVM而言，只要正确结果的得分比错误结果大Δ，那么loss将会为0.如 [10, -100, -100] 与 [10, 9, 9]两个得分（第一个为正确分类结果），SVM产生的loss是一样的，而Softmax则永远不会对分类结果“感到满意”,即Loss永远不会为0。它希望分类正确的得分越大越好，分类错误的得分越小越好。这样的特性也使SVM与Softmax分别有不同的应用领域。</li>
 </ul>
-<p>##神经网络</p>
-<p>###神经网络模型</p>
-<h3 id="反向传导算法"><a href="#反向传导算法" class="headerlink" title="反向传导算法"></a>反向传导算法</h3><p>##分类中的其他问题</p>
-<h3 id="正则化"><a href="#正则化" class="headerlink" title="正则化"></a>正则化</h3><h3 id="最优化算法"><a href="#最优化算法" class="headerlink" title="最优化算法"></a>最优化算法</h3><h3 id="validation-sets"><a href="#validation-sets" class="headerlink" title="validation sets"></a>validation sets</h3><h3 id="特征提取"><a href="#特征提取" class="headerlink" title="特征提取"></a>特征提取</h3><h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2>
+<h2 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h2><h3 id="神经网络模型"><a href="#神经网络模型" class="headerlink" title="神经网络模型"></a>神经网络模型</h3><h3 id="反向传导算法"><a href="#反向传导算法" class="headerlink" title="反向传导算法"></a>反向传导算法</h3><h2 id="分类中的其他问题"><a href="#分类中的其他问题" class="headerlink" title="分类中的其他问题"></a>分类中的其他问题</h2><h3 id="正则化"><a href="#正则化" class="headerlink" title="正则化"></a>正则化</h3><h3 id="最优化算法"><a href="#最优化算法" class="headerlink" title="最优化算法"></a>最优化算法</h3><h3 id="validation-sets"><a href="#validation-sets" class="headerlink" title="validation sets"></a>validation sets</h3><h3 id="特征提取"><a href="#特征提取" class="headerlink" title="特征提取"></a>特征提取</h3><h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2>
       
 
       
@@ -447,11 +444,11 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">生活</a>
+                <a href="javascript:void(0)" class="js-tag color3">技术</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">技术</a>
+                <a href="javascript:void(0)" class="js-tag color3">生活</a>
               </li>
             
             <div class="clearfix"></div>
