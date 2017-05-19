@@ -28,9 +28,9 @@
 <meta property="og:image" content="http://latex.codecogs.com/gif.latex?\frac{e^{f_{y_i}}}{\sum_j e^{f_j}}
 = \frac{Ce^{f_{y_i}}}{C\sum_j e^{f_j}}
 = \frac{e^{f_{y_i} + \log C}}{\sum_j e^{f_j + \log C}}">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?R(W) = \sum_k\sum_l W_{k,l}^2">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?L =  \underbrace{ \frac{1}{N} \sum_i L_i }_\text{data loss} + \underbrace{ \lambda R(W) }_\text{regularization loss} \\\\">
-<meta property="og:updated_time" content="2017-05-19T15:37:14.426Z">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?R(W)=\sum_k\sum_lW_{k,l}^2">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?L=\underbrace{\frac{1}{N}\sum_iL_i}_\text{data loss}+\underbrace{\lambdaR(W) }_\text{regularization loss}">
+<meta property="og:updated_time" content="2017-05-19T15:40:05.749Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="cs231n assignment1-几种分类算法">
 <meta name="twitter:description" content="最近开始上斯坦福大学cs231n的公开课。其实上学期已经过了一遍cs224d了，当时看的是无字幕的视频，感觉收获并不是特别大，可能是由于学弟的时候断断续续很多实现的细节还是没有理解。这次学习cs231n就只是看了课程网站上的lecture note，跟着写了写作业。cs231n的内容涉及到机器学习中的多种算法以及 cnn/rnn等多种神经网络，之后的作业也还都比较有趣。现在写了第一周的作业，主要涉">
@@ -222,7 +222,7 @@
 <li>Softmax loss function的输出可以看作是分类的概率，而SVM的输出结果没有含义，但是softmax得到的分类概率与正则化参数λ有关。（后面将会提到正则化）</li>
 <li>与Softmax相比，SVM有”局部目的性”(<em>local</em> objective)。 对SVM而言，只要正确结果的得分比错误结果大Δ，那么loss将会为0.如 [10, -100, -100] 与 [10, 9, 9]两个得分（第一个为正确分类结果），SVM产生的loss是一样的，而Softmax则永远不会对分类结果“感到满意”,即Loss永远不会为0。它希望分类正确的得分越大越好，分类错误的得分越小越好。这样的特性也使SVM与Softmax分别有不同的应用领域。</li>
 </ul>
-<h2 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h2><h3 id="神经网络模型"><a href="#神经网络模型" class="headerlink" title="神经网络模型"></a>神经网络模型</h3><h3 id="反向传导算法"><a href="#反向传导算法" class="headerlink" title="反向传导算法"></a>反向传导算法</h3><h2 id="分类中的其他问题"><a href="#分类中的其他问题" class="headerlink" title="分类中的其他问题"></a>分类中的其他问题</h2><h3 id="正则化"><a href="#正则化" class="headerlink" title="正则化"></a>正则化</h3><p>引入正则化的原因在于，我们想要得到的权重矩阵W是不唯一的。如果W变为原来的2倍得到的分类效果理论上是一样的，但是相应的Loss却相差两倍。我们想要在Loss function上加上一项来移除对于W的模糊性，这一项称为正则惩罚 R(W). 最普遍的L2正则惩罚是权重矩阵W中所有项的平方和：<br><img src="http://latex.codecogs.com/gif.latex?R(W) = \sum_k\sum_l W_{k,l}^2" title="f(x_i,W)"><br>修改后的Loss function变为：<br><img src="http://latex.codecogs.com/gif.latex?L =  \underbrace{ \frac{1}{N} \sum_i L_i }_\text{data loss} + \underbrace{ \lambda R(W) }_\text{regularization loss} \\\\" title="f(x_i,W)"><br>除了L2正则项，还有L1正则项，但L2正则项更倾向于所有的权重变得更加分散，即最后的得分是所有特征综合的结果。正则化参数λ可以通过验证集选取。</p>
+<h2 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h2><h3 id="神经网络模型"><a href="#神经网络模型" class="headerlink" title="神经网络模型"></a>神经网络模型</h3><h3 id="反向传导算法"><a href="#反向传导算法" class="headerlink" title="反向传导算法"></a>反向传导算法</h3><h2 id="分类中的其他问题"><a href="#分类中的其他问题" class="headerlink" title="分类中的其他问题"></a>分类中的其他问题</h2><h3 id="正则化"><a href="#正则化" class="headerlink" title="正则化"></a>正则化</h3><p>引入正则化的原因在于，我们想要得到的权重矩阵W是不唯一的。如果W变为原来的2倍得到的分类效果理论上是一样的，但是相应的Loss却相差两倍。我们想要在Loss function上加上一项来移除对于W的模糊性，这一项称为正则惩罚 R(W). 最普遍的L2正则惩罚是权重矩阵W中所有项的平方和：<br><img src="http://latex.codecogs.com/gif.latex?R(W)=\sum_k\sum_lW_{k,l}^2" title="f(x_i,W)"><br>修改后的Loss function变为：<br><img src="http://latex.codecogs.com/gif.latex?L=\underbrace{\frac{1}{N}\sum_iL_i}_\text{data loss}+\underbrace{\lambdaR(W) }_\text{regularization loss}" title="f(x_i,W)"><br>除了L2正则项，还有L1正则项，但L2正则项更倾向于所有的权重变得更加分散，即最后的得分是所有特征综合的结果。正则化参数λ可以通过验证集选取。</p>
 <h3 id="最优化算法"><a href="#最优化算法" class="headerlink" title="最优化算法"></a>最优化算法</h3><h3 id="validation-sets"><a href="#validation-sets" class="headerlink" title="validation sets"></a>validation sets</h3><p>对于knn算法中的k，线性分类器中的正则项系数λ以及学习速率α，这些参数都对最后的训练结果有极大的影响。我们在确定了分类模型之后，需要找到最好的超参数（Hyperparameter）从而在测试集中得到最高的准确率。</p>
 <p>之所以不能用测试集（test set）来获取超参数，有两个原因。当我们使用原本的测试集我们可能对于某一些超参数可以获得很好的分类准确率，但是当我们的模型被应用到其他的数据时结果也许就不佳。这种情况就说明测试集过拟合了。还有一个原因是，如果用测试集来训练的到超参数，其实也就把测试集当做了训练集，所以在测试集上得到的结果并不能很准确的反映模型的好坏，所以这里我们引进了验证数据集（Validation sets）。一般来说，我们把所有标记过的数据分为测试集，训练集，验证集三个部分，三个部分的比例为7:2:1.</p>
 <h3 id="特征提取"><a href="#特征提取" class="headerlink" title="特征提取"></a>特征提取</h3><h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2>
@@ -449,11 +449,11 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">生活</a>
+                <a href="javascript:void(0)" class="js-tag color3">技术</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">技术</a>
+                <a href="javascript:void(0)" class="js-tag color3">生活</a>
               </li>
             
             <div class="clearfix"></div>
