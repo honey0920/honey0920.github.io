@@ -221,7 +221,8 @@
 <li>对于 <img src="http://latex.codecogs.com/gif.latex?l=n_l-1,n_l-2,n_l-3,\ldots" title="l=n_l-1,n_l-2,n_l-3,\ldots">, 2 的各层，计算：<img src="http://latex.codecogs.com/gif.latex?\delta^{(l)}&space;=&space;\left((W^{(l)})^T&space;\delta^{(l&plus;1)}\right)&space;\bullet&space;f'(z^{(l)})" title="\delta^{(l)} = \left((W^{(l)})^T \delta^{(l+1)}\right) \bullet f'(z^{(l)})"></li>
 <li>计算最终需要的偏导数值：<br><img src="http://ufldl.stanford.edu/wiki/images/math/5/3/9/5391ac390a4e279ac8a543d4d5498ecc.png" title="\nabla_{W^{(l)}} J(W,b;x,y) &= \delta^{(l+1)} (a^{(l)})^T"></li>
 </ol>
-<h2 id="分类中的其他问题"><a href="#分类中的其他问题" class="headerlink" title="分类中的其他问题"></a>分类中的其他问题</h2><h3 id="正则化"><a href="#正则化" class="headerlink" title="正则化"></a>正则化</h3><p>引入正则化的原因在于，我们想要得到的权重矩阵W是不唯一的。如果W变为原来的2倍得到的分类效果理论上是一样的，但是相应的Loss却相差两倍。我们想要在Loss function上加上一项来移除对于W的模糊性，这一项称为正则惩罚 R(W). 最普遍的L2正则惩罚是权重矩阵W中所有项的平方和：<br><img src="http://latex.codecogs.com/gif.latex?R(W)=\sum_k\sum_lW_{k,l}^2" title="f(x_i,W)"><br>修改后的Loss function变为：<br><img src="http://latex.codecogs.com/gif.latex?L=\underbrace{\frac{1}{N}\sum_iL_i}_\text{data loss}+\underbrace{\lambdaR(W) }_\text{regularization loss}" title="f(x_i,W)"><br>除了L2正则项，还有L1正则项，但L2正则项更倾向于所有的权重变得更加分散，即最后的得分是所有特征综合的结果。正则化参数λ可以通过验证集选取。</p>
+<h2 id="分类中的其他问题"><a href="#分类中的其他问题" class="headerlink" title="分类中的其他问题"></a>分类中的其他问题</h2><h3 id="正则化"><a href="#正则化" class="headerlink" title="正则化"></a>正则化</h3><p>引入正则化的原因在于，我们想要得到的权重矩阵W是不唯一的。如果W变为原来的2倍得到的分类效果理论上是一样的，但是相应的Loss却相差两倍。我们想要在Loss function上加上一项来移除对于W的模糊性，这一项称为正则惩罚 R(W). 最普遍的L2正则惩罚是权重矩阵W中所有项的平方和：<br><img src="http://latex.codecogs.com/gif.latex?R(W)=\sum_k\sum_lW_{k,l}^2" title="f(x_i,W)"><br>修改后的Loss function变为：</p>
+<script type="math/tex; mode=display">L =  \underbrace{ \frac{1}{N} \sum_i L_i }_\text{data loss} + \underbrace{ \lambda R(W) }_\text{regularization loss} \\\\</script><p>除了L2正则项，还有L1正则项，但L2正则项更倾向于所有的权重变得更加分散，即最后的得分是所有特征综合的结果。正则化参数λ可以通过验证集选取。</p>
 <h3 id="最优化算法"><a href="#最优化算法" class="headerlink" title="最优化算法"></a>最优化算法</h3><p>在我们构造出了相应的score function和loss function之后，下一步就希望能通过在训练集中评估loss function得到的预测结果和真实结果的差来更新score function中W和b值。 最优化算法就是根据每次得到的预测loss来对W和b中元素值进行调整，从而使模型有更好的分类结果的过程。</p>
 <p>最优化中最经常使用的是<strong>梯度下降法</strong>，其核心思想就是用微积分或数值分析的知识计算出loss function关于W和b的梯度，然后逐渐让W和b沿着求出的梯度方向下降，直到最后loss趋向于一个稳定值。<br><img src="http://latex.codecogs.com/gif.latex?W&space;=&space;W-\alpha\frac{\partial&space;}{W}J(W,b)" title="W = W-\alpha\frac{\partial }{W}J(W,b)"><br>梯度下降法在很多实例中可以取得不错的结果，但是它要求loss function是一个凸函数，否则可能会收敛到局部最优解。梯度下降法有如下几个要点：</p>
 <ul>
@@ -239,7 +240,7 @@
 <li><a href="http://cs231n.github.io/linear-classify" target="_blank" rel="external">cs231n linear classification</a></li>
 <li><a href="http://cs231n.github.io/optimization-1" target="_blank" rel="external">cs231n optimization notes</a></li>
 </ol>
-<script type="math/tex; mode=display">sum_{i=1}^n a_i=0</script>
+
       
 
       
@@ -700,11 +701,11 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">生活</a>
+                <a href="javascript:void(0)" class="js-tag color3">技术</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">技术</a>
+                <a href="javascript:void(0)" class="js-tag color3">生活</a>
               </li>
             
             <div class="clearfix"></div>
