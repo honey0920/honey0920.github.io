@@ -8,22 +8,19 @@
   <link rel="dns-prefetch" href="https://honey0920.github.io">
   <title>cs231n assignment2-最优化小结 | 野草集</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="梯度下降法梯度下降法先随机给出参数的一组值，然后更新参数，使每次更新后的结构都能够让损失函数变小，最终达到最小。在梯度下降法中，目标函数其实可以看做是参数的函数，因为给出了样本输入和输出值后，目标函数就只剩下参数部分了，这时可以把参数看做是自变量，则目标函数变成参数的函数。
-SGD批量梯度下降法在更新每一个参数时，都需要所有的训练样本，所以训练过程会随着样本数量的加大而变得异常的缓慢，所以提出了随">
+  <meta name="description" content="cs231n的第二次作业因为各种课以及考试中断了很久，在一切结束后接上来总是有种力不从心的感觉。assignment 2 涉及到的知识点太多了，神经网络中的各种tricks，sgd加速，batch normalization，drop out等。神经网络以及卷积神经网络各层的前向传播以及后向传播。涉及到传播的可能需要复杂的公式推导以及扎实的python编程基础，所以做起来还是很头疼，但是前面的各种">
 <meta property="og:type" content="article">
 <meta property="og:title" content="cs231n assignment2-最优化小结">
 <meta property="og:url" content="https://honey0920.github.io/2017/06/12/optimization-05/index.html">
 <meta property="og:site_name" content="野草集">
-<meta property="og:description" content="梯度下降法梯度下降法先随机给出参数的一组值，然后更新参数，使每次更新后的结构都能够让损失函数变小，最终达到最小。在梯度下降法中，目标函数其实可以看做是参数的函数，因为给出了样本输入和输出值后，目标函数就只剩下参数部分了，这时可以把参数看做是自变量，则目标函数变成参数的函数。
-SGD批量梯度下降法在更新每一个参数时，都需要所有的训练样本，所以训练过程会随着样本数量的加大而变得异常的缓慢，所以提出了随">
+<meta property="og:description" content="cs231n的第二次作业因为各种课以及考试中断了很久，在一切结束后接上来总是有种力不从心的感觉。assignment 2 涉及到的知识点太多了，神经网络中的各种tricks，sgd加速，batch normalization，drop out等。神经网络以及卷积神经网络各层的前向传播以及后向传播。涉及到传播的可能需要复杂的公式推导以及扎实的python编程基础，所以做起来还是很头疼，但是前面的各种">
 <meta property="og:image" content="http://cs231n.github.io/assets/nn3/nesterov.jpeg">
 <meta property="og:image" content="https://pic2.zhimg.com/9ad70be49c408d464c71b8e9a006d141_b.jpg">
 <meta property="og:image" content="https://pic1.zhimg.com/beb44145200caafe24fe88e7480e9730_b.jpg">
-<meta property="og:updated_time" content="2017-06-12T14:04:17.107Z">
+<meta property="og:updated_time" content="2017-06-12T15:28:27.877Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="cs231n assignment2-最优化小结">
-<meta name="twitter:description" content="梯度下降法梯度下降法先随机给出参数的一组值，然后更新参数，使每次更新后的结构都能够让损失函数变小，最终达到最小。在梯度下降法中，目标函数其实可以看做是参数的函数，因为给出了样本输入和输出值后，目标函数就只剩下参数部分了，这时可以把参数看做是自变量，则目标函数变成参数的函数。
-SGD批量梯度下降法在更新每一个参数时，都需要所有的训练样本，所以训练过程会随着样本数量的加大而变得异常的缓慢，所以提出了随">
+<meta name="twitter:description" content="cs231n的第二次作业因为各种课以及考试中断了很久，在一切结束后接上来总是有种力不从心的感觉。assignment 2 涉及到的知识点太多了，神经网络中的各种tricks，sgd加速，batch normalization，drop out等。神经网络以及卷积神经网络各层的前向传播以及后向传播。涉及到传播的可能需要复杂的公式推导以及扎实的python编程基础，所以做起来还是很头疼，但是前面的各种">
 <meta name="twitter:image" content="http://cs231n.github.io/assets/nn3/nesterov.jpeg">
   
     <link rel="alternative" href="/atom.xml" title="野草集" type="application/atom+xml">
@@ -184,7 +181,8 @@ SGD批量梯度下降法在更新每一个参数时，都需要所有的训练�
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="梯度下降法"><a href="#梯度下降法" class="headerlink" title="梯度下降法"></a>梯度下降法</h2><p>梯度下降法先随机给出参数的一组值，然后更新参数，使每次更新后的结构都能够让损失函数变小，最终达到最小。在梯度下降法中，目标函数其实可以看做是参数的函数，因为给出了样本输入和输出值后，目标函数就只剩下参数部分了，这时可以把参数看做是自变量，则目标函数变成参数的函数。</p>
+        <p>cs231n的第二次作业因为各种课以及考试中断了很久，在一切结束后接上来总是有种力不从心的感觉。assignment 2 涉及到的知识点太多了，神经网络中的各种tricks，sgd加速，batch normalization，drop out等。神经网络以及卷积神经网络各层的前向传播以及后向传播。涉及到传播的可能需要复杂的公式推导以及扎实的python编程基础，所以做起来还是很头疼，但是前面的各种tricks也是让我涨姿势了~ 这里就把最优化的一些知识点小结一下。</p>
+<h2 id="梯度下降法"><a href="#梯度下降法" class="headerlink" title="梯度下降法"></a>梯度下降法</h2><p>梯度下降法先随机给出参数的一组值，然后更新参数，使每次更新后的结构都能够让损失函数变小，最终达到最小。在梯度下降法中，目标函数其实可以看做是参数的函数，因为给出了样本输入和输出值后，目标函数就只剩下参数部分了，这时可以把参数看做是自变量，则目标函数变成参数的函数。</p>
 <h3 id="SGD"><a href="#SGD" class="headerlink" title="SGD"></a>SGD</h3><p>批量梯度下降法在更新每一个参数时，都需要所有的训练样本，所以训练过程会随着样本数量的加大而变得异常的缓慢，所以提出了随机梯度下降（SGD）算法。SGD就是每一次迭代计算mini-batch的梯度，然后对参数进行更新。</p>
 <script type="math/tex; mode=display">g_t=\nabla_{\theta_{t-1}}{f(\theta_{t-1})}</script><p>\Delta{\theta_t}=-\eta*g_t</p>
 <script type="math/tex; mode=display">\Delta{\theta_t}=-\eta*g_t\</script><p>其中 $\eta$是学习率，$g_t$是梯度</p>
