@@ -178,7 +178,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近开始上斯坦福大学<a href="http://cs231n.stanford.edu/" target="_blank" rel="external">cs231n</a>的公开课。其实上学期已经过了一遍cs224d了，当时看的是无字幕的视频，感觉收获并不是特别大，可能是由于学弟的时候断断续续很多实现的细节还是没有理解。这次学习cs231n就只是看了课程网站上的lecture note，跟着写了写作业。cs231n的内容涉及到机器学习中的多种算法以及 cnn/rnn等多种神经网络，之后的作业也还都比较有趣。现在写了第一周的作业，主要涉及到了几种分类算法，在这里小结一下。</p>
+        <p>最近开始上斯坦福大学<a href="http://cs231n.stanford.edu/" target="_blank" rel="external">cs231n</a>的公开课。其实上学期已经过了一遍cs224d了，当时看的是无字幕的视频，感觉收获并不是特别大，可能是由于学习的时候断断续续很多实现的细节还是没有理解。这次学习cs231n就只是看了课程网站上的lecture note，跟着写了写作业。cs231n的内容涉及到机器学习中的多种算法以及 cnn/rnn等多种神经网络，之后的作业也还都比较有趣。现在写了第一周的作业，主要涉及到了几种分类算法，在这里小结一下。</p>
 <h2 id="knn算法"><a href="#knn算法" class="headerlink" title="knn算法"></a>knn算法</h2><p>一般来说，knn作为无监督学习(unsupervised learning)可以作聚类，这里把knn作为监督学习(supervised learning)，将<a href="http://www.cs.toronto.edu/~kriz/cifar.html" target="_blank" rel="external">CIFAR-10 dataset</a>中的图片作为训练集和测试集，将测试集中的每一张图片与训练集中的每一张比对，选出最相似的k张，这k个label中出现次数最多的就是测试集的判定分类结果。</p>
 <h3 id="L1与L2距离"><a href="#L1与L2距离" class="headerlink" title="L1与L2距离"></a>L1与L2距离</h3><p>为了计算两张图片之间的差距，把数据集中的32 <em> 32 </em> 3的原始图片延展成一个一维向量，共有32 <em> 32 </em>3维特征。<br>对于测试集与训练集的距离计算，有两种方式，L1距离与L2距离。</p>
 <p>L1距离：<br><img src="http://latex.codecogs.com/gif.latex?d_1(I_1,I_2)=\sum_{p}|I_1^p&space;-&space;I_2^p|" title="d_1(I_1,I_2)=\sum_{p}|I_1^p - I_2^p|"><br>L2距离：<br><img src="http://latex.codecogs.com/gif.latex?d_2(I_1,I_2)=\sqrt{\sum_{p}(I_1^p&space;-&space;I_2^p)^2"><br>基于L1距离的knn分类算法在CIFAR-10上的准确率可以达到38.6%，而基于L2距离的knn分类器准确率则为35.4%。对于L2距离而言，由于距离之间的差有平方，L2在距离差异较大时会产生更大的分歧。</p>
