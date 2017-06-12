@@ -158,6 +158,99 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-optimization-05" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/06/12/optimization-05/">cs231n assignment2-最优化小结</a>
+    </h1>
+  
+
+        
+        <a href="/2017/06/12/optimization-05/" class="archive-article-date">
+  	<time datetime="2017-06-12T12:52:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="梯度下降法"><a href="#梯度下降法" class="headerlink" title="梯度下降法"></a>梯度下降法</h2><p>梯度下降法先随机给出参数的一组值，然后更新参数，使每次更新后的结构都能够让损失函数变小，最终达到最小。在梯度下降法中，目标函数其实可以看做是参数的函数，因为给出了样本输入和输出值后，目标函数就只剩下参数部分了，这时可以把参数看做是自变量，则目标函数变成参数的函数。</p>
+<h3 id="SGD"><a href="#SGD" class="headerlink" title="SGD"></a>SGD</h3><p>批量梯度下降法在更新每一个参数时，都需要所有的训练样本，所以训练过程会随着样本数量的加大而变得异常的缓慢，所以提出了随机梯度下降（SGD）算法。SGD就是每一次迭代计算mini-batch的梯度，然后对参数进行更新。</p>
+<script type="math/tex; mode=display">g_t=\nabla_{\theta_{t-1}}{f(\theta_{t-1})}</script><p>\Delta{\theta_t}=-\eta*g_t</p>
+<script type="math/tex; mode=display">\Delta{\theta_t}=-\eta*g_t\</script><p>其中 $\eta$是学习率，$g_t$是梯度</p>
+<p>随机梯度下降与传统的梯度下降相比，随机梯度下降法收敛速度速度更快，但是也更容易收敛到局部最优点。除此之外学习率的设置也会极大的影响最终结果。</p>
+<h3 id="Momentum"><a href="#Momentum" class="headerlink" title="Momentum"></a>Momentum</h3><p>momentum是模拟物理里动量的概念，积累之前的动量来替代真正的梯度。公式如下：</p>
+<script type="math/tex; mode=display">m_t=\mu*m_{t-1}+g_t</script><script type="math/tex; mode=display">\Delta{\theta_t}=-\eta*m_t</script><p>其中$\mu$是动量因子，作用是通过历史搜索方向的积累，消除相继搜索方向中相反的方向，而一致的方向则相互累加。<br>与普通的SGD相比，下降初期由于使用上一次参数更新，下降方向一致，乘上较大的$\mu$能够进行很好的加速;而下降中后期时，在局部最小值来回震荡的时候，$gradient\to0$，$\mu$使得更新幅度增大，跳出陷阱。总而言之，momentum项能够在相关方向加速SGD，抑制振荡，从而加快收敛。</p>
+<h3 id="Nesterov"><a href="#Nesterov" class="headerlink" title="Nesterov"></a>Nesterov</h3><p>将momentum方法的公式展开得：</p>
+<script type="math/tex; mode=display">\Delta{\theta_t}=-\eta*\mu*m_{t-1}-\eta*g_t</script><p>可以看出，$m_{t-1}$并没有直接改变当前梯度g_t，所以Nesterov的改进就是让之前的动量直接影响当前的动量。即：</p>
+<script type="math/tex; mode=display">g_t=\nabla_{\theta_{t-1}}{f(\theta_{t-1}-\eta*\mu*m_{t-1})}</script><script type="math/tex; mode=display">m_t=\mu*m_{t-1}+g_t</script><script type="math/tex; mode=display">\Delta{\theta_t}=-\eta*m_t</script><p>所以，加上nesterov项后，梯度在大的跳跃后，进行计算对当前梯度进行校正。momentum方法在红色圆圈点通过得到的动量和梯度放下来得到梯度下降的step，而Nesterov则是在预估出actual step之后再对梯度的方向进行计算和校正。（图片引自<a href="http://cs231n.github.io/neural-networks-3/" target="_blank" rel="external">cs231n Lecture Notes</a>）<br><img src="http://cs231n.github.io/assets/nn3/nesterov.jpeg"></p>
+<p>momentum项和nesterov项都是为了使梯度更新更加灵活，对不同情况有针对性。但是这两种方法和SGD一样都需要人工设置学习率，接下来的几种方法可以自适应学习率。</p>
+<h3 id="Adagrad"><a href="#Adagrad" class="headerlink" title="Adagrad"></a>Adagrad</h3><p>adagrad其实是对学习率进行了一个约束：</p>
+<script type="math/tex; mode=display">n_t=n_{t-1}+g_t^2</script><script type="math/tex; mode=display">\Delta{\theta_t}=-\frac{\eta}{\sqrt{n_t+\epsilon}}*g_t</script><p>此处，对g_t从1到t进行一个递推形成一个约束项regularizer，$-\frac{1}{\sqrt{\sum_{r=1}^t(g_r)^2+\epsilon}}$，$\epsilon$用来保证分母非0。</p>
+<p>前期当$g_t$较小时，regularizer较大，能放大梯度，而后期$g_t$较大，能约束梯度。Adagrad方法仍需设置一个全局学习率，而$\eta$设置过大也会使regularize过于敏感，对梯度调节太大。</p>
+<h3 id="RMSprop"><a href="#RMSprop" class="headerlink" title="RMSprop"></a>RMSprop</h3><p>为了解决Adagrad方法后期学习率消失的问题。与Adadelta中计算所有梯度的均方和不同的是，Rprop将之前所有$g_t$的期望和与当前的$g_t$作了一个加权平均：</p>
+<script type="math/tex; mode=display">E[g^2]_t = \gamma E[g^2]_{t-1} + （1-\gamma） g^2_t</script><script type="math/tex; mode=display">\theta_{t+1} = \theta_{t} - \dfrac{\eta}{\sqrt{E[g^2]_t + \epsilon}} g_{t}</script><p>RMSprop的学习率按照梯度的均方和呈指数衰减。Hinton提出$\gamma$设为0.9，$\eta$设为0.001s此算法效果较好。</p>
+<h3 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h3><p>Adam(Adaptive Moment Estimation)本质上是带有动量项的RMSprop，它利用梯度的一阶矩估计和二阶矩估计动态调整每个参数的学习率。Adam的优点主要在于经过偏置校正后，每一次迭代学习率都有个确定范围，使得参数比较平稳。公式如下：</p>
+<script type="math/tex; mode=display">m_t=\mu*m_{t-1}+(1-\mu)*g_t</script><script type="math/tex; mode=display">n_t=\nu*n_{t-1}+(1-\nu)*g_t^2</script><script type="math/tex; mode=display">\hat{m_t}=\frac{m_t}{1-\mu^t}</script><script type="math/tex; mode=display">\hat{n_t}=\frac{n_t}{1-\nu^t}</script><script type="math/tex; mode=display">\Delta{\theta_t}=-\frac{\hat{m_t}}{\sqrt{\hat{n_t}}+\epsilon}*\eta</script><p>其中，$m_t$，$n_t$分别是对梯度的一阶矩估计和二阶矩估计，可以看作对期望$E|g_t|$，$E|g_t^2|$的估计；$\hat{m_t}$，$\hat{n_t}$是对$m_t$，$n_t$的校正，这样可以近似为对期望的无偏估计。 可以看出，直接对梯度的矩估计对内存没有额外的要求，而且可以根据梯度进行动态调整，而$-\frac{\hat{m_t}}{\sqrt{\hat{n_t}}+\epsilon}$对学习率形成一个动态约束，而且有明确的范围。</p>
+<p>Adam方法结合了Adagrad善于处理稀疏梯度和RMSprop善于处理非平稳目标的优点，为不同的参数计算不同的自适应学习率。</p>
+<h3 id="Batch-Normalization"><a href="#Batch-Normalization" class="headerlink" title="Batch Normalization"></a>Batch Normalization</h3><p>前面提到梯度下降中为了加速收敛，以及避免陷入局部最优一些方法。 在参考文献[3]中提出了Batch Normalization， 它解决了反向传播过程中的梯度问题（梯度消失和爆炸），同时使得不同scale的 权重$w$ 整体更新步调更一致，从而克服深度神经网络难以训练的弊病。</p>
+<p>统计机器学习中的一个经典假设是“源空间（source domain）和目标空间（target domain）的数据分布（distribution）是一致的”。因此我们需要对输入数据进行归一化的处理。但是不同的网络层具有不同的特点，如果简单的将每一层都归一化就会失去不同卷积层的区分性。于是[3]中提出了变换重构，引入了参数$\gamma$,$\beta$:</p>
+<script type="math/tex; mode=display">y^{(k)} = \gamma^{(k)} + \beta^{(k)}</script><p>引入这两个参数之后可以使网络学习会付出原始网络的特征分布。（图片引自[3]）<br><img src="https://pic2.zhimg.com/9ad70be49c408d464c71b8e9a006d141_b.jpg"><br>训练过程如：<br><img src="https://pic1.zhimg.com/beb44145200caafe24fe88e7480e9730_b.jpg"></p>
+<p>具体说来，在神经网络训练时遇到收敛速度很慢，或梯度爆炸等无法训练的状况时可以尝试BN来解决。另外，在一般使用情况下也可以加入BN来加快训练速度，提高模型精度。</p>
+<h2 id="牛顿法与拟牛顿法"><a href="#牛顿法与拟牛顿法" class="headerlink" title="牛顿法与拟牛顿法"></a>牛顿法与拟牛顿法</h2><p>除了梯度下降法，牛顿法也是机器学习中用的比较多的一种优化算法。</p>
+<p>牛顿法的基本思想是利用迭代点处的一阶导数(梯度)和二阶导数(Hessen矩阵)对目标函数进行二次函数近似，然后把二次模型的极小点作为新的迭代点，并不断重复这一过程，直至求得满足精度的近似极小值。牛顿法的速度相当快，而且能高度逼近最优值。</p>
+<h3 id="牛顿法"><a href="#牛顿法" class="headerlink" title="牛顿法"></a>牛顿法</h3><h3 id="拟牛顿法"><a href="#拟牛顿法" class="headerlink" title="拟牛顿法"></a>拟牛顿法</h3><h4 id="DFP-算法"><a href="#DFP-算法" class="headerlink" title="DFP 算法"></a>DFP 算法</h4><h4 id="BFGS-算法"><a href="#BFGS-算法" class="headerlink" title="BFGS 算法"></a>BFGS 算法</h4><h4 id="L-BFGS-算法"><a href="#L-BFGS-算法" class="headerlink" title="L-BFGS 算法"></a>L-BFGS 算法</h4><h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li><a href="https://zhuanlan.zhihu.com/p/22252270" target="_blank" rel="external">深度学习最全优化方法总结比较（SGD，Adagrad，Adadelta，Adam，Adamax，Nadam）</a></li>
+<li><a href="http://sebastianruder.com/optimizing-gradient-descent/index.html#stochasticgradientdescent" target="_blank" rel="external">An overview of gradient descent optimization algorithms</a></li>
+<li><a href="https://arxiv.org/pdf/1502.03167.pdf" target="_blank" rel="external">Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift</a></li>
+<li><a href="https://www.zhihu.com/question/38102762/answer/85238569" target="_blank" rel="external">深度学习中 Batch Normalization为什么效果好？魏秀参的回答</a></li>
+<li><a href="http://blog.csdn.net/hjimce/article/details/50866313" target="_blank" rel="external">Batch Normalization 学习笔记 - hjimce</a></li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技术</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/06/12/optimization-05/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-classifier-04" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     

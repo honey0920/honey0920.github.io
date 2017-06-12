@@ -6,48 +6,25 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://honey0920.github.io">
-  <title>cs231n assignment1-几种分类算法 | 野草集</title>
+  <title>cs231n assignment2-最优化小结 | 野草集</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近开始上斯坦福大学cs231n的公开课。其实上学期已经过了一遍cs224d了，当时看的是无字幕的视频，感觉收获并不是特别大，可能是由于学习的时候断断续续很多实现的细节还是没有理解。这次学习cs231n就只是看了课程网站上的lecture note，跟着写了写作业。cs231n的内容涉及到机器学习中的多种算法以及 cnn/rnn等多种神经网络，之后的作业也还都比较有趣。现在写了第一周的作业，主要涉">
+  <meta name="description" content="梯度下降法梯度下降法先随机给出参数的一组值，然后更新参数，使每次更新后的结构都能够让损失函数变小，最终达到最小。在梯度下降法中，目标函数其实可以看做是参数的函数，因为给出了样本输入和输出值后，目标函数就只剩下参数部分了，这时可以把参数看做是自变量，则目标函数变成参数的函数。
+SGD批量梯度下降法在更新每一个参数时，都需要所有的训练样本，所以训练过程会随着样本数量的加大而变得异常的缓慢，所以提出了随">
 <meta property="og:type" content="article">
-<meta property="og:title" content="cs231n assignment1-几种分类算法">
-<meta property="og:url" content="https://honey0920.github.io/2017/05/19/classifier-04/index.html">
+<meta property="og:title" content="cs231n assignment2-最优化小结">
+<meta property="og:url" content="https://honey0920.github.io/2017/06/12/optimization-05/index.html">
 <meta property="og:site_name" content="野草集">
-<meta property="og:description" content="最近开始上斯坦福大学cs231n的公开课。其实上学期已经过了一遍cs224d了，当时看的是无字幕的视频，感觉收获并不是特别大，可能是由于学习的时候断断续续很多实现的细节还是没有理解。这次学习cs231n就只是看了课程网站上的lecture note，跟着写了写作业。cs231n的内容涉及到机器学习中的多种算法以及 cnn/rnn等多种神经网络，之后的作业也还都比较有趣。现在写了第一周的作业，主要涉">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?d_1(I_1,I_2)=\sum_{p}|I_1^p&space;-&space;I_2^p|">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?d_2(I_1,I_2)=\sqrt{\sum_{p}(I_1^p&space;-&space;I_2^p)^2">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?f(x_i,W,b)&space;=&space;Wx_i&space;+&space;b">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?f(x_i,W)&space;=&space;Wx_i">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?f(x_i,W)">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?L_i=\sum_{j\neq y_i}\max(0,s_j-s_{y_i}+\Delta)">
-<meta property="og:image" content="http://cs231n.github.io/assets/margin.jpg
-">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?f(x_i,W)&space;=&space;Wx_i">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?L_i=-\log(\frac{e^{f_{y_i}}}{\sum_j{e^{f_j}}})">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?f_j(z)&space;=&space;\frac{e^{z_j}}{\sum_k{e^{z_k}}}">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?\frac{e^{f_{y_i}}}{\sum_j e^{f_j}}
-= \frac{Ce^{f_{y_i}}}{C\sum_j e^{f_j}}
-= \frac{e^{f_{y_i} + \log C}}{\sum_j e^{f_j + \log C}}">
-<meta property="og:image" content="http://ufldl.stanford.edu/wiki/images/thumb/9/99/Network331.png/400px-Network331.png">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?n_l">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?a_i^{(l)}">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?z_i^{(l)}">
-<meta property="og:image" content="http://ufldl.stanford.edu/wiki/images/math/5/c/f/5cfcbbe6d55b6c882f56a85a57eafe6e.png">
-<meta property="og:image" content="http://ufldl.stanford.edu/wiki/images/math/a/2/e/a2ec4c7c0fce868f4b5275e8ce307469.png">
-<meta property="og:image" content="http://ufldl.stanford.edu/wiki/images/math/2/2/1/221a7296664022427d488fdb9b14b19b.png">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?n_l">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?\delta^{(n_l)}=-(y-a^{(n_l)})\bulletf'(z^{(n_l)})">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?l=n_l-1,n_l-2,n_l-3,\ldots">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?\delta^{(l)}&space;=&space;\left((W^{(l)})^T&space;\delta^{(l+1)}\right)&space;\bullet&space;f'(z^{(l)})">
-<meta property="og:image" content="http://ufldl.stanford.edu/wiki/images/math/5/3/9/5391ac390a4e279ac8a543d4d5498ecc.png">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?R(W)=\sum_k\sum_lW_{k,l}^2">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?W&space;=&space;W-\alpha\frac{\partial&space;}{W}J(W,b)">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?\frac{df(x)}{dx}&space;=&space;\lim_{h\&space;\to&space;0}&space;\frac{f(x&space;+&space;h)&space;-&space;f(x)}{h}">
-<meta property="og:updated_time" content="2017-06-12T12:42:52.724Z">
+<meta property="og:description" content="梯度下降法梯度下降法先随机给出参数的一组值，然后更新参数，使每次更新后的结构都能够让损失函数变小，最终达到最小。在梯度下降法中，目标函数其实可以看做是参数的函数，因为给出了样本输入和输出值后，目标函数就只剩下参数部分了，这时可以把参数看做是自变量，则目标函数变成参数的函数。
+SGD批量梯度下降法在更新每一个参数时，都需要所有的训练样本，所以训练过程会随着样本数量的加大而变得异常的缓慢，所以提出了随">
+<meta property="og:image" content="http://cs231n.github.io/assets/nn3/nesterov.jpeg">
+<meta property="og:image" content="https://pic2.zhimg.com/9ad70be49c408d464c71b8e9a006d141_b.jpg">
+<meta property="og:image" content="https://pic1.zhimg.com/beb44145200caafe24fe88e7480e9730_b.jpg">
+<meta property="og:updated_time" content="2017-06-12T14:04:17.107Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="cs231n assignment1-几种分类算法">
-<meta name="twitter:description" content="最近开始上斯坦福大学cs231n的公开课。其实上学期已经过了一遍cs224d了，当时看的是无字幕的视频，感觉收获并不是特别大，可能是由于学习的时候断断续续很多实现的细节还是没有理解。这次学习cs231n就只是看了课程网站上的lecture note，跟着写了写作业。cs231n的内容涉及到机器学习中的多种算法以及 cnn/rnn等多种神经网络，之后的作业也还都比较有趣。现在写了第一周的作业，主要涉">
-<meta name="twitter:image" content="http://latex.codecogs.com/gif.latex?d_1(I_1,I_2)=\sum_{p}|I_1^p&space;-&space;I_2^p|">
+<meta name="twitter:title" content="cs231n assignment2-最优化小结">
+<meta name="twitter:description" content="梯度下降法梯度下降法先随机给出参数的一组值，然后更新参数，使每次更新后的结构都能够让损失函数变小，最终达到最小。在梯度下降法中，目标函数其实可以看做是参数的函数，因为给出了样本输入和输出值后，目标函数就只剩下参数部分了，这时可以把参数看做是自变量，则目标函数变成参数的函数。
+SGD批量梯度下降法在更新每一个参数时，都需要所有的训练样本，所以训练过程会随着样本数量的加大而变得异常的缓慢，所以提出了随">
+<meta name="twitter:image" content="http://cs231n.github.io/assets/nn3/nesterov.jpeg">
   
     <link rel="alternative" href="/atom.xml" title="野草集" type="application/atom+xml">
   
@@ -187,87 +164,57 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-classifier-04" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-optimization-05" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      cs231n assignment1-几种分类算法
+      cs231n assignment2-最优化小结
     </h1>
   
 
         
-        <a href="/2017/05/19/classifier-04/" class="archive-article-date">
-  	<time datetime="2017-05-19T11:21:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-19</time>
+        <a href="/2017/06/12/optimization-05/" class="archive-article-date">
+  	<time datetime="2017-06-12T12:52:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-12</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近开始上斯坦福大学<a href="http://cs231n.stanford.edu/" target="_blank" rel="external">cs231n</a>的公开课。其实上学期已经过了一遍cs224d了，当时看的是无字幕的视频，感觉收获并不是特别大，可能是由于学习的时候断断续续很多实现的细节还是没有理解。这次学习cs231n就只是看了课程网站上的lecture note，跟着写了写作业。cs231n的内容涉及到机器学习中的多种算法以及 cnn/rnn等多种神经网络，之后的作业也还都比较有趣。现在写了第一周的作业，主要涉及到了几种分类算法，在这里小结一下。</p>
-<h2 id="knn算法"><a href="#knn算法" class="headerlink" title="knn算法"></a>knn算法</h2><p>一般来说，knn作为无监督学习(unsupervised learning)可以作聚类，这里把knn作为监督学习(supervised learning)，将<a href="http://www.cs.toronto.edu/~kriz/cifar.html" target="_blank" rel="external">CIFAR-10 dataset</a>中的图片作为训练集和测试集，将测试集中的每一张图片与训练集中的每一张比对，选出最相似的k张，这k个label中出现次数最多的就是测试集的判定分类结果。</p>
-<h3 id="L1与L2距离"><a href="#L1与L2距离" class="headerlink" title="L1与L2距离"></a>L1与L2距离</h3><p>为了计算两张图片之间的差距，把数据集中的32 <em> 32 </em> 3的原始图片延展成一个一维向量，共有32 <em> 32 </em>3维特征。<br>对于测试集与训练集的距离计算，有两种方式，L1距离与L2距离。</p>
-<p>L1距离：<br><img src="http://latex.codecogs.com/gif.latex?d_1(I_1,I_2)=\sum_{p}|I_1^p&space;-&space;I_2^p|" title="d_1(I_1,I_2)=\sum_{p}|I_1^p - I_2^p|"><br>L2距离：<br><img src="http://latex.codecogs.com/gif.latex?d_2(I_1,I_2)=\sqrt{\sum_{p}(I_1^p&space;-&space;I_2^p)^2"><br>基于L1距离的knn分类算法在CIFAR-10上的准确率可以达到38.6%，而基于L2距离的knn分类器准确率则为35.4%。对于L2距离而言，由于距离之间的差有平方，L2在距离差异较大时会产生更大的分歧。</p>
-<h3 id="knn分类的优缺点"><a href="#knn分类的优缺点" class="headerlink" title="knn分类的优缺点"></a>knn分类的优缺点</h3><ul>
-<li>knn的优点在于，算法非常简单直观，不需要额外的训练时间。</li>
-<li>缺点在于虽然缺少了训练过程，但是分类的测试时间非常长。且在每次做分类过程中都要与所有的训练数据比较，空间复杂度也很大。在图像分类中，由于维度特别高所以knn也使用不多。</li>
-</ul>
-<h2 id="线性分类器"><a href="#线性分类器" class="headerlink" title="线性分类器"></a>线性分类器</h2><p>为了解决knn算法中出现的时间和空间开销太大的问题，这里提出了线性分类器。线性分类器分为两个部分，首先是一个得分函数将输入的原始数据映射到每一个分类label的得分，第二部分是一个可以量化预测得分和真实分类的损失函数。</p>
-<p>利用线性分类器进行分类的具体步骤如下：</p>
-<ul>
-<li>首先进行数据的预处理，一般来说在机器学习中输入特征总是会被归一化（在图像的情况下，每个像素就是一个特征）。具体来说每个像素都要减去所有像素的平均值，之后再缩放这些特征，使得所有特征的取值范围都在[-1,1]。</li>
-<li>在进行<img src="http://latex.codecogs.com/gif.latex?f(x_i,W,b)&space;=&space;Wx_i&space;&plus;&space;b" title="f(x_i,W,b) = Wx_i + b">计算时，可以将x向量增加一维并全置1，相应的把对应的权重矩阵W也增加一维，这样原本的W，b两个参数就可以变为一个参数。<img src="http://latex.codecogs.com/gif.latex?f(x_i,W)&space;=&space;Wx_i" title="f(x_i,W) = Wx_i"></li>
-<li>在通过得分函数计算出了每个变量分在每一个类的得分之后，得分最高的就应该是预测的分类结果。</li>
-</ul>
-<p>上面提到的是测试分类的过程，训练的过程就是通过大量的训练数据集不断调整W与b，使得其能有最好的分类结果。而W和b的调整标准就在于loss function，loss function在预测结果与真实结果最为接近时值最小，通过最优化算法（梯度下降，牛顿法/拟牛顿法）通过每次迭代loss function的函数值来更新W,b的值，使得在训练结束之后得到的W和b能较好反映图像的特征。下面提到的SVM与Softmax实质上就是两个不同的loss function。</p>
-<h3 id="SVM-loss"><a href="#SVM-loss" class="headerlink" title="SVM loss"></a>SVM loss</h3><p>这里的SVM与cs229等其他机器学习中提到的复杂SVM算法有一定区别，它采用SVM核心的hinge loss，没有讨论svm中涉及到的kernel,dual以及SMO算法。 SVM loss 希望每个图像正确分类的得分比不正确分类的得分高得至少一个固定Δ。</p>
-<p>具体来说，对于第i个例子，我们给出了图像的特征（即像素）与正确分类的标签。得分函数利用输入的像素计算<img src="http://latex.codecogs.com/gif.latex?f(x_i,W)" title="f(x_i,W) ">的分类得分。第i个训练数据多分类SVM的损失可以表示为：<img src="http://latex.codecogs.com/gif.latex?L_i=\sum_{j\neq y_i}\max(0,s_j-s_{y_i}+\Delta)" title="f(x_i,W) "></p>
-<p>从下图也可以看出，svm的loss希望分类正确的得分比分类错误的得分至少高Δ，如果没有做到，那么损失将会累积。<br><img src="http://cs231n.github.io/assets/margin.jpg
-" title="f(x_i,W) "><br>这里的Δ的取值一般为1，其实Δ的变化可能就是使W与b成倍放大和缩小，而不会对分类结果有很大影响。</p>
-<h3 id="Softmax-loss"><a href="#Softmax-loss" class="headerlink" title="Softmax loss"></a>Softmax loss</h3><p>softmax分类器是逻辑回归分类的一般情况。与SVM的loss相比，softmax将对分类得分有一个更直观的概率解释。得分函数<img src="http://latex.codecogs.com/gif.latex?f(x_i,W)&space;=&space;Wx_i" title="f(x_i,W) = Wx_i">不变，但是我们会用log概率处理这些得分并把svm中的hinge loss变为cross-entropy loss（交叉熵损失）：<br><img src="http://latex.codecogs.com/gif.latex?L_i=-\log(\frac{e^{f_{y_i}}}{\sum_j{e^{f_j}}})" title="f(x_i,W) "><br>Softmax函数的一般形式为<img src="http://latex.codecogs.com/gif.latex?f_j(z)&space;=&space;\frac{e^{z_j}}{\sum_k{e^{z_k}}}" title="f_j(z) = \frac{e^{z_j}}{\sum_k{e^{z_k}}}">, 它的输入为任意的实数向量，输出和输入相同维度向量，其中每一个数都在0与1之间且相加的和为1.从上式可以看出，当分类正确的得分越大，分类错误的得分越小，损失就越接近于0。这里借助了概率论中<a href="https://en.wikipedia.org/wiki/Cross_entropy" target="_blank" rel="external">交叉熵</a>的思想。</p>
-<p>在实现softmax算法时，为了计算的稳定性，通常令输入的实数向量中每个值都减去该向量中的最大值，因为：<br><img src="http://latex.codecogs.com/gif.latex?\frac{e^{f_{y_i}}}{\sum_j e^{f_j}}
-= \frac{Ce^{f_{y_i}}}{C\sum_j e^{f_j}}
-= \frac{e^{f_{y_i} + \log C}}{\sum_j e^{f_j + \log C}}" title="f(x_i,W)"></p>
-<h3 id="分析与比较"><a href="#分析与比较" class="headerlink" title="分析与比较"></a>分析与比较</h3><ul>
-<li>Softmax loss function的输出可以看作是分类的概率，而SVM的输出结果没有含义，但是softmax得到的分类概率与正则化参数λ有关。（后面将会提到正则化）</li>
-<li>与Softmax相比，SVM有”局部目的性”(<em>local</em> objective)。 对SVM而言，只要正确结果的得分比错误结果大Δ，那么loss将会为0.如 [10, -100, -100] 与 [10, 9, 9]两个得分（第一个为正确分类结果），SVM产生的loss是一样的，而Softmax则永远不会对分类结果“感到满意”,即Loss永远不会为0。它希望分类正确的得分越大越好，分类错误的得分越小越好。这样的特性也使SVM与Softmax分别有不同的应用领域。</li>
-</ul>
-<h2 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h2><h3 id="神经网络模型"><a href="#神经网络模型" class="headerlink" title="神经网络模型"></a>神经网络模型</h3><p>神经网络是由很多神经元结合在一起，一个神经元把很多的输入x1,x2,x3… 以及截距+1（偏置）作为输入.与SVM和softmax相似的，这里也有一个得分函数将输入映射到一个得分，z = Wx+b。之后再用一个激活函数f将得分z作一个非线性的变换，然后输出。这里的非线性函数有很多种选择，tanh,sigmoid,reLu都是常见的激活函数。</p>
-<p>神经网络就是将许多个单一“神经元”联结在一起，这样，一个“神经元”的输出就可以是另一个“神经元”的输入。例如，下图就是一个简单的神经网络：<br><img src="http://ufldl.stanford.edu/wiki/images/thumb/9/99/Network331.png/400px-Network331.png"></p>
-<p>我们使用圆圈来表示神经网络的输入，标上“ +1”的圆圈被称为偏置节点，也就是截距项。神经网络最左边的一层叫做输入层，最右的一层叫做输出层（本例中，输出层只有一个节点）。中间所有节点组成的一层叫做隐藏层，因为我们不能在训练样本集中观测到它们的值。同时可以看到，以上神经网络的例子中有3个输入单元（偏置单元不计在内），3个隐藏单元及一个输出单元。</p>
-<p>一般我们用用<img src="http://latex.codecogs.com/gif.latex?n_l" title="n_l">来表示网络的层数,<img src="http://latex.codecogs.com/gif.latex?a_i^{(l)}" title="n_l">表示第 l 层第  i 单元的激活值（输出值）,我们用<img src="http://latex.codecogs.com/gif.latex?z_i^{(l)}" title="n_l"> 表示第 l层第 i 单元输入加权和（包括偏置单元),f<br>表示激活函数。整个神经网络可以表示为：</p>
-<p><img src="http://ufldl.stanford.edu/wiki/images/math/5/c/f/5cfcbbe6d55b6c882f56a85a57eafe6e.png"></p>
-<p>求解这个网络，即是通过大量已经标记号的数据（x,y），获取最合适的权重矩阵W与b，使得能得到最好的分类结果。下面提到的反向传播算法就是神经网络的训练算法。</p>
-<h3 id="反向传播算法"><a href="#反向传播算法" class="headerlink" title="反向传播算法"></a>反向传播算法</h3><p>反向传播（Backpropagation）是“误差反向传播”的简称，是一种与最优化方法（如梯度下降法）结合使用的，用来训练人工神经网络的常见方法。该方法计算对网络中所有权重计算损失函数的梯度。这个梯度会反馈给最优化方法，用来更新权值以最小化损失函数。<br>反向传播要求有对每个输入值想得到的已知输出，来计算损失函数梯度。因此，它通常被认为是一种监督式学习方法，虽然它也用在一些无监督网络（如自动编码器）中。它是多层前馈网络的Delta规则的推广，可以用链式法则对每层迭代计算梯度。反向传播要求人工神经元（或“节点”）的激励函数可微。</p>
-<p>由于神经网络的loss function不是一个凸函数，所以有可能会收敛到局部最优解，但是通常情况下反向传播的结果都不错。另外，在进行反向传播算法前要将参数进行随机初始化，而不是全部置为0。如果所有参数都用相同的值作为初始值，那么所有隐藏层单元最终会得到与输入值有关的、相同的函数随机初始化的目的是使对称失效。</p>
-<p>反向传播算法可表示为以下几个步骤：</p>
-<ol>
-<li>进行前馈传导计算，利用前向传导公式，得到<img src="http://ufldl.stanford.edu/wiki/images/math/a/2/e/a2ec4c7c0fce868f4b5275e8ce307469.png">直到输出层 <img src="http://ufldl.stanford.edu/wiki/images/math/2/2/1/221a7296664022427d488fdb9b14b19b.png">的激活值。</li>
-<li>对输出层（第 <img src="http://latex.codecogs.com/gif.latex?n_l" title="n_l"> 层），计算：<img src="http://latex.codecogs.com/gif.latex?\delta^{(n_l)}=-(y-a^{(n_l)})\bulletf'(z^{(n_l)})" title="\delta^{(n_l)}=-(y-a^{(n_l)})\bulletf'(z^{(n_l)})"></li>
-<li>对于 <img src="http://latex.codecogs.com/gif.latex?l=n_l-1,n_l-2,n_l-3,\ldots" title="l=n_l-1,n_l-2,n_l-3,\ldots">, 2 的各层，计算：<img src="http://latex.codecogs.com/gif.latex?\delta^{(l)}&space;=&space;\left((W^{(l)})^T&space;\delta^{(l&plus;1)}\right)&space;\bullet&space;f'(z^{(l)})" title="\delta^{(l)} = \left((W^{(l)})^T \delta^{(l+1)}\right) \bullet f'(z^{(l)})"></li>
-<li>计算最终需要的偏导数值：<br><img src="http://ufldl.stanford.edu/wiki/images/math/5/3/9/5391ac390a4e279ac8a543d4d5498ecc.png" title="\nabla_{W^{(l)}} J(W,b;x,y) &= \delta^{(l+1)} (a^{(l)})^T"></li>
-</ol>
-<h2 id="分类中的其他问题"><a href="#分类中的其他问题" class="headerlink" title="分类中的其他问题"></a>分类中的其他问题</h2><h3 id="正则化"><a href="#正则化" class="headerlink" title="正则化"></a>正则化</h3><p>引入正则化的原因在于，我们想要得到的权重矩阵W是不唯一的。如果W变为原来的2倍得到的分类效果理论上是一样的，但是相应的Loss却相差两倍。我们想要在Loss function上加上一项来移除对于W的模糊性，这一项称为正则惩罚 R(W). 最普遍的L2正则惩罚是权重矩阵W中所有项的平方和：<br><img src="http://latex.codecogs.com/gif.latex?R(W)=\sum_k\sum_lW_{k,l}^2" title="f(x_i,W)"><br>修改后的Loss function变为：</p>
-<script type="math/tex; mode=display">L =  \underbrace{ \frac{1}{N} \sum_i L_i }_\text{data loss} + \underbrace{ \lambda R(W) }_\text{regularization loss} \\\\</script><p>除了L2正则项，还有L1正则项，但L2正则项更倾向于所有的权重变得更加分散，即最后的得分是所有特征综合的结果。正则化参数λ可以通过验证集选取。</p>
-<h3 id="最优化算法"><a href="#最优化算法" class="headerlink" title="最优化算法"></a>最优化算法</h3><p>在我们构造出了相应的score function和loss function之后，下一步就希望能通过在训练集中评估loss function得到的预测结果和真实结果的差来更新score function中W和b值。 最优化算法就是根据每次得到的预测loss来对W和b中元素值进行调整，从而使模型有更好的分类结果的过程。</p>
-<p>最优化中最经常使用的是<strong>梯度下降法</strong>，其核心思想就是用微积分或数值分析的知识计算出loss function关于W和b的梯度，然后逐渐让W和b沿着求出的梯度方向下降，直到最后loss趋向于一个稳定值。<br><img src="http://latex.codecogs.com/gif.latex?W&space;=&space;W-\alpha\frac{\partial&space;}{W}J(W,b)" title="W = W-\alpha\frac{\partial }{W}J(W,b)"><br>梯度下降法在很多实例中可以取得不错的结果，但是它要求loss function是一个凸函数，否则可能会收敛到局部最优解。梯度下降法有如下几个要点：</p>
-<ul>
-<li>由于每次都把所有的数据计算一次loss计算开销太大了，所以经常采用随机梯度计算的方法，把数据分成很多batch，每次只是计算每个batch的loss。</li>
-<li>α的值可以通过验证集确定</li>
-<li>无法用微积分直接计算梯度时，可以用数值计算的方法<img src="http://latex.codecogs.com/gif.latex?\frac{df(x)}{dx}&space;=&space;\lim_{h\&space;\to&space;0}&space;\frac{f(x&space;&plus;&space;h)&space;-&space;f(x)}{h}" title="\frac{df(x)}{dx} = \lim_{h\ \to 0} \frac{f(x + h) - f(x)}{h}">得到梯度。<h3 id="validation-sets"><a href="#validation-sets" class="headerlink" title="validation sets"></a>validation sets</h3></li>
-</ul>
-<p>对于knn算法中的k，线性分类器中的正则项系数λ以及学习速率α，这些参数都对最后的训练结果有极大的影响。我们在确定了分类模型之后，需要找到最好的超参数（Hyperparameter）从而在测试集中得到最高的准确率。</p>
-<p>之所以不能用测试集（test set）来获取超参数，有两个原因。当我们使用原本的测试集我们可能对于某一些超参数可以获得很好的分类准确率，但是当我们的模型被应用到其他的数据时结果也许就不佳。这种情况就说明测试集过拟合了。还有一个原因是，如果用测试集来训练的到超参数，其实也就把测试集当做了训练集，所以在测试集上得到的结果并不能很准确的反映模型的好坏，所以这里我们引进了验证数据集（Validation sets）。一般来说，我们把所有标记过的数据分为测试集，训练集，验证集三个部分，三个部分的比例为7:2:1.</p>
-<h3 id="特征提取"><a href="#特征提取" class="headerlink" title="特征提取"></a>特征提取</h3><p>对于线性分类器而言，如果把RGB原图压缩成一个一维向量，那么输入的维度就太大了。所以在做图像分类之前，一般都要先提取特征。 特征提取是图象处理中的一个初级运算，它检查每个像素来确定该像素是否代表一个特征。假如它是一个更大的算法的一部分，那么这个算法一般只检查图像的特征区域。作为特征提取的一个前提运算，输入图像一般通过高斯模糊核在尺度空间中被平滑。图像特征一般分为颜色特征和纹理特征。</p>
-<p>在cs231n的作业中，对输入的CIFAR-10图片提取了<a href="https://en.wikipedia.org/wiki/Histogram_of_oriented_gradients" target="_blank" rel="external">hog</a>特征，方向梯度直方图（Histogram of Oriented Gradient, HOG）特征是一种在计算机视觉和图像处理中用来进行物体检测的特征描述子。它通过计算和统计图像局部区域的梯度方向直方图来构成特征。</p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
-<li><a href="http://ufldl.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B" target="_blank" rel="external">ulfdl</a></li>
-<li><a href="http://cs231n.github.io/classification" target="_blank" rel="external">cs231n-image classification notes</a></li>
-<li><a href="http://cs231n.github.io/linear-classify" target="_blank" rel="external">cs231n linear classification</a></li>
-<li><a href="http://cs231n.github.io/optimization-1" target="_blank" rel="external">cs231n optimization notes</a></li>
+        <h2 id="梯度下降法"><a href="#梯度下降法" class="headerlink" title="梯度下降法"></a>梯度下降法</h2><p>梯度下降法先随机给出参数的一组值，然后更新参数，使每次更新后的结构都能够让损失函数变小，最终达到最小。在梯度下降法中，目标函数其实可以看做是参数的函数，因为给出了样本输入和输出值后，目标函数就只剩下参数部分了，这时可以把参数看做是自变量，则目标函数变成参数的函数。</p>
+<h3 id="SGD"><a href="#SGD" class="headerlink" title="SGD"></a>SGD</h3><p>批量梯度下降法在更新每一个参数时，都需要所有的训练样本，所以训练过程会随着样本数量的加大而变得异常的缓慢，所以提出了随机梯度下降（SGD）算法。SGD就是每一次迭代计算mini-batch的梯度，然后对参数进行更新。</p>
+<script type="math/tex; mode=display">g_t=\nabla_{\theta_{t-1}}{f(\theta_{t-1})}</script><p>\Delta{\theta_t}=-\eta*g_t</p>
+<script type="math/tex; mode=display">\Delta{\theta_t}=-\eta*g_t\</script><p>其中 $\eta$是学习率，$g_t$是梯度</p>
+<p>随机梯度下降与传统的梯度下降相比，随机梯度下降法收敛速度速度更快，但是也更容易收敛到局部最优点。除此之外学习率的设置也会极大的影响最终结果。</p>
+<h3 id="Momentum"><a href="#Momentum" class="headerlink" title="Momentum"></a>Momentum</h3><p>momentum是模拟物理里动量的概念，积累之前的动量来替代真正的梯度。公式如下：</p>
+<script type="math/tex; mode=display">m_t=\mu*m_{t-1}+g_t</script><script type="math/tex; mode=display">\Delta{\theta_t}=-\eta*m_t</script><p>其中$\mu$是动量因子，作用是通过历史搜索方向的积累，消除相继搜索方向中相反的方向，而一致的方向则相互累加。<br>与普通的SGD相比，下降初期由于使用上一次参数更新，下降方向一致，乘上较大的$\mu$能够进行很好的加速;而下降中后期时，在局部最小值来回震荡的时候，$gradient\to0$，$\mu$使得更新幅度增大，跳出陷阱。总而言之，momentum项能够在相关方向加速SGD，抑制振荡，从而加快收敛。</p>
+<h3 id="Nesterov"><a href="#Nesterov" class="headerlink" title="Nesterov"></a>Nesterov</h3><p>将momentum方法的公式展开得：</p>
+<script type="math/tex; mode=display">\Delta{\theta_t}=-\eta*\mu*m_{t-1}-\eta*g_t</script><p>可以看出，$m_{t-1}$并没有直接改变当前梯度g_t，所以Nesterov的改进就是让之前的动量直接影响当前的动量。即：</p>
+<script type="math/tex; mode=display">g_t=\nabla_{\theta_{t-1}}{f(\theta_{t-1}-\eta*\mu*m_{t-1})}</script><script type="math/tex; mode=display">m_t=\mu*m_{t-1}+g_t</script><script type="math/tex; mode=display">\Delta{\theta_t}=-\eta*m_t</script><p>所以，加上nesterov项后，梯度在大的跳跃后，进行计算对当前梯度进行校正。momentum方法在红色圆圈点通过得到的动量和梯度放下来得到梯度下降的step，而Nesterov则是在预估出actual step之后再对梯度的方向进行计算和校正。（图片引自<a href="http://cs231n.github.io/neural-networks-3/" target="_blank" rel="external">cs231n Lecture Notes</a>）<br><img src="http://cs231n.github.io/assets/nn3/nesterov.jpeg"></p>
+<p>momentum项和nesterov项都是为了使梯度更新更加灵活，对不同情况有针对性。但是这两种方法和SGD一样都需要人工设置学习率，接下来的几种方法可以自适应学习率。</p>
+<h3 id="Adagrad"><a href="#Adagrad" class="headerlink" title="Adagrad"></a>Adagrad</h3><p>adagrad其实是对学习率进行了一个约束：</p>
+<script type="math/tex; mode=display">n_t=n_{t-1}+g_t^2</script><script type="math/tex; mode=display">\Delta{\theta_t}=-\frac{\eta}{\sqrt{n_t+\epsilon}}*g_t</script><p>此处，对g_t从1到t进行一个递推形成一个约束项regularizer，$-\frac{1}{\sqrt{\sum_{r=1}^t(g_r)^2+\epsilon}}$，$\epsilon$用来保证分母非0。</p>
+<p>前期当$g_t$较小时，regularizer较大，能放大梯度，而后期$g_t$较大，能约束梯度。Adagrad方法仍需设置一个全局学习率，而$\eta$设置过大也会使regularize过于敏感，对梯度调节太大。</p>
+<h3 id="RMSprop"><a href="#RMSprop" class="headerlink" title="RMSprop"></a>RMSprop</h3><p>为了解决Adagrad方法后期学习率消失的问题。与Adadelta中计算所有梯度的均方和不同的是，Rprop将之前所有$g_t$的期望和与当前的$g_t$作了一个加权平均：</p>
+<script type="math/tex; mode=display">E[g^2]_t = \gamma E[g^2]_{t-1} + （1-\gamma） g^2_t</script><script type="math/tex; mode=display">\theta_{t+1} = \theta_{t} - \dfrac{\eta}{\sqrt{E[g^2]_t + \epsilon}} g_{t}</script><p>RMSprop的学习率按照梯度的均方和呈指数衰减。Hinton提出$\gamma$设为0.9，$\eta$设为0.001s此算法效果较好。</p>
+<h3 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h3><p>Adam(Adaptive Moment Estimation)本质上是带有动量项的RMSprop，它利用梯度的一阶矩估计和二阶矩估计动态调整每个参数的学习率。Adam的优点主要在于经过偏置校正后，每一次迭代学习率都有个确定范围，使得参数比较平稳。公式如下：</p>
+<script type="math/tex; mode=display">m_t=\mu*m_{t-1}+(1-\mu)*g_t</script><script type="math/tex; mode=display">n_t=\nu*n_{t-1}+(1-\nu)*g_t^2</script><script type="math/tex; mode=display">\hat{m_t}=\frac{m_t}{1-\mu^t}</script><script type="math/tex; mode=display">\hat{n_t}=\frac{n_t}{1-\nu^t}</script><script type="math/tex; mode=display">\Delta{\theta_t}=-\frac{\hat{m_t}}{\sqrt{\hat{n_t}}+\epsilon}*\eta</script><p>其中，$m_t$，$n_t$分别是对梯度的一阶矩估计和二阶矩估计，可以看作对期望$E|g_t|$，$E|g_t^2|$的估计；$\hat{m_t}$，$\hat{n_t}$是对$m_t$，$n_t$的校正，这样可以近似为对期望的无偏估计。 可以看出，直接对梯度的矩估计对内存没有额外的要求，而且可以根据梯度进行动态调整，而$-\frac{\hat{m_t}}{\sqrt{\hat{n_t}}+\epsilon}$对学习率形成一个动态约束，而且有明确的范围。</p>
+<p>Adam方法结合了Adagrad善于处理稀疏梯度和RMSprop善于处理非平稳目标的优点，为不同的参数计算不同的自适应学习率。</p>
+<h3 id="Batch-Normalization"><a href="#Batch-Normalization" class="headerlink" title="Batch Normalization"></a>Batch Normalization</h3><p>前面提到梯度下降中为了加速收敛，以及避免陷入局部最优一些方法。 在参考文献[3]中提出了Batch Normalization， 它解决了反向传播过程中的梯度问题（梯度消失和爆炸），同时使得不同scale的 权重$w$ 整体更新步调更一致，从而克服深度神经网络难以训练的弊病。</p>
+<p>统计机器学习中的一个经典假设是“源空间（source domain）和目标空间（target domain）的数据分布（distribution）是一致的”。因此我们需要对输入数据进行归一化的处理。但是不同的网络层具有不同的特点，如果简单的将每一层都归一化就会失去不同卷积层的区分性。于是[3]中提出了变换重构，引入了参数$\gamma$,$\beta$:</p>
+<script type="math/tex; mode=display">y^{(k)} = \gamma^{(k)} + \beta^{(k)}</script><p>引入这两个参数之后可以使网络学习会付出原始网络的特征分布。（图片引自[3]）<br><img src="https://pic2.zhimg.com/9ad70be49c408d464c71b8e9a006d141_b.jpg"><br>训练过程如：<br><img src="https://pic1.zhimg.com/beb44145200caafe24fe88e7480e9730_b.jpg"></p>
+<p>具体说来，在神经网络训练时遇到收敛速度很慢，或梯度爆炸等无法训练的状况时可以尝试BN来解决。另外，在一般使用情况下也可以加入BN来加快训练速度，提高模型精度。</p>
+<h2 id="牛顿法与拟牛顿法"><a href="#牛顿法与拟牛顿法" class="headerlink" title="牛顿法与拟牛顿法"></a>牛顿法与拟牛顿法</h2><p>除了梯度下降法，牛顿法也是机器学习中用的比较多的一种优化算法。</p>
+<p>牛顿法的基本思想是利用迭代点处的一阶导数(梯度)和二阶导数(Hessen矩阵)对目标函数进行二次函数近似，然后把二次模型的极小点作为新的迭代点，并不断重复这一过程，直至求得满足精度的近似极小值。牛顿法的速度相当快，而且能高度逼近最优值。</p>
+<h3 id="牛顿法"><a href="#牛顿法" class="headerlink" title="牛顿法"></a>牛顿法</h3><h3 id="拟牛顿法"><a href="#拟牛顿法" class="headerlink" title="拟牛顿法"></a>拟牛顿法</h3><h4 id="DFP-算法"><a href="#DFP-算法" class="headerlink" title="DFP 算法"></a>DFP 算法</h4><h4 id="BFGS-算法"><a href="#BFGS-算法" class="headerlink" title="BFGS 算法"></a>BFGS 算法</h4><h4 id="L-BFGS-算法"><a href="#L-BFGS-算法" class="headerlink" title="L-BFGS 算法"></a>L-BFGS 算法</h4><h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li><a href="https://zhuanlan.zhihu.com/p/22252270" target="_blank" rel="external">深度学习最全优化方法总结比较（SGD，Adagrad，Adadelta，Adam，Adamax，Nadam）</a></li>
+<li><a href="http://sebastianruder.com/optimizing-gradient-descent/index.html#stochasticgradientdescent" target="_blank" rel="external">An overview of gradient descent optimization algorithms</a></li>
+<li><a href="https://arxiv.org/pdf/1502.03167.pdf" target="_blank" rel="external">Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift</a></li>
+<li><a href="https://www.zhihu.com/question/38102762/answer/85238569" target="_blank" rel="external">深度学习中 Batch Normalization为什么效果好？魏秀参的回答</a></li>
+<li><a href="http://blog.csdn.net/hjimce/article/details/50866313" target="_blank" rel="external">Batch Normalization 学习笔记 - hjimce</a></li>
 </ol>
 
       
@@ -359,7 +306,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=https://honey0920.github.io/2017/05/19/classifier-04/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://honey0920.github.io/2017/06/12/optimization-05/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -373,18 +320,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/06/12/optimization-05/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          cs231n assignment2-最优化小结
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/04/25/scrapy-03/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">网络爬虫的原理与应用</div>
+    <a href="/2017/05/19/classifier-04/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">cs231n assignment1-几种分类算法</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -398,7 +336,7 @@
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="classifier-04" data-title="cs231n assignment1-几种分类算法" data-url="https://honey0920.github.io/2017/05/19/classifier-04/"></div>
+	<div class="ds-thread" data-thread-key="optimization-05" data-title="cs231n assignment2-最优化小结" data-url="https://honey0920.github.io/2017/06/12/optimization-05/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
