@@ -18,7 +18,7 @@
 <meta property="og:image" content="https://pic2.zhimg.com/9ad70be49c408d464c71b8e9a006d141_b.jpg">
 <meta property="og:image" content="https://pic1.zhimg.com/beb44145200caafe24fe88e7480e9730_b.jpg">
 <meta property="og:image" content="https://honey0920.github.io/img/blogImg/L-BFGS-05.png">
-<meta property="og:updated_time" content="2017-06-13T10:44:47.597Z">
+<meta property="og:updated_time" content="2017-06-13T14:58:28.772Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="cs231n assignment2-最优化小结">
 <meta name="twitter:description" content="cs231n的第二次作业因为各种课以及考试中断了很久，在一切结束后接上来总是有种力不从心的感觉。assignment 2 涉及到的知识点太多了，神经网络中的各种tricks，sgd加速，batch normalization，drop out等。神经网络以及卷积神经网络各层的前向传播以及后向传播。涉及到传播的可能需要复杂的公式推导以及扎实的python编程基础，所以做起来还是很头疼，但是前面的各种">
@@ -223,9 +223,8 @@
 <script type="math/tex; mode=display">\Delta D_k = \frac{s_k s_k^T}{s_k^Ty_k} - \frac{D_ky_ky_k^TD_k}{y_k^TD_ky_k}</script><h4 id="BFGS-算法"><a href="#BFGS-算法" class="headerlink" title="BFGS 算法"></a>BFGS 算法</h4><p>与DFP算法相比，BFGS算法性能更佳，目前它已成为了求解无约束非线性优化问题最常用的方法之一。BFGS算法已有较完善的局部收敛理论。</p>
 <p>BFGS算法中核心公式的推导过程与DFP完全类似，只是互换了$s_k$与$y_k$的位置。BFGS算法直接逼近海森矩阵，即$B_k \approx H_k$,设迭代格式为</p>
 <script type="math/tex; mode=display">B_{k+1} = B_k + \Delta B_k</script><p>其中的$B_0$也常取为单位矩阵$I$,将$\Delta B_k$待定为：</p>
-<script type="math/tex; mode=display">\Delta B_k = \alpha u u^T + \beta v v^T$$其中
-$\alpha = \frac{1}{y_k^T}$, $\beta = -\frac{1}{s_k^T B_ks_k}$得到了如下校正矩阵
-$$\Delta B_k = \frac{y_k y_k^T}{t_k^Ts_k} - \frac{B_ks_ks_k^TB_k}{s_k^TB_ks_k}</script><p>如果要用$\Delta D_k$来替换$\Delta B_k$，则上式可改为:</p>
+<script type="math/tex; mode=display">\Delta B_k = \alpha u u^T + \beta v v^T</script><p>其中<br>$\alpha = \frac{1}{y_k^T}$, $\beta = -\frac{1}{s_k^T B_ks_k}$得到了如下校正矩阵</p>
+<script type="math/tex; mode=display">\Delta B_k = \frac{y_k y_k^T}{t_k^Ts_k} - \frac{B_ks_ks_k^TB_k}{s_k^TB_ks_k}</script><p>如果要用$\Delta D_k$来替换$\Delta B_k$，则上式可改为:</p>
 <script type="math/tex; mode=display">D_{k+1} = (I - \frac{s_k y^T_k}{y^T_ks_k})B_k^{-1}(I - \frac{y_ks_k^T}{y^T_ks_k}) + \frac{s_k s_k^T}{y_k^T s_k}</script><h4 id="L-BFGS-算法"><a href="#L-BFGS-算法" class="headerlink" title="L-BFGS 算法"></a>L-BFGS 算法</h4><p>在BFGS算法中，需要用到一个$N$\times$N$的矩阵，当$N$很大时，计算机需要耗费很大资源。L-BFGS就是为了这个解决这个问题。 它对BFGS算法进行了近似，其基本思想是：不再存储完整的矩阵$D_k$，而是计算过程中的最新$m$个向量序列${s_i}$,${y_i}$,需要矩阵$D_k$时，利用向量序列{s_i}与{y_i}计算来代替。</p>
 <p>具体来说,为了实现迭代式</p>
 <script type="math/tex; mode=display">D_{k+1} = (I - \frac{s_k y^T_k}{y^T_ks_k})B_k^{-1}(I - \frac{y_ks_k^T}{y^T_ks_k}) + \frac{s_k s_k^T}{y_k^T s_k}</script><p>记$\rho_k = \frac{1}{y_k^T}$, $V_k = I- \rho_ky_ks^T_k $，L-BFGS算法流程可描述如下[7]：<br><img src="/img/blogImg/L-BFGS-05.png" alt=""> </p>
@@ -483,11 +482,11 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">生活</a>
+                <a href="javascript:void(0)" class="js-tag color3">技术</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">技术</a>
+                <a href="javascript:void(0)" class="js-tag color3">生活</a>
               </li>
             
             <div class="clearfix"></div>
