@@ -212,7 +212,7 @@
 <p>在介绍几种拟牛顿算法之前，先引出“拟牛顿条件”。设经过$k+1$次迭代后得到$x_{k+1}$，此时将目标函数$f(x)$在$x_{k+1}$附近作泰勒展开，取二次近似得：</p>
 <script type="math/tex; mode=display">f(x)\approx f(x_{k+1})+\bigtriangledown f(x_{k+1})\cdot(x-x_{k+1}) + \frac{1}{2}\cdot(x-x_{k+1})^T \cdot \bigtriangledown^2f(x_{k+1})\cdot (x-x_{k+1})</script><p>对上式两边同时作用一个梯度算子$\bigtriangledown$,可得：</p>
 <script type="math/tex; mode=display">\bigtriangledown f(x) \approx \bigtriangledown f(x_{k+1})+H_{k+1}\cdot(x-x_{k+1})</script><p>取$x=x_k$并整理，可得:</p>
-<script type="math/tex; mode=display">g_{k+1} - g_k \approx H_{k+1} \cdot (x_{k+1} - x_k)</script><p>令: <script type="math/tex">s_k = x_{k+1}- x_k, y_k = g_{k+1} - g_k</script><br>则可得:<script type="math/tex">y_k = H_{k+1}\cdot s_k</script>或者<script type="math/tex">s_k\approx H_{k+1}^{-1} \cdot y_k</script></p>
+<script type="math/tex; mode=display">g_{k+1} - g_k \approx H_{k+1} \cdot (x_{k+1} - x_k)</script><p>令: <script type="math/tex">s_k = x_{k+1}- x_k, y_k = g_{k+1} - g_k</script><br>则可得:<script type="math/tex">y_k \approx H_{k+1}\cdot s_k</script>或者<script type="math/tex">s_k\approx H_{k+1}^{-1} \cdot y_k</script></p>
 <h4 id="DFP-算法"><a href="#DFP-算法" class="headerlink" title="DFP 算法"></a>DFP 算法</h4><p>DFP是UI早的拟牛顿法，该算法的核心是:通过迭代的方法，对$H_{k+1}^{-1}$（记为$D_{k+1}$）做近似，迭代格式为：</p>
 <script type="math/tex; mode=display">D_{k+1} = D_k + \Delta D_k, k=0,1,2,...</script><p>其中$D_0$通常取为单位矩阵$I$,为了构造一个正定对称的$\Delta D$，将$\Delta D$待定为</p>
 <script type="math/tex; mode=display">\Delta D_k = \alpha u u^T + \beta v v^T$$,其中
@@ -816,11 +816,11 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">生活</a>
+                <a href="javascript:void(0)" class="js-tag color3">技术</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">技术</a>
+                <a href="javascript:void(0)" class="js-tag color3">生活</a>
               </li>
             
             <div class="clearfix"></div>
