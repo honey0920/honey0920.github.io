@@ -215,7 +215,7 @@
 <script type="math/tex; mode=display">g_{k+1} - g_k \approx H_{k+1} \cdot (x_{k+1} - x_k)</script><p>令: <script type="math/tex">s_k = x_{k+1}- x_k, y_k = g_{k+1} - g_k</script><br>则可得:<script type="math/tex">y_k \approx H_{k+1}\cdot s_k</script>或者<script type="math/tex">s_k\approx H_{k+1}^{-1} \cdot y_k</script></p>
 <h4 id="DFP-算法"><a href="#DFP-算法" class="headerlink" title="DFP 算法"></a>DFP 算法</h4><p>DFP是UI早的拟牛顿法，该算法的核心是:通过迭代的方法，对$H_{k+1}^{-1}$（记为$D_{k+1}$）做近似，迭代格式为：</p>
 <script type="math/tex; mode=display">D_{k+1} = D_k + \Delta D_k, k=0,1,2,...</script><p>其中$D_0$通常取为单位矩阵$I$,为了构造一个正定对称的$\Delta D$，将$\Delta D$待定为</p>
-<script type="math/tex; mode=display">\Delta D_k = \alpha u u^T + \beta v v^T$$,其中
+<script type="math/tex; mode=display">\Delta D_k = \alpha u u^T + \beta v v^T$$其中
 $\alpha = \frac{1}{s_k^Ty_k}$, $\beta=-\frac{1}{y_k^TD_ky_k}$
 我们构造出的校正矩阵$$\Delta D_k = \frac{s_k s_k^T}{s_k^Ty_k} - \frac{D_ky_ky_k^TD_k}{y_k^TD_ky_k}</script><h4 id="BFGS-算法"><a href="#BFGS-算法" class="headerlink" title="BFGS 算法"></a>BFGS 算法</h4><p>与DFP算法相比，BFGS算法性能更佳，目前它已成为了求解无约束非线性优化问题最常用的方法之一。BFGS算法已有较完善的局部收敛理论。</p>
 <p>BFGS算法中核心公式的推导过程与DFP完全类似，只是互换了$s_k$与$y_k$的位置。BFGS算法直接逼近海森矩阵，即$B_k \approx H_k$,设迭代格式为<script type="math/tex">B_{k+1} = B_k + \Delta B_k</script>其中的$B_0$也常取为单位矩阵$I$,将$\Delta B_k$待定为：<script type="math/tex">\Delta B_k = \alpha u u^T + \beta v v^T</script>其中<br>$\alpha = \frac{1}{y_k^T}$, $\beta = -\frac{1}{s_k^T B_ks_k}$得到了如下校正矩阵</p>
