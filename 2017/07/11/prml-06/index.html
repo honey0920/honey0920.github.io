@@ -14,7 +14,7 @@
 <meta property="og:url" content="https://honey0920.github.io/2017/07/11/prml-06/index.html">
 <meta property="og:site_name" content="野草集">
 <meta property="og:description" content="暑假到了，狠下决心开始啃之前一直可望而不可即的大部头《PRML》。这本PRML主要从贝叶斯的角度将机器学习的众多知识点串联在一起，优点在于知识比较系统，由浅入深循序渐进，但是很多细节推导的步骤不严谨，对于微积分，概率论和矩阵论知识不够扎实的我也忽略了很多公式部分（=。=）。本打算是一口气看完再来写读后感，但还是觉得这本书内容很多也比较复杂，不及时总结巩固可能就忘记了。所以大概花了20天断断续续的看">
-<meta property="og:updated_time" content="2017-07-11T15:40:48.265Z">
+<meta property="og:updated_time" content="2017-07-11T15:46:45.513Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从贝叶斯的观点看线性分类和线性回归">
 <meta name="twitter:description" content="暑假到了，狠下决心开始啃之前一直可望而不可即的大部头《PRML》。这本PRML主要从贝叶斯的角度将机器学习的众多知识点串联在一起，优点在于知识比较系统，由浅入深循序渐进，但是很多细节推导的步骤不严谨，对于微积分，概率论和矩阵论知识不够扎实的我也忽略了很多公式部分（=。=）。本打算是一口气看完再来写读后感，但还是觉得这本书内容很多也比较复杂，不及时总结巩固可能就忘记了。所以大概花了20天断断续续的看">
@@ -203,7 +203,7 @@
 <script type="math/tex; mode=display">p(w)=N(w|\mathbf{0},\alpha^{-1}I)\tag{2.3.1}</script><p>由于共轭高斯先验分布的选择，后验分布也将是高斯分布。</p>
 <script type="math/tex; mode=display">p(w|t)=N(w|m_N,S_N)\tag{2.3.2}</script><p>其中：</p>
 <script type="math/tex; mode=display">m_N= \beta S_N \mathbf{\Phi}^T \mathbf{t}\tag{2.3.3}</script><script type="math/tex; mode=display">S_N^{-1} = \alpha\mathbf{I} + \beta \mathbf{\Phi}^T \mathbf{\Phi}\tag{2.3.4}</script><p>后验概率分布的对数由对数似然函数与先验的对数求和的方式得到。它是w的函数，形式为:</p>
-<script type="math/tex; mode=display">\ln p(\mathbf{w}|\mathbf{t})=\frac{\beta}{2} \sum_{n=1}^{N}\left \{ t_n - \mathbf{w}^T\Phi(x_n) \right \}^2 + \frac{\alpha}{2}\mathbf{w}^T\mathbf{w}\tag{2.3.5}</script><p>我们可以看到，这个式子与公式(2.2.2)一样，但是在MAP方法中需要对$\mathbf{w}$求导得出使后验概率最大的$\mathbf{w}$的值，而在贝叶斯线性回归中，则不是得到一个确定的$\mathbf{w}$的值，而是计算$\mathbf{w}$的分布。</p>
+<script type="math/tex; mode=display">\ln p(\mathbf{w}|\mathbf{t})=\frac{\beta}{2} \sum_{n=1}^{N}\left \{ t_n - \mathbf{w}^T\Phi(x_n) \right \}^2 + \frac{\alpha}{2}\mathbf{w}^T\mathbf{w} + const\tag{2.3.5}</script><p>我们可以看到，这个式子与公式(2.2.2)一样，但是在MAP方法中需要对$\mathbf{w}$求导得出使后验概率最大的$\mathbf{w}$的值，而在贝叶斯线性回归中，则不是得到一个确定的$\mathbf{w}$的值，而是计算$\mathbf{w}$的分布。</p>
 <h2 id="线性分类模型"><a href="#线性分类模型" class="headerlink" title="线性分类模型"></a>线性分类模型</h2><p>同样是线性模型，但是在分类问题上，模型的输出值是连续的，因为基函数连续，且是线性组合，模型输出值仍是连续的，而分类问题样本的target值是离散的。于是这之间就不能使用示性函数了。强行仍使用空间输出值就是最小平方法和Fisher线性判别函数法（后者是前者的一个特例），设置阈值进行二值离散化（+1， -1）感知机算法。生成式概率模型和判别式模型采用的是logistics 回归函数。强行使用原来的空间输出值带来的问题就是，分类问题原本只关心对错（正反例），这里变成了五十步笑百步的问题，<strong>对离群点缺乏robust</strong>。设置二值离散化问题是缺乏连续性（指的是误差函数不能始终朝着好的方向进行）。而logistics回归函数连续性较好，本质上也是二项分布和多项分布相关。但是除了最小平方法，其他方法都引入了非线性函数，导致整个大模型线性性质被破坏。无论是MLE和MAP，其结果都不是高斯分布，在判别式概率模型时进行优化的方法就变成了梯度下降法迭代求解，因为它没有解析解了。在预测分布时，后验分布已不再是高斯分布，为了使用高斯分布的性质，对其使用了laplace近似，将其近似成高斯分布，当然还有其他的近似了。</p>
 <h3 id="判别函数"><a href="#判别函数" class="headerlink" title="判别函数"></a>判别函数</h3><h4 id="最小均方法"><a href="#最小均方法" class="headerlink" title="最小均方法"></a>最小均方法</h4><h4 id="Fisher线性判别函数"><a href="#Fisher线性判别函数" class="headerlink" title="Fisher线性判别函数"></a>Fisher线性判别函数</h4><h4 id="感知机算法"><a href="#感知机算法" class="headerlink" title="感知机算法"></a>感知机算法</h4><h3 id="判别模型"><a href="#判别模型" class="headerlink" title="判别模型"></a>判别模型</h3><h3 id="生成模型"><a href="#生成模型" class="headerlink" title="生成模型"></a>生成模型</h3><h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
 <li><a href="http://blog.csdn.net/simplelove17/article/details/50806210" target="_blank" rel="external">PRML阅读笔记</a></li>
