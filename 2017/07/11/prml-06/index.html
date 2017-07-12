@@ -14,10 +14,12 @@
 <meta property="og:url" content="https://honey0920.github.io/2017/07/11/prml-06/index.html">
 <meta property="og:site_name" content="野草集">
 <meta property="og:description" content="暑假到了，狠下决心开始啃之前一直可望而不可即的大部头《PRML》。这本PRML主要从贝叶斯的角度将机器学习的众多知识点串联在一起，优点在于知识比较系统，由浅入深循序渐进，但是很多细节推导的步骤不严谨，对于微积分，概率论和矩阵论知识不够扎实的我也忽略了很多公式部分（=。=）。本打算是一口气看完再来写读后感，但还是觉得这本书内容很多也比较复杂，不及时总结巩固可能就忘记了。所以大概花了20天断断续续的看">
-<meta property="og:updated_time" content="2017-07-11T15:46:45.513Z">
+<meta property="og:image" content="https://honey0920.github.io/square-06.png">
+<meta property="og:updated_time" content="2017-07-12T15:04:16.690Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从贝叶斯的观点看线性分类和线性回归">
 <meta name="twitter:description" content="暑假到了，狠下决心开始啃之前一直可望而不可即的大部头《PRML》。这本PRML主要从贝叶斯的角度将机器学习的众多知识点串联在一起，优点在于知识比较系统，由浅入深循序渐进，但是很多细节推导的步骤不严谨，对于微积分，概率论和矩阵论知识不够扎实的我也忽略了很多公式部分（=。=）。本打算是一口气看完再来写读后感，但还是觉得这本书内容很多也比较复杂，不及时总结巩固可能就忘记了。所以大概花了20天断断续续的看">
+<meta name="twitter:image" content="https://honey0920.github.io/square-06.png">
   
     <link rel="alternative" href="/atom.xml" title="野草集" type="application/atom+xml">
   
@@ -183,33 +185,85 @@
 <p>当然贝叶斯学派的先验分布被频率学派广为诟病的是：贝叶斯学派引入的先验分布并不是真正的经验知识，甚至为了数学上的方便，强行给了形式化的先验分布。这样的先验分布没有任何价值，反而污染了现有的观测数据。于是大家为了解决这个问题又不想带来过拟合问题，开始探索无先验信息分布。</p>
 <h2 id="线性回归模型"><a href="#线性回归模型" class="headerlink" title="线性回归模型"></a>线性回归模型</h2><p>建立线性模型之后，注意线性模型是将样本的自变量在新的映射空间的值，即初始变量的<strong>基函数</strong>输出做线性组合得到输出值。输出值本质上和样本的因变量target值其实是没有关系的。引入了t=f(y)关系，在回归问题上，我们习惯使用了示性函数t=f(y)将空间输出值与样本的target的值认为是相同的，这样在预测的时候，将待预测的输入变量输入到线性模型中得到的值就可以认为是预测的输出变量。更重要的是，这种示性函数会保持整个模型的线性性质，会带来极大方便。接下来假设观测值存在随机噪声，认为服从高斯分布，建立起似然函数，最大化似然函数得到模型参数（ML）。最大化似然函数会带来过拟合问题，引入先验分布，得到最大后验分布（MAP）。而最大后验分布中又有一些超参数无法很好的确定，所以又引入贝叶斯回归。这里由于都是线性函数，高斯分布的性质反复使用，就可以得到解析解。先验分布引入的时候又会引入超参，超参的选取又引来争议，于是对超参的求解带来了证据近似的迭代方法。</p>
 <h3 id="最大似然法（ML）"><a href="#最大似然法（ML）" class="headerlink" title="最大似然法（ML）"></a>最大似然法（ML）</h3><p>假设目标变量t由确定的函数y(x,w)给出，这个函数被附加了高斯噪声，即</p>
-<script type="math/tex; mode=display">t = y(x,w)+ \epsilon\tag{2.1.1}</script><p>其中$\epsilon$是一个零均值的高斯随机变量，精度（方差的倒数）为$\beta$,因此:</p>
-<script type="math/tex; mode=display">p(t|x,w,\beta) = N(t| y(x,w),\beta^(-1))\tag{2.1.2}</script><p>如果假设一个平方损失函数，那么对于$x$的一个新值，<strong>最优的预测由目标变量的条件均值给出</strong>。在公式(2.1.2)给出的高斯条件分布下，条件均值为：</p>
-<script type="math/tex; mode=display">E[t|x] = \int tp(t|x)dt = y(x,w)\tag{2.1.3}</script><p>考虑一个输入数据集$X={x_1, …,x_N}$,对应的目标值为$\mathbf{t}={t_1,…t_N}$。假设这些数据点是独立从分布(2.1.2)中抽取的，那么可以得到下面的似然函数表达式：</p>
-<script type="math/tex; mode=display">p(t|\mathbf{X},w,\beta) = \prod_{n=1}^{N}N(t_n|w^T\Phi (x_n),\beta^{-1})\tag{2.1.4}</script><p>其中$y(\mathbf{x},\mathbf{w}) = \sum_{j=0}^{M-1}w_j\Phi_j(x) =\mathbf{w}^T\mathbf{\Phi(x)} $<br>取似然函数的对数，我们有:</p>
-<script type="math/tex; mode=display">\ln p(\mathbf{t}|\mathbf{w},\beta)=\sum_{n=1}^{N}\ln N(t_n|w^T\Phi(x_n),\beta^{-1})\tag{2.1.5}</script><p>平方和误差函数的定义为：</p>
-<script type="math/tex; mode=display">E_D(\mathbf{w})={\frac{1}{2}}{\sum_{n=1}^{N}\left \{t_n-\mathbf{w}^T\Phi(x_n)  \right \}^2}\tag{2.1.6}</script><p>写出似然函数之后，可以用最大似然的方法确定$w$与$\beta$。对于$w$的最大值，<strong>在条件高斯噪声分布的情况下，线性模型的似然函数最大化等价于平方和误差函数的最小化。</strong> 上述似然函数的梯度为：</p>
-<script type="math/tex; mode=display">\triangledown \ln p(\mathbf{t}| \mathbf{w},\beta) = \beta\sum_{n=1}^{N}\left \{t_n - \mathbf{w}^T\Phi(x_n)  \right \}\Phi(x_n)^T\tag{2.1.7}</script><p>令这个梯度为0，可得:</p>
-<script type="math/tex; mode=display">w_{ML} = (\mathbf{\Phi}^T \mathbf{\Phi})^{-1}\mathbf{\Phi}^T t \tag{2.1.8}</script><p>这被称为最小平方问题的规范方程(normal equation)。这里$\mathbf{\Phi}$是一个$N \times M$的矩阵，它的元素$\mathbf{\Phi}_{nj} = \Phi_j(x_n)$。</p>
-<p>关于噪声精度参数$\beta$最大化似然函数，结果为：</p>
-<script type="math/tex; mode=display">\frac{1}{\beta_{ML}} = \frac{1}{N}\sum_{n=1}^{N}\left \{ t_n - \mathbf{w}^T_{ML}\Phi(x_n) \right \}^2\tag{2.1.9}</script><p>因此噪声精度的倒数由目标值在回归函数周围的残留方差给出。</p>
+<script type="math/tex; mode=display">t = y(x,w)+ \epsilon</script><p>其中$\epsilon$是一个零均值的高斯随机变量，精度（方差的倒数）为$\beta$,因此:</p>
+<script type="math/tex; mode=display">p(t|x,w,\beta) = N(t| y(x,w),\beta^(-1))\tag{1}</script><p>如果假设一个平方损失函数，那么对于$x$的一个新值，<strong>最优的预测由目标变量的条件均值给出</strong>。在公式(1)给出的高斯条件分布下，条件均值为：</p>
+<script type="math/tex; mode=display">E[t|x] = \int tp(t|x)dt = y(x,w)</script><p>考虑一个输入数据集$X={x_1, …,x_N}$,对应的目标值为$\mathbf{t}={t_1,…t_N}$。假设这些数据点是独立从分布(1)中抽取的，那么可以得到下面的似然函数表达式：</p>
+<script type="math/tex; mode=display">p(t|\mathbf{X},w,\beta) = \prod_{n=1}^{N}N(t_n|w^T\Phi (x_n),\beta^{-1})</script><p>其中$y(\mathbf{x},\mathbf{w}) = \sum_{j=0}^{M-1}w_j\Phi_j(x) =\mathbf{w}^T\mathbf{\Phi(x)} $<br>取似然函数的对数，我们有:</p>
+<script type="math/tex; mode=display">\ln p(\mathbf{t}|\mathbf{w},\beta)=\sum_{n=1}^{N}\ln N(t_n|w^T\Phi(x_n),\beta^{-1})</script><p>平方和误差函数的定义为：</p>
+<script type="math/tex; mode=display">E_D(\mathbf{w})={\frac{1}{2}}{\sum_{n=1}^{N}\left \{t_n-\mathbf{w}^T\Phi(x_n)  \right \}^2}</script><p>写出似然函数之后，可以用最大似然的方法确定$w$与$\beta$。对于$w$的最大值，<strong>在条件高斯噪声分布的情况下，线性模型的似然函数最大化等价于平方和误差函数的最小化。</strong> 上述似然函数的梯度为：</p>
+<script type="math/tex; mode=display">\triangledown \ln p(\mathbf{t}| \mathbf{w},\beta) = \beta\sum_{n=1}^{N}\left \{t_n - \mathbf{w}^T\Phi(x_n)  \right \}\Phi(x_n)^T</script><p>令这个梯度为0，可得:</p>
+<script type="math/tex; mode=display">w_{ML} = (\mathbf{\Phi}^T \mathbf{\Phi})^{-1}\mathbf{\Phi}^T t  $
+这被称为最小平方问题的规范方程(normal equation)。这里$\mathbf{\Phi}$是一个$N \times M$的矩阵，它的元素$\mathbf{\Phi}_{nj} = \Phi_j(x_n)$。
+
+关于噪声精度参数$\beta$最大化似然函数，结果为：
+
+$$\frac{1}{\beta_{ML}} = \frac{1}{N}\sum_{n=1}^{N}\left \{ t_n - \mathbf{w}^T_{ML}\Phi(x_n) \right \}^2</script><p>因此噪声精度的倒数由目标值在回归函数周围的残留方差给出。</p>
 <h3 id="最大后验-MAP"><a href="#最大后验-MAP" class="headerlink" title="最大后验(MAP)"></a>最大后验(MAP)</h3><p>对于最大似然法，数据规模不够时很容易出现过拟合，由贝叶斯定理:</p>
 <script type="math/tex; mode=display">posterior\propto likelihood \times prior</script><p>我们引入多项式系数$w$上的先验分布，我们下面的高斯分布：</p>
-<script type="math/tex; mode=display">p(\mathbf{w}|\alpha) = N(\mathbf{w}|\mathbf{0}, \alpha^{-1}\mathbf{I}) = (\frac{\alpha}{2\pi})^{\frac{M+1}{2}}exp\left \{ -\frac{\alpha}{2} \mathbf{w} \mathbf{w}^T \right \}\tag{2.2.1}</script><p>其中$\alpha$是分布的精度，M+1是对于M阶多项式的向量$\mathbf{w}$的总数。假定$\mathbf{w}$服从这个先验分布后，可以通过寻找最可能$\mathbf{w}$的值来确定后验分布。最大化后验概率就是最小化下式：</p>
-<script type="math/tex; mode=display">\frac{\beta}{2} \sum_{n=1}^{N}\left \{ t_n - \mathbf{w}^T\Phi(x_n) \right \}^2 + \frac{\alpha}{2}\mathbf{w}^T\mathbf{w}\tag{2.2.2}</script><p>其实质就是为误差函数添加了正则化项来控制过拟合。令$\lambda = \frac{\alpha}{\beta}$,其中$\lambda$称为正则化系数。令误差函数关于$\mathbf{w}$的梯度等于零，我们得到：$\mathbf{w}_{MAP} = (\lambda\mathbf{I} + \mathbf{\Phi}^T\mathbf{\Phi})^{-1}\mathbf{\Phi}^T\mathbf{t}$。</p>
+<script type="math/tex; mode=display">p(\mathbf{w}|\alpha) = N(\mathbf{w}|\mathbf{0}, \alpha^{-1}\mathbf{I}) = (\frac{\alpha}{2\pi})^{\frac{M+1}{2}}exp\left \{ -\frac{\alpha}{2} \mathbf{w} \mathbf{w}^T \right \}</script><p>其中$\alpha$是分布的精度，M+1是对于M阶多项式的向量$\mathbf{w}$的总数。假定$\mathbf{w}$服从这个先验分布后，可以通过寻找最可能$\mathbf{w}$的值来确定后验分布。最大化后验概率就是最小化下式：</p>
+<script type="math/tex; mode=display">\frac{\beta}{2} \sum_{n=1}^{N}\left \{ t_n - \mathbf{w}^T\Phi(x_n) \right \}^2 + \frac{\alpha}{2}\mathbf{w}^T\mathbf{w}</script><p>其实质就是为误差函数添加了正则化项来控制过拟合。令$\lambda = \frac{\alpha}{\beta}$,其中$\lambda$称为正则化系数。令误差函数关于$\mathbf{w}$的梯度等于零，我们得到：$\mathbf{w}_{MAP} = (\lambda\mathbf{I} + \mathbf{\Phi}^T\mathbf{\Phi})^{-1}\mathbf{\Phi}^T\mathbf{t}$。</p>
 <p>如果假设$\mathbf{w}$的先验概率服从高斯分布，则相当于加了一个L2 正则项；如果假设$\mathbf{w}$服从拉普拉斯分布，则相当于加了一个L1正则项。L1正则化会导致参数值变为0，但是L2却只会使得参数值减小。在机器学习中也将L2正则称为weight decay。</p>
 <h3 id="贝叶斯线性回归"><a href="#贝叶斯线性回归" class="headerlink" title="贝叶斯线性回归"></a>贝叶斯线性回归</h3><p>利用上面提到的极大似然法来训练模型时，如果数据集的规模是有限的，会导致严重的过拟合问题。如果通过限制基函数的数量来避免过拟合，就会限制模型描述数据中有趣且重要规律的灵活性。虽然引入正则化可以控制具有各参数的模型过拟合问题，但是$\lambda$的值是不好确定的。过拟合现象是最大似然方法一个不好的性质，但是当我们在使用贝叶斯方法对参数进行求和或者积分时，过拟合现象不会出现。贝叶斯与最大似然估计，最大后验估计不同之处在于它得到的是测试数据在整个空间上的一个概率分布，而不单纯是一个点估计。它的精髓就在于这个加权积分：考虑到了参数的所有情况，并且加以不同的权重（后验分布的值），自然就避免了过拟合。此外，很多情况下比起单纯的点估计，我们更需要一个分布来获得更多的信息。</p>
 <p>先引入模型参数w的先验概率分布。现在这个阶段，我们把噪声精度参数$\beta$当做已知常数。由于似然函数是$p(t|w)$是$w$的二次指数形式，于是对应的先验分布为高斯分布，均值为$\mathbf{0}$,协方差为$\alpha^{-1}I$,假定先验分布为：</p>
-<script type="math/tex; mode=display">p(w)=N(w|\mathbf{0},\alpha^{-1}I)\tag{2.3.1}</script><p>由于共轭高斯先验分布的选择，后验分布也将是高斯分布。</p>
-<script type="math/tex; mode=display">p(w|t)=N(w|m_N,S_N)\tag{2.3.2}</script><p>其中：</p>
-<script type="math/tex; mode=display">m_N= \beta S_N \mathbf{\Phi}^T \mathbf{t}\tag{2.3.3}</script><script type="math/tex; mode=display">S_N^{-1} = \alpha\mathbf{I} + \beta \mathbf{\Phi}^T \mathbf{\Phi}\tag{2.3.4}</script><p>后验概率分布的对数由对数似然函数与先验的对数求和的方式得到。它是w的函数，形式为:</p>
-<script type="math/tex; mode=display">\ln p(\mathbf{w}|\mathbf{t})=\frac{\beta}{2} \sum_{n=1}^{N}\left \{ t_n - \mathbf{w}^T\Phi(x_n) \right \}^2 + \frac{\alpha}{2}\mathbf{w}^T\mathbf{w} + const\tag{2.3.5}</script><p>我们可以看到，这个式子与公式(2.2.2)一样，但是在MAP方法中需要对$\mathbf{w}$求导得出使后验概率最大的$\mathbf{w}$的值，而在贝叶斯线性回归中，则不是得到一个确定的$\mathbf{w}$的值，而是计算$\mathbf{w}$的分布。</p>
+<script type="math/tex; mode=display">p(w)=N(w|\mathbf{0},\alpha^{-1}I)</script><p>由于共轭高斯先验分布的选择，后验分布也将是高斯分布。</p>
+<script type="math/tex; mode=display">p(w|t)=N(w|m_N,S_N) \tag{2}</script><p>由<a href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution#Marginal_distributions" target="_blank" rel="external">高斯边缘分布</a>与<a href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution#Conditional_distributions" target="_blank" rel="external">条件分布</a>的关系可得：</p>
+<script type="math/tex; mode=display">m_N= \beta S_N \mathbf{\Phi}^T \mathbf{t}</script><script type="math/tex; mode=display">S_N^{-1} = \alpha\mathbf{I} + \beta \mathbf{\Phi}^T \mathbf{\Phi}</script><p>后验概率分布的对数由对数似然函数与先验的对数求和的方式得到。它是w的函数，形式为:</p>
+<script type="math/tex; mode=display">\ln p(\mathbf{w}|\mathbf{t})=\frac{\beta}{2} \sum_{n=1}^{N}\left \{ t_n - \mathbf{w}^T\Phi(x_n) \right \}^2 + \frac{\alpha}{2}\mathbf{w}^T\mathbf{w} + const</script><p>我们可以看到，这个式子与MAP的后验概率分布一样，但是在MAP方法中需要对$\mathbf{w}$求导得出使后验概率最大的$\mathbf{w}$的值，而在贝叶斯线性回归中，则不是得到一个确定的$\mathbf{w}$的值，而是计算$\mathbf{w}$的分布。</p>
+<p>我们用得到的$\mathbf{w}$的分布来预测$t$的值，即计算出预测分布(predictive distribution):</p>
+<script type="math/tex; mode=display">p(t|\mathbf{t}, \alpha, \beta) = \int p(t|\mathbf{w},\beta)p(\mathbf{w}|\mathbf{t},\alpha,\beta)d\mathbf{w}</script><p>其中$\mathbf{t}$是训练数据的目标变量组成的向量。目标变量的条件概率分布$p(t|\mathbf{w},\beta)$由公式（1）给出，后验分布由(2)给出。预测函数涉及到两个高斯函数的卷积，所以预测分布的形式可以写为:</p>
+<script type="math/tex; mode=display">p(t|\mathbf{t}, \alpha, \beta) = N(t|m_N^T \Phi(x),\sigma_N^2(\mathbf{x}))</script><p>其中预测分布的方差$\sigma_N^2(\mathbf{x})$为：</p>
+<script type="math/tex; mode=display">\sigma_N^2(\mathbf{x}) = \frac{1}{\beta} + \phi(x)^T S_N \Phi(x)\tag{3}</script><p>公式(2.3.8)第一项表示数据中的噪声，第二项反映了参数$w$关联的不确定性。 当额外的数据点被观<br>测到的时候，后验概率分布会变窄，公式(3)第二项在N趋近于无穷大时会趋近于0。</p>
+<p>在实际中，除了少数情况（比如先验和似然函数都是高斯分布），预测分布的形式一般都很复杂，公式(2.3.6)的积分是积不出来的。这时候就要采取一些近似方法，近似方法又分为两大类：简化复杂的预测分布，然后就能算出积分的解析形式了。具体方法有变分推断，<a href="https://en.wikipedia.org/wiki/Laplace%27s_method" target="_blank" rel="external">Laplace近似</a>等。这类方法的特点是人算起来困难，机器跑起来快。用采样的方法搞定后验分布。具体方法有<a href="https://en.wikipedia.org/wiki/Gibbs_sampling" target="_blank" rel="external">Gibbs采样</a>，<a href="https://en.wikipedia.org/wiki/Markov_chain_Monte_Carlo" target="_blank" rel="external">MCMC采样</a>等。人算起来简单，但是机器跑起来慢。采样方法还有一个好处，就是精度非常高。</p>
 <h2 id="线性分类模型"><a href="#线性分类模型" class="headerlink" title="线性分类模型"></a>线性分类模型</h2><p>同样是线性模型，但是在分类问题上，模型的输出值是连续的，因为基函数连续，且是线性组合，模型输出值仍是连续的，而分类问题样本的target值是离散的。于是这之间就不能使用示性函数了。强行仍使用空间输出值就是最小平方法和Fisher线性判别函数法（后者是前者的一个特例），设置阈值进行二值离散化（+1， -1）感知机算法。生成式概率模型和判别式模型采用的是logistics 回归函数。强行使用原来的空间输出值带来的问题就是，分类问题原本只关心对错（正反例），这里变成了五十步笑百步的问题，<strong>对离群点缺乏robust</strong>。设置二值离散化问题是缺乏连续性（指的是误差函数不能始终朝着好的方向进行）。而logistics回归函数连续性较好，本质上也是二项分布和多项分布相关。但是除了最小平方法，其他方法都引入了非线性函数，导致整个大模型线性性质被破坏。无论是MLE和MAP，其结果都不是高斯分布，在判别式概率模型时进行优化的方法就变成了梯度下降法迭代求解，因为它没有解析解了。在预测分布时，后验分布已不再是高斯分布，为了使用高斯分布的性质，对其使用了laplace近似，将其近似成高斯分布，当然还有其他的近似了。</p>
-<h3 id="判别函数"><a href="#判别函数" class="headerlink" title="判别函数"></a>判别函数</h3><h4 id="最小均方法"><a href="#最小均方法" class="headerlink" title="最小均方法"></a>最小均方法</h4><h4 id="Fisher线性判别函数"><a href="#Fisher线性判别函数" class="headerlink" title="Fisher线性判别函数"></a>Fisher线性判别函数</h4><h4 id="感知机算法"><a href="#感知机算法" class="headerlink" title="感知机算法"></a>感知机算法</h4><h3 id="判别模型"><a href="#判别模型" class="headerlink" title="判别模型"></a>判别模型</h3><h3 id="生成模型"><a href="#生成模型" class="headerlink" title="生成模型"></a>生成模型</h3><h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<h3 id="判别函数"><a href="#判别函数" class="headerlink" title="判别函数"></a>判别函数</h3><p>判别函数是一个以向量x为输入，把它分配到K个类别中的某一个类别（记作$C_k$）的函数。线性判别函数最简单的形式是输入向量的线性函数，即:</p>
+<script type="math/tex; mode=display">y(\mathbf{x}) = \mathbf{w}^T\mathbf{x} + w_0</script><p>其中$\mathbf{w}$被称为权向量(weight)，$w_0$被称为偏置(bias)。如果是二分类问题，对于一个输入向量$\mathbf{x}$，如果$y(\mathbf{x})\geq 0$,则它被分到$C_1$中，否则被分到$C_2$中。决策边界由$y(\mathbf{x})=0$确定。对于多分类问题，引入一个K类判别函数:</p>
+<script type="math/tex; mode=display">y_k(\mathbf{x} = \mathbf{w}_k^T\mathbf{x} + w_{k0})</script><p>对于点$x$, 如果对于所有的$j\neq k$都有$y_k(\mathbf{x}) &gt; y_j \mathbf{x}$就把他分到$C_k$。下面介绍三种学习线性判别函数参数的方法，分别是最小平方法，Fisher线性判别函数以及感知机算法。</p>
+<h4 id="最小平方法"><a href="#最小平方法" class="headerlink" title="最小平方法"></a>最小平方法</h4><p>将公式（3.1.2）写成向量形式:</p>
+<script type="math/tex; mode=display">\mathbf{y}(\mathbf{x}) = \tilde{\mathbf{W}} \tilde{\mathbf{x}}</script><p>其中$\tilde{\mathbf{W}}$是一个矩阵，第k列由D+1维向量$\tilde{w_k} = (w_{k0}, w_k^T)^T$组成，$\tilde{\mathbf{x}}$是对应的增广矩阵的输入向量$(1,x^T)^T$。一个新的输入x被分配到输出$y_k = \tilde{w_k^T}\tilde{x}$最大的类别中。</p>
+<p>现在通过最小化平方和误差函数来确定参数矩阵$\tilde{\mathbf{W}}$,考虑训练数据集$\left \{ \mathbf{x_n}, \mathbf{t_n} \right \}$,然后定义一个矩阵$\matnbf{T}$,它的第n行是向量$\mathbf{t}_n^T$,还定义了矩阵\tilde{\mathbf{X}}，它的第n行是向量$\tilde{x}_n^T$,这样，平方函数可以表示为：</p>
+<script type="math/tex; mode=display">E_D(\tilde{\mathbf{W}}) = \frac{1}{2}Tr\left \{(\tilde{\mathbf{X}} \tilde{\mathbf{W}} -\mathbf{T})^T (\tilde{\mathbf{X}}\tilde{\mathbf{W}}-\mathbf{T})  \right \}</script><p>令上式关于$\tilde{\mathbf{W}}$的倒数为0，得到关于$\tilde{\mathbf{W}}$的解为$\tilde{\mathbf{W}}=(\tilde{\mathbf{X}}^T \tilde{\mathbf{X}})^{-1}\tilde{\mathbf{X}}\mathbf{T}$<br>根据$\tilde{\mathbf{W}}$这样我们可以得到判别函数。</p>
+<p>最小平方法对于判别函数的参数给出了精确的解析解，单即使作为一个判别函数，他仍然有很严重的问题。最小平方解对于离群点缺少鲁棒性，除此之外，在多分类问题上，即使是线性可分的数据集用最小平方判别函数也不能得到很好的结果。如下图3.1，左边是最小平方法对应的分类结果，右边是逻辑回归对应的结果，可以看到最小平方法的决策边界非常差。</p>
+<p><img src="square-06.png" alt="图3.1 最小平方与逻辑回归"></p>
+<h4 id="Fisher线性判别函数"><a href="#Fisher线性判别函数" class="headerlink" title="Fisher线性判别函数"></a>Fisher线性判别函数</h4><p>这里只讨论二分类的Fisher线性判别函数。我们可以从维度降低的⾓度考察线性分类模型。考虑二分类的情形。假设我们有一个D维入向量x，然后使用下式投影到一维:</p>
+<script type="math/tex; mode=display">y = \matnbf{w}^T\mathbf{x}</script><p>如果我们在$y$上设置一个阈值，然后把$y\geq -w_0$的样本分为$C_1$类，把其余样本分为$C_2$类，就得到了标准的线性分类器。通常来说，向一维投影会造成相当多的信息丢<br>失，因此在原始的D维空间能够完美地分离开的样本可能在⼀维空间中会相互重叠。但是，通过调整权向量w，我们可以选择让类别之间分开最大的一个投影。<br>考虑一个二分类问题，其中$C_1$类中有$N_1$个点，$C_2$类中有$N_2$个点，两类的均值向量为:</p>
+<script type="math/tex; mode=display">\mathbf{m}_1 = \frac{1}{N_1} \sum_{n \in C_1} \mathbf{x}_n , \mathbf{m}_2 = \frac{1}{N_2} \sum_{n \in C_2} \mathbf{x}_n</script><p>其中$m_k = \mathbf{w}^T\mathbf{m}_k$</p>
+<p>最简单的度量类别之间分开程度的⽅式就是类别均值投影之后的距离,这种思想可能会带来两个问题，增大$w$可以使表达式无限大，类间可能会存在较大重叠。为了解决第一个问题，我们规定$\sum_i w_i^2=1$;针对第二个问题，Fisher提出一种思想是，最大化一个函数，这个函数能够让类均值的投影分开得较大，同时让每个类别内部的⽅差较小，从而最小化了类别的重叠。其中类内方差定义为:</p>
+<script type="math/tex; mode=display">s_k^2 = \sum_{n \in C_k} (y_n - m_k)^2</script><p>其中$y_n = \mathbf{w}^T\mathbf{x}_n$。Fisher准则根据类间方差和类内方差的比值来定义，误差函数为:<script type="math/tex">J(\mathbf{w}) = \frac{(m_2- m_1)^2}{s_1^2 + s_2^2}</script><br>可以将上式重写为:</p>
+<script type="math/tex; mode=display">J(\mathbf{w}) = \frac{\mathbf{w}^T S_B \mathbf{w}}{\mathbf{w}^T S_W \mathbf{w}}</script><p>其中$S_B$是类间(between-class)协方差矩阵，形式为:</p>
+<script type="math/tex; mode=display">S_B = (\mathbf{m}_2 - \mathbf{m}_1)(\mathbf{m}_2 - \mathbf{m}_1)^T</script><p>$S_W$是类内（within-class）协方差矩阵，形式为:</p>
+<script type="math/tex; mode=display">S_W = \sum_{n in C_1} (\mathbf{x}_n - \mathbf{m}_1)(\mathbf{x}_n - \mathbf{m}_1)^T+\sum_{n in C_2} (\mathbf{x}_n - \mathbf{m}_2)(\mathbf{x}_n - \mathbf{m}_2)^T</script><p>对公式(3.2.7)求导得，$J(w)$取得最大值的条件是:</p>
+<script type="math/tex; mode=display">(\mathbf{w}^T S_B \mathbf{W})S_W \mathbf{w} = (\mathbf{w}^T S_W \mathbf{W})S_B \mathbf{w}</script><p>由于我们不关心$w$的值只关心$w$的方向,我们有:</p>
+<script type="math/tex; mode=display">\mathbf{w} \propto S_W^{-1}(\mathbf{m}_2 - \mathbf{m}_1)</script><p>如果选择了一个阈值$y_0$，是的$y(\mathbf{x}) \geq y_0$时把数据点分到$C_1$,否则把数据点分到$C_2$。可以使用高斯概率分布对类条件概率密度$p(y|C_k)$建模，然后使用最大似然方法找到高斯分布的参数值。</p>
+<h4 id="感知机算法"><a href="#感知机算法" class="headerlink" title="感知机算法"></a>感知机算法</h4><p>感知器算法对应于一个二分类模型，这份模型中输入$x$首先使用一个固定的非线性变换得到一个特征向量$\Phi(x)$，这个特征向量被用于构造一个一般的线性模型，形式为:</p>
+<script type="math/tex; mode=display">y(x) = f(w^T\Phi(x))</script><p>其中非线性激活函数f(\dot)是一个阶梯函数，形式为:</p>
+<script type="math/tex; mode=display">f(a)\left\{\begin{matrix}
++1, & a \geq 0 \\ 
+-1, & a <0
+\end{matrix}\right.</script><p>在感知器算法中，更方便的用$t = +1$表示$C_1$,用$t = -1$表示$C_2$。<br>如果使用误分类模式的总数作为误差函数来确定参数$w$会带来很多问题，因为误差函数会称为$w$的分段常函数，从而当当决策边界移过某个数据点时，这个函数不连续变化。因此我们考虑另外一个误差函数，被称为感知器准则：</p>
+<script type="math/tex; mode=display">E_P(w) = -\sum_(n \in M) w^T\Phi_n t_n</script><p>其中\Phi_n = \Phi(x_n)和$M$表示所有误分类模式的集合。某个特定的误分类模式对于误差函数的贡献<br>是$w$空间中模式被误分类的区域中w的线性函数，而在正确分类的区域，误差函数等于零。总的误差函数因此是分段线性的。</p>
+<p>对这个误差函数使用随机梯度下降算法。这样权向量的变化为:</p>
+<script type="math/tex; mode=display">w^{(\tau + 1)} = w^{\tau}- \eta\triangledown E_P(w) = w^{(\tau)}+\eta\Phi_n t_n</script><p>其中$\eta$是学习率参数，$\tau$表示运行次数。</p>
+<h3 id="生成模型"><a href="#生成模型" class="headerlink" title="生成模型"></a>生成模型</h3><p>对于每个类别$C_k$,独立地确定类条件密度$p(x|C_k)$。这是一个推断问题。然后，推断先验概率$p(C_k)$。之后利用贝叶斯定理:</p>
+<script type="math/tex; mode=display">p(C_k|x) = \frac{p(x|C_k)p(C_k)}{p(x)}$$求出后验概率$p(C_k|x)$。
+如果我们具体化了类条件概率$p(x|C_k)$参数化的函数形式，就能使用最大似然法确定参数的值以及先验类概率。这里先对二分类的情况进行建模，假设每个类别都有一个高斯类条件概率密度，且协方差矩阵相同。我们假设有一个数据集\left \{x_n, t_n \right \},其中$n = 1,...,N$，这里用$t_n$= 0或者1来表示分类结果为$C_1$或$C_2$。把先验概率记作$p(C_1)=\pi$,从而$p(C_2) = 1 -\pi$，对于一个来自类别$C_1$的数据点$x_n$,有：
+$$p(x_n,C_1) = p(C_1)p(x_n|C_1 = \piN(x_n|\mu_1,\sum)</script><p>对于类别$C_2$:</p>
+<script type="math/tex; mode=display">p(x_n,C_2) = p(C_2)p(x_n|C_2) = (1-\pi)N(x_n|\mu_2,\sum)</script><p>所以似然函数为:</p>
+<script type="math/tex; mode=display">p(\mathbf{t},\mathbf{X}|\pi,\mu_1,\mu_2,\sum) = \prod_{n=1}^{N}[\pi N(x_n|\mu_1,\sum)]^{t_n}[(1-\pi)N(x_n|\mu_2,\sum)]^{1-t_n}</script><p>其中$\mathbf{t}=(t_1,…,t_N)^T$<br>取似然函数的对数，令其关于$\pi$的导数为0,可得:</p>
+<script type="math/tex; mode=display">\pi = \frac{1}{N} \sum_{n=1}^{N}t_n = \frac{N_1}{N} = \frac{N_1}{N_1 + N_2}</script><p>\pi的最大似然估计就是类别C1的点所占的比例, 与两类的情况相同，在多类的情形中，类别$C_K$的先验概率估计为这个类别的数据点数量占训练集总数据的比例。<br>令似然函数对数关于$\mu_1$的导数为0，整理可得:</p>
+<script type="math/tex; mode=display">\mu_1 = \frac{1}{N_1} \sum_{n=1}^{N} t_n x_n</script><p>对应的$\mu_2$的结果为:</p>
+<script type="math/tex; mode=display">\mu_2 =  \frac{1}{N_2}\sum_{n=1}^{N} (1 - t_n)x_n</script><p>可以发现$\mu_1$和$\mu_2$分别是属于类别$C_1$和$C_2$输入向量$x_n$的均值。</p>
+<p>最后考虑协方差矩阵$\sum$的最大似然解，选出似然函数中与$\sum$相关的项，令其关于$\sum$的导数为0，可以得到$\sum = S$,其中:</p>
+<script type="math/tex; mode=display">S = \frac{N_1}{N}S_1 + \frac{N_2}{N}S_2\\
+S_1 = \frac{1}{N_1}\sum_{n \in C_1}(x_n - \mu_1)(x_n - \mu_1)^T\\
+S_2 = \frac{1}{N_2}\sum_{n \in C_2}(x_n - \mu_2)(x_n - \mu_2)^T</script><p>它表⽰对一个与两类都有关系的协方差矩阵求加权平均。</p>
+<h3 id="判别模型"><a href="#判别模型" class="headerlink" title="判别模型"></a>判别模型</h3><p>除了生成模型之外，另一种方法是显示的使用一般的线性模型的函数形式，然后使用最大似然法直接确定他的参数。判别式方法的.个优点是通常有更少的可调节参数需要确定，并且预测表现也会提升，尤其是当类条件概率密度的假设没有很好地近似真实的分布的时候。<br>在一些一般的假设条件下，类别$C_1$的后验概率可以写成作用在特征向量$\Phi$的线性函数上的logistic sigmoid函数的形式，即：$p(C_1|\Phi) = y(\Phi) = \sigma(w^T\Phi)$且$p(C_2|\Phi) = 1-p(C_1|\Phi)$，这里$\sigma(\dot)$是logistic <a href="https://en.wikipedia.org/wiki/Sigmoid_function函数" target="_blank" rel="external">sigmoid 函数</a>。这个模型称为logistic回归，是一个分类模型而不是回归模型。<br>与上一节提到的用最大似然法调节高斯类条件概率密度的方法，逻辑回归需要的参数明显更少，这是它的优势之一。利用最大似然方法来确定logistic回归模型的参数。很容易推导出:</p>
+<script type="math/tex; mode=display">\frac{d\sigma}{da} = \sigma(1-\sigma)</script><p>对于一个数据集$\left \{\Phi_n, t_n\right \}$,其中$t\subset \left \{0,1\right \}$,$\Phi_n = \Phi(x_n)$且$n = 1,…,N$,似然函数可以写为:</p>
+<script type="math/tex; mode=display">p(\mathbf{t}|w) = \prod_{n=1}^N y_n^{t_n} (1-y_n)^{(1-t_n)}</script><h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
 <li><a href="http://blog.csdn.net/simplelove17/article/details/50806210" target="_blank" rel="external">PRML阅读笔记</a></li>
 <li><a href="https://chenrudan.github.io/blog/2016/01/09/logisticregression.html" target="_blank" rel="external">【机器学习算法系列之二】浅析Logistic Regression</a></li>
 <li><a href="https://www.zhihu.com/question/22007264/answer/20014371" target="_blank" rel="external">如何通俗地解释贝叶斯线性回归的基本原理？- 李文哲的回答</a> </li>
-<li><a href="http://www.cnblogs.com/little-YTMM/p/5399532.html" target="_blank" rel="external">贝叶斯思想以及与最大似然估计、最大后验估计的区别</a></li>
+<li><a href="http://www.cnblogs.com/little-YTMM/p/5399532.html" target="_blank" rel="external">贝叶斯思想以及与最大似然估计、最大后验估计的区别 - 江湖小妞 - 博客园</a></li>
+<li><a href="http://blog.csdn.net/zouxy09/article/details/8195017" target="_blank" rel="external">生成模型与判别模型 - zouxy09的专栏</a></li>
 </ol>
 
       
