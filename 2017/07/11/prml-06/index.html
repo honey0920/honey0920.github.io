@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="野草集">
 <meta property="og:description" content="暑假到了，狠下决心开始啃之前一直可望而不可即的大部头《PRML》。这本PRML主要从贝叶斯的角度将机器学习的众多知识点串联在一起，优点在于知识比较系统，由浅入深循序渐进，但是很多细节推导的步骤不严谨，对于微积分，概率论和矩阵论知识不够扎实的我也忽略了很多公式部分（=。=）。本打算是一口气看完再来写读后感，但还是觉得这本书内容很多也比较复杂，不及时总结巩固可能就忘记了。所以大概花了20天断断续续的看">
 <meta property="og:image" content="https://honey0920.github.io/img/blogImg/square_06.png">
-<meta property="og:updated_time" content="2017-07-12T15:40:26.329Z">
+<meta property="og:updated_time" content="2017-07-12T15:41:39.987Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从贝叶斯的观点看线性分类和线性回归">
 <meta name="twitter:description" content="暑假到了，狠下决心开始啃之前一直可望而不可即的大部头《PRML》。这本PRML主要从贝叶斯的角度将机器学习的众多知识点串联在一起，优点在于知识比较系统，由浅入深循序渐进，但是很多细节推导的步骤不严谨，对于微积分，概率论和矩阵论知识不够扎实的我也忽略了很多公式部分（=。=）。本打算是一口气看完再来写读后感，但还是觉得这本书内容很多也比较复杂，不及时总结巩固可能就忘记了。所以大概花了20天断断续续的看">
@@ -242,7 +242,7 @@
 <script type="math/tex; mode=display">w^{(\tau + 1)} = w^{\tau}- \eta\triangledown E_P(w) = w^{(\tau)}+\eta\Phi_n t_n</script><p>其中$\eta$是学习率参数，$\tau$表示运行次数。</p>
 <h3 id="生成模型"><a href="#生成模型" class="headerlink" title="生成模型"></a>生成模型</h3><p>对于每个类别$C_k$,独立地确定类条件密度$p(x|C_k)$。这是一个推断问题。然后，推断先验概率$p(C_k)$。之后利用贝叶斯定理:</p>
 <script type="math/tex; mode=display">p(C_k|x) = \frac{p(x|C_k)p(C_k)}{p(x)}</script><p>求出后验概率$p(C_k|x)$。<br>如果我们具体化了类条件概率$p(x|C_k)$参数化的函数形式，就能使用最大似然法确定参数的值以及先验类概率。这里先对二分类的情况进行建模，假设每个类别都有一个高斯类条件概率密度，且协方差矩阵相同。我们假设有一个数据集\left \{x_n, t_n \right \},其中$n = 1,…,N$，这里用$t_n$= 0或者1来表示分类结果为$C_1$或$C_2$。把先验概率记作$p(C_1)=\pi$,从而$p(C_2) = 1 -\pi$，对于一个来自类别$C_1$的数据点$x_n$,有：</p>
-<script type="math/tex; mode=display">p(x_n,C_1) = p(C_1)p(x_n|C_1 = \piN(x_n|\mu_1,\sum)</script><p>对于类别$C_2$:</p>
+<script type="math/tex; mode=display">p(x_n,C_1) = p(C_1)p(x_n|C_1 = \pi N(x_n|\mu_1,\sum)</script><p>对于类别$C_2$:</p>
 <script type="math/tex; mode=display">p(x_n,C_2) = p(C_2)p(x_n|C_2) = (1-\pi)N(x_n|\mu_2,\sum)</script><p>所以似然函数为:</p>
 <script type="math/tex; mode=display">p(\mathbf{t},\mathbf{X}|\pi,\mu_1,\mu_2,\sum) = \prod_{n=1}^{N}[\pi N(x_n|\mu_1,\sum)]^{t_n}[(1-\pi)N(x_n|\mu_2,\sum)]^{1-t_n}</script><p>其中$\mathbf{t}=(t_1,…,t_N)^T$<br>取似然函数的对数，令其关于$\pi$的导数为0,可得:</p>
 <script type="math/tex; mode=display">\pi = \frac{1}{N} \sum_{n=1}^{N}t_n = \frac{N_1}{N} = \frac{N_1}{N_1 + N_2}</script><p>\pi的最大似然估计就是类别C1的点所占的比例, 与两类的情况相同，在多类的情形中，类别$C_K$的先验概率估计为这个类别的数据点数量占训练集总数据的比例。<br>令似然函数对数关于$\mu_1$的导数为0，整理可得:</p>
