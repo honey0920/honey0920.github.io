@@ -346,7 +346,7 @@ S_2 = \frac{1}{N_2}\sum_{n \in C_2}(x_n - \mu_2)(x_n - \mu_2)^T</script><p>它�
 <p>Adam方法结合了Adagrad善于处理稀疏梯度和RMSprop善于处理非平稳目标的优点，为不同的参数计算不同的自适应学习率。</p>
 <h3 id="Batch-Normalization"><a href="#Batch-Normalization" class="headerlink" title="Batch Normalization"></a>Batch Normalization</h3><p>前面提到梯度下降中为了加速收敛，以及避免陷入局部最优一些方法。 在参考文献[3]中提出了Batch Normalization， 它解决了反向传播过程中的梯度问题（梯度消失和爆炸），同时使得不同scale的 权重$w$ 整体更新步调更一致，从而克服深度神经网络难以训练的弊病。</p>
 <p>统计机器学习中的一个经典假设是“源空间（source domain）和目标空间（target domain）的数据分布（distribution）是一致的”。因此我们需要对输入数据进行归一化的处理。但是不同的网络层具有不同的特点，如果简单的将每一层都归一化就会失去不同卷积层的区分性。于是[3]中提出了变换重构，引入了参数$\gamma$,$\beta$:</p>
-<script type="math/tex; mode=display">y^{(k)} = \gamma^{(k)} + \beta^{(k)}</script><p>引入这两个参数之后可以使网络学习会付出原始网络的特征分布。（图片引自[3]）<br><img src="/img/blogImg/bn_1.jpg" alt=""><br>训练过程如：<br><img src="/img/blogImg/bn_2.jpg" alt=""> </p>
+<script type="math/tex; mode=display">y^{(k)} = \gamma^{(k)} + \beta^{(k)}</script><p>引入这两个参数之后可以使网络学习会服从原始网络的特征分布。（图片引自[3]）<br><img src="/img/blogImg/bn_1.jpg" alt=""><br>训练过程如：<br><img src="/img/blogImg/bn_2.jpg" alt=""> </p>
 <p>具体说来，在神经网络训练时遇到收敛速度很慢，或梯度爆炸等无法训练的状况时可以尝试BN来解决。另外，在一般使用情况下也可以加入BN来加快训练速度，提高模型精度。</p>
 <h2 id="牛顿法与拟牛顿法"><a href="#牛顿法与拟牛顿法" class="headerlink" title="牛顿法与拟牛顿法"></a>牛顿法与拟牛顿法</h2><p>除了梯度下降法，牛顿法也是机器学习中用的比较多的一种优化算法。牛顿法的基本思想是利用迭代点处的一阶导数(梯度)和二阶导数(Hessen矩阵)对目标函数进行二次函数近似，然后把二次模型的极小点作为新的迭代点，并不断重复这一过程，直至求得满足精度的近似极小值。牛顿法的速度相当快，而且能高度逼近最优值。</p>
 <h3 id="牛顿法"><a href="#牛顿法" class="headerlink" title="牛顿法"></a>牛顿法</h3><p>牛顿法主要有两个应用方向，目标函数最优化求解以及方程的求根，这两个应用方面都主要是针对f(x)为非线性函数的情况。在机器学习最优化的领域中用到的是前一种。牛顿法的核心思想是对函数进行泰勒展开。</p>
