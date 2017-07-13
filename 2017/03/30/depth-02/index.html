@@ -8,16 +8,13 @@
   <link rel="dns-prefetch" href="https://honey0920.github.io">
   <title>深度估计&amp;平面检测小结 | 野草集</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近一段时间已知忙着赶图像分析与理解的项目，在三个星期内强行接触了CNN,MRF,Caffe,openCV在内的很多东西。现在项目已经完全结束了，反而有点怀念看论文写代码的日子～希望能用这篇博文将我这段时间的工作作一个整理，也方便我之后写报告。
-问题描述
-深度估计是从2D图片中得到深度信息，深度估计主要分为两种形式：从单个的单目图像中获得深度信息，从一系列不同角度的单目图像中得到深度信息。在这个项">
+  <meta name="description" content="最近一段时间已知忙着赶图像分析与理解的项目，在三个星期内强行接触了CNN,MRF,Caffe,openCV在内的很多东西。现在项目已经完全结束了，反而有点怀念看论文写代码的日子～希望能用这篇博文将我这段时间的工作作一个整理，也方便我之后写报告。 问题描述 深度估计是从2D图片中得到深度信息，深度估计主要分为两种形式：从单个的单目图像中获得深度信息，从一系列不同角度的单目图像中得到深度信息。在这个项">
+<meta name="keywords" content="技术">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深度估计&平面检测小结">
+<meta property="og:title" content="深度估计&amp;平面检测小结">
 <meta property="og:url" content="https://honey0920.github.io/2017/03/30/depth-02/index.html">
 <meta property="og:site_name" content="野草集">
-<meta property="og:description" content="最近一段时间已知忙着赶图像分析与理解的项目，在三个星期内强行接触了CNN,MRF,Caffe,openCV在内的很多东西。现在项目已经完全结束了，反而有点怀念看论文写代码的日子～希望能用这篇博文将我这段时间的工作作一个整理，也方便我之后写报告。
-问题描述
-深度估计是从2D图片中得到深度信息，深度估计主要分为两种形式：从单个的单目图像中获得深度信息，从一系列不同角度的单目图像中得到深度信息。在这个项">
+<meta property="og:description" content="最近一段时间已知忙着赶图像分析与理解的项目，在三个星期内强行接触了CNN,MRF,Caffe,openCV在内的很多东西。现在项目已经完全结束了，反而有点怀念看论文写代码的日子～希望能用这篇博文将我这段时间的工作作一个整理，也方便我之后写报告。 问题描述 深度估计是从2D图片中得到深度信息，深度估计主要分为两种形式：从单个的单目图像中获得深度信息，从一系列不同角度的单目图像中得到深度信息。在这个项">
 <meta property="og:image" content="http://chart.googleapis.com/chart?cht=tx&chl= E_i=\sum_{(x,y)\in patch(i))} |I(x,y)*F_n(x,y))|^k">
 <meta property="og:image" content="https://honey0920.github.io/img/blogImg/features-02.png">
 <meta property="og:image" content="http://chart.googleapis.com/chart?cht=tx&chl= P(d|X;\theta,\sigma)=\frac{1}{Z}exp(-\sum_{i=1}^{M}\frac{(d_i(1)-x_i^T\theta_r)^2}{2\sigma^2_{1r}}-\sum_{s=1}^{3} \sum_{i=1}^{M} \sum_{j \in N_s(i)} \frac{(d_i(s)-d_j(s))^2}{2\sigma_{2rs}^{2} })">
@@ -32,12 +29,10 @@
 <meta property="og:image" content="http://latex.codecogs.com/svg.latex? K_S(S^A,S^B)=\sum_{q=1}^{Q}{\rho(S^A,S^B)^q}">
 <meta property="og:image" content="http://latex.codecogs.com/svg.latex? U(p)=\sum_{i\in S}V_1(p_i,r_i)+\sum_{i \in S}\sum_{j \in N_i}V_2(p_i,p_j)">
 <meta property="og:image" content="http://latex.codecogs.com/svg.latex? E(n)=\sum_{i\in S'}F_1(n_i,d_i)+\sum_{i \in S'}\sum_{j \in N_i}F_2(n_i,n_j)">
-<meta property="og:updated_time" content="2017-04-25T14:12:24.020Z">
+<meta property="og:updated_time" content="2017-04-25T14:12:26.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="深度估计&平面检测小结">
-<meta name="twitter:description" content="最近一段时间已知忙着赶图像分析与理解的项目，在三个星期内强行接触了CNN,MRF,Caffe,openCV在内的很多东西。现在项目已经完全结束了，反而有点怀念看论文写代码的日子～希望能用这篇博文将我这段时间的工作作一个整理，也方便我之后写报告。
-问题描述
-深度估计是从2D图片中得到深度信息，深度估计主要分为两种形式：从单个的单目图像中获得深度信息，从一系列不同角度的单目图像中得到深度信息。在这个项">
+<meta name="twitter:title" content="深度估计&amp;平面检测小结">
+<meta name="twitter:description" content="最近一段时间已知忙着赶图像分析与理解的项目，在三个星期内强行接触了CNN,MRF,Caffe,openCV在内的很多东西。现在项目已经完全结束了，反而有点怀念看论文写代码的日子～希望能用这篇博文将我这段时间的工作作一个整理，也方便我之后写报告。 问题描述 深度估计是从2D图片中得到深度信息，深度估计主要分为两种形式：从单个的单目图像中获得深度信息，从一系列不同角度的单目图像中得到深度信息。在这个项">
 <meta name="twitter:image" content="http://chart.googleapis.com/chart?cht=tx&chl= E_i=\sum_{(x,y)\in patch(i))} |I(x,y)*F_n(x,y))|^k">
   
     <link rel="alternative" href="/atom.xml" title="野草集" type="application/atom+xml">
@@ -258,11 +253,11 @@
 <h2 id="网站建设"><a href="#网站建设" class="headerlink" title="网站建设"></a>网站建设</h2><p>网站建设其实是项目一开始没有考虑到的。一刚开始我就只是git clone了两个项目<a href="https://github.com/PSMM/SLIC-Superpixels" target="_blank" rel="external">SLIC-Superpixels</a>（in C++)和<a href="https://github.com/janivanecky/Depth-Estimation" target="_blank" rel="external">Depth-estimation</a>(in python)，在SLIC算法之中增加了[5]这篇paper的实现。也就是说核心算法部分用到了python和C++两种语言。本来觉得能跑出结果就很好了，可是在验收的前一周突然又想到可以做一个demo展示一下，不然还有一个星期的时间很浪费。最后大胆的决定用python将plane-detection的部分完全重构一遍，最后用<a href="https://en.wikipedia.org/wiki/Django_(web_framework)" target="_blank" rel="external">Django</a>框架写一个前端页面与后台可以连接起来。</p>
 <h3 id="1-Django简介"><a href="#1-Django简介" class="headerlink" title="1. Django简介"></a>1. Django简介</h3><p>Django是一个开放源代码的Web应用框架，由Python写成。采用了MVC的框架模式，即模型M，视图V和控制器C。利用Django开发可以省去很多web开发的麻烦，程序员可以专注于写应用而不用去造轮子。并且它是开源且免费的。（<a href="https://www.djangoproject.com/start/overview/" target="_blank" rel="external">Django Overview</a>）</p>
 <h3 id="2-view与template"><a href="#2-view与template" class="headerlink" title="2. view与template"></a>2. view与template</h3><p>关于django我了解的不多，也主要是现学现卖了。这里我的项目主要用到了template和view方面的知识，简单的说一下我用到的功能，如需更系统学习django可以访问<a href="https://docs.djangoproject.com/en/1.10/" target="_blank" rel="external">django Documentation</a>.</p>
-<p>view负责的是对视图的渲染，一个页面中有一个内容是动态的，不是静态写在html中而是要需要一定的操作（譬如从数据库中提取，或是经过一定处理）才能够展现在静态页面里的。访问了一个views.py中的函数就相当于提前把要在页面上显示的内容准备一下，之后再返回一个已经写好的html页面，并把html中相关的动态内容替换成处理后的内容。在本项目中，Views.py中的 get_ pic 函数调用了 get_ depth 与 get_ plane   两个函数得到了所需要的深度图和平面检测图，并以一定的名称保存到本地。</p>
+<p>view负责的是对视图的渲染，一个页面中有一个内容是动态的，不是静态写在html中而是要需要一定的操作（譬如从数据库中提取，或是经过一定处理）才能够展现在静态页面里的。访问了一个views.py中的函数就相当于提前把要在页面上显示的内容准备一下，之后再返回一个已经写好的html页面，并把html中相关的动态内容替换成处理后的内容。在本项目中，Views.py中的 get<em> pic 函数调用了 get</em> depth 与 get_ plane   两个函数得到了所需要的深度图和平面检测图，并以一定的名称保存到本地。</p>
 <p>template负责的是展示的页面，我的项目中有一个demo.html页面负责选择图片上传，还有一个show_pic.html的页面负责展示原图，深度图，两种不同形式的平面检测图。具体参见我们的<a href="http://itec.hust.edu.cn/~chenghn/project/Depth_Estimation/material/Demo_Video.mp4" target="_blank" rel="external">Demo Video</a>这两个页面放在新建的template文件夹中。</p>
 <p>除此之外，还要在url.py里进行配置，这一步主要是将在浏览器地址栏中输入的url与views.py中渲染页面的函数对应起来。</p>
 <p>这一部分详细见 <a href="https://docs.djangoproject.com/en/1.10/intro/tutorial03/" target="_blank" rel="external">Part3:Views and templates</a>.</p>
-<h3 id="3-代码实现-2"><a href="#3-代码实现-2" class="headerlink" title="3. 代码实现"></a>3. 代码实现</h3><p>处理图片之后显示的代码在views.py中的get _pic 函数中，在get _depth 与get_ plane 两个函数中都把处理过后的图片保存下来了。</p>
+<h3 id="3-代码实现-2"><a href="#3-代码实现-2" class="headerlink" title="3. 代码实现"></a>3. 代码实现</h3><p>处理图片之后显示的代码在views.py中的get <em>pic 函数中，在get _depth 与get</em> plane 两个函数中都把处理过后的图片保存下来了。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_pic</span><span class="params">(request)</span>:</span></div><div class="line"><span class="keyword">if</span> request.method==<span class="string">'POST'</span>:</div><div class="line">	<span class="keyword">try</span>:</div><div class="line">		image = request.FILES[<span class="string">'image'</span>]</div><div class="line">		img = Image.open(image)</div><div class="line">		filepath=<span class="string">'media/origin.png'</span></div><div class="line">		img.save(filepath)</div><div class="line">		get_depth(filepath)</div><div class="line">		get_planar(<span class="string">'media/img.png'</span>,<span class="string">'media/depth.png'</span>)</div><div class="line">		<span class="keyword">return</span> render_to_response(<span class="string">'show_pic.html'</span>,&#123;<span class="string">'image'</span>:<span class="string">'/media/test.png'</span>&#125;)</div><div class="line">	<span class="keyword">except</span> Exception,e:</div><div class="line">		<span class="keyword">return</span> HttpResponse(e)</div></pre></td></tr></table></figure>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>前前后后大概花了三个星期来完成这个项目，又花了三天的时间码完这篇1w字的技术博客真是满满的成就感啊~这个项目的源码在<a href="https://github.com/honey0920/depth-estimation-plane-detection" target="_blank" rel="external">这里</a>，我们的项目网站在<a href="http://itec.hust.edu.cn/~chenghn/project/Depth_Estimation/index.html" target="_blank" rel="external">这里</a>。说起来我对机器学习和深度学习也并没有很了解，关于深度估计和平面检测这块我也是第一次接触，上文中很多提到的方法可能有错误或者不足，也希望大家能指出来。接下来自己想学习部分在<strong>python爬虫</strong> /  <strong>tensorflow写深度学习</strong>。立个flag吧，四月份还会写一篇技术博客。加油！</p>
 <h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
@@ -529,11 +524,11 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">技术</a>
+                <a href="javascript:void(0)" class="js-tag color3">生活</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">生活</a>
+                <a href="javascript:void(0)" class="js-tag color3">技术</a>
               </li>
             
             <div class="clearfix"></div>
