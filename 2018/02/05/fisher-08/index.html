@@ -8,17 +8,17 @@
   <link rel="dns-prefetch" href="https://honey0920.github.io">
   <title>BOV与Fisher Vector进行特征编码的比较 | 野草集</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="华中科技大学本科电信12级，研究生16级。喜欢算法也喜欢编程的小姑娘~">
+  <meta name="description" content="最近开始研究对视频进行行为识别，了解到目前state-of-art的方法都是基于iDT(improved dense trajectories)[1]的。基本思路分两种，一种是手动提取特征（Handcraft feature）然后对特征进行编码，然后分类的过程，还有一种是利用卷积神经网络提取特征，这里的网络一般分为以单个的视频帧表象的形式存在的空域网络，以及包含连续视频帧的堆叠光流位移场来描述视频">
 <meta name="keywords" content="技术">
 <meta property="og:type" content="article">
 <meta property="og:title" content="BOV与Fisher Vector进行特征编码的比较">
 <meta property="og:url" content="https://honey0920.github.io/2018/02/05/fisher-08/index.html">
 <meta property="og:site_name" content="野草集">
-<meta property="og:description" content="华中科技大学本科电信12级，研究生16级。喜欢算法也喜欢编程的小姑娘~">
-<meta property="og:updated_time" content="2018-02-05T02:24:56.279Z">
+<meta property="og:description" content="最近开始研究对视频进行行为识别，了解到目前state-of-art的方法都是基于iDT(improved dense trajectories)[1]的。基本思路分两种，一种是手动提取特征（Handcraft feature）然后对特征进行编码，然后分类的过程，还有一种是利用卷积神经网络提取特征，这里的网络一般分为以单个的视频帧表象的形式存在的空域网络，以及包含连续视频帧的堆叠光流位移场来描述视频">
+<meta property="og:updated_time" content="2018-02-05T12:20:00.579Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BOV与Fisher Vector进行特征编码的比较">
-<meta name="twitter:description" content="华中科技大学本科电信12级，研究生16级。喜欢算法也喜欢编程的小姑娘~">
+<meta name="twitter:description" content="最近开始研究对视频进行行为识别，了解到目前state-of-art的方法都是基于iDT(improved dense trajectories)[1]的。基本思路分两种，一种是手动提取特征（Handcraft feature）然后对特征进行编码，然后分类的过程，还有一种是利用卷积神经网络提取特征，这里的网络一般分为以单个的视频帧表象的形式存在的空域网络，以及包含连续视频帧的堆叠光流位移场来描述视频">
   
     <link rel="alternative" href="/atom.xml" title="野草集" type="application/atom+xml">
   
@@ -178,7 +178,31 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>最近开始研究对视频进行行为识别，了解到目前state-of-art的方法都是基于iDT(improved dense trajectories)[1]的。基本思路分两种，一种是手动提取特征（Handcraft feature）然后对特征进行编码，然后分类的过程，还有一种是利用卷积神经网络提取特征，这里的网络一般分为以单个的视频帧表象的形式存在的空域网络，以及包含连续视频帧的堆叠光流位移场来描述视频帧之间的运动的时域网络， 但这种基于深度特征的方法在加入了iDT之后效果也能得到明显提升[2]。 这里我先研究手动提取iDT特征后进行Fisher vector编码的过程，并把Fisher Vector 与 BoV(Bag of Visual words)进行特征编码的过程进行了对比。</p>
+<h2 id="BoV"><a href="#BoV" class="headerlink" title="BoV"></a>BoV</h2><p>BOV解决的是提取SIFT特征之后，特征数据量太多而无法快速计算相似度的问题。如果是用聚类算法对这些SIFT特征矢量数据进行聚类，然后用聚类中的一个簇代表BOV中的一个视觉词，将同一幅图像的SIFT矢量映射到视觉词序列生成码本，这样每一幅图像只用一个码本矢量来描述，这样计算相似度时效率就大大提高了。</p>
+<p>具体来说BoV特征编码主要是下面的步骤：</p>
+<ol>
+<li>对训练集中的M副图像进行预处理并提取SIFT特征，假设一共提取N个特征。</li>
+<li>用K-means对提取的N个SIFT特征进行聚类， K个聚类的中心词被选为视觉词。</li>
+<li>计算每一幅图像的每一个SIFT特征到这K个视觉词的距离，并将其映射到距离最近的视觉词中（即将该视觉词的对应词频+1）。</li>
+<li>3里得到每幅图像与视觉词序列相对应的词频矢量之后，对词频向量进行l1归一化。</li>
+</ol>
+<h2 id="Fisher-Vector"><a href="#Fisher-Vector" class="headerlink" title="Fisher Vector"></a>Fisher Vector</h2><p>Fisher Vector（FV）是一种类似于BOV词袋模型的一种编码方式, FV采用混合高斯模型（GMM）构建码本，但是FV不只是存储视觉词典的在一幅图像中出现的频率，并且FV还统计视觉词典与局部特征（如SIFT）的差异。Fisher Vector本质上是用似然函数的梯度vector来表达一幅图像，这个梯度向量的物理意义就是表达了参数往哪个方向修正才能最佳拟合数据。</p>
+<p>FV的步骤如下:</p>
+<ol>
+<li>首先从图片上提取出特征描述子（如SIFT特征），假设每个描述子是D维的。</li>
+<li>令这些特征描述子符合K个高斯分布的线性组合（即混合高斯分布），并训练出GMM参数,系数$w_i$,均值$\mu_i$以及方差$\sigma_i$。</li>
+<li>求出该图片（用其特征描述子表示）在某GMM下的概率函数$p(\mathbf{X}|\lambda)=\prod<em>{t=1}^{T}p(x_t|\lambda)$，并可以写出其似然函数$\mathcal{L}(\mathbf{X}|\lambda)=\sum</em>{t=1}^{T}p(x_t|\lambda)$</li>
+<li>用似然函数的梯度vector来表达这幅图像，即\frac{\partial\mathcal{L}(\mathbf{X}|\lambda)}{\partial w_i}<br>，\frac{\partial\mathcal{L}(\mathbf{X}|\lambda)}{\partial \mu_i^d}及\frac{\partial\mathcal{L}(\mathbf{X}|\lambda)}{\partial \sigma_i^d}。这样就把长度不一的图片特征向量转化为长度相等了。</li>
+<li>最后一步通过计算fisher matrix的对角线期望[3]来进行特征向量的归一化,归一化的向量也被称为Fisher kernel，可以用来计算两个点在某个空间内的距离，可直接用于SVM分类中。</li>
+</ol>
+<p>FisherVector相对于BOV的优势在于，BOV得到的是一个及其稀疏的向量，由于BOV只关注了关键词的数量信息，这是一个0阶的统计信息；FisherVector并不稀疏，同时，除了0阶信息，Fisher Vector还包含了1阶(期望)信息、2阶(方差信息)，因此FisherVector可以更加充分地表示一幅图片。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li>Wang H, Schmid C. Action Recognition with Improved Trajectories[C]// IEEE International Conference on Computer Vision. IEEE, 2014:3551-3558.</li>
+<li>Wang L, Qiao Y, Tang X. Action recognition with trajectory-pooled deep-convolutional descriptors[J]. 2015:4305-4314.</li>
+<li><a href="https://www.cnblogs.com/jie-dcai/p/5740480.html" target="_blank" rel="external">【CV知识学习】Fisher Vector</a></li>
+</ol>
+
       
 
       
