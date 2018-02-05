@@ -191,9 +191,9 @@
 <p>FV的步骤如下:</p>
 <ol>
 <li>首先从图片上提取出特征描述子（如SIFT特征），假设每个描述子是D维的。</li>
-<li>令这些特征描述子符合K个高斯分布的线性组合（即混合高斯分布），并训练出GMM参数,系数$w_i$,均值$\mu_i$以及方差$\sigma_i$。</li>
-<li>求出该图片（用其特征描述子表示）在某GMM下的概率函数 $p(\mathbf{X}|\lambda)=\prod<em>{t=1}^{T}p(x_t|\lambda)$ ，并可以写出其似然函数 $\mathcal{L}(\mathbf{X}|\lambda)=\sum</em>{t=1}^{T}p(x_t|\lambda)$</li>
-<li>用似然函数的梯度vector来表达这幅图像，即$\frac{\partial\mathcal{L}(\mathbf{X}|\lambda)}{\partial w_i}$<br>， $\frac{\partial\mathcal{L}(\mathbf{X}|\lambda)}{\partial \mu_i^d}$ 及 $\frac{\partial\mathcal{L}(\mathbf{X}|\lambda)}{\partial \sigma_i^d}$。这样就把长度不一的图片特征向量转化为长度相等了。</li>
+<li>令这些特征描述子符合K个高斯分布的线性组合（即混合高斯分布），并训练出GMM参数,系数$w_i$,均值$\mu_i^d$以及方差$\sigma_i^d$。</li>
+<li>求出该图片（用其特征描述子表示）在某GMM下的概率函数 $p(\mathbf{X}|\lambda)=\prod<em>{t=1}^{T}p(x_t|\lambda)$ ,并可以写出其似然函数 $\mathcal{L}(\mathbf{X}|\lambda)=\sum</em>{t=1}^{T}p(x_t|\lambda)$</li>
+<li>用似然函数的梯度vector来表达这幅图像，即$\frac{\partial\mathcal{L}(\mathbf{X}|\lambda)}{\partial w_i}$， $\frac{\partial\mathcal{L}(\mathbf{X}|\lambda)}{\partial \mu_i^d}$ 及 $\frac{\partial\mathcal{L}(\mathbf{X}|\lambda)}{\partial \sigma_i^d}$。这样就把长度不一的图片特征向量转化为长度相等了。</li>
 <li>最后一步通过计算fisher matrix的对角线期望[3]来进行特征向量的归一化,归一化的向量也被称为Fisher kernel，可以用来计算两个点在某个空间内的距离，可直接用于SVM分类中。</li>
 </ol>
 <p>FisherVector相对于BOV的优势在于，BOV得到的是一个及其稀疏的向量，由于BOV只关注了关键词的数量信息，这是一个0阶的统计信息；FisherVector并不稀疏，同时，除了0阶信息，Fisher Vector还包含了1阶(期望)信息、2阶(方差信息)，因此FisherVector可以更加充分地表示一幅图片。</p>
@@ -1053,11 +1053,11 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">生活</a>
+                <a href="javascript:void(0)" class="js-tag color3">技术</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">技术</a>
+                <a href="javascript:void(0)" class="js-tag color3">生活</a>
               </li>
             
             <div class="clearfix"></div>
