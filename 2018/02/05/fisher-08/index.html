@@ -15,7 +15,7 @@
 <meta property="og:url" content="https://honey0920.github.io/2018/02/05/fisher-08/index.html">
 <meta property="og:site_name" content="野草集">
 <meta property="og:description" content="最近开始研究对视频进行行为识别，了解到目前state-of-art的方法都是基于iDT(improved dense trajectories)[1]的。基本思路分两种，一种是手动提取特征（Handcraft feature）然后对特征进行编码，然后分类的过程，还有一种是利用卷积神经网络提取特征，这里的网络一般分为以单个的视频帧表象的形式存在的空域网络，以及包含连续视频帧的堆叠光流位移场来描述视频">
-<meta property="og:updated_time" content="2018-02-05T12:37:52.204Z">
+<meta property="og:updated_time" content="2018-02-05T12:40:49.922Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BOV与Fisher Vector进行特征编码的比较">
 <meta name="twitter:description" content="最近开始研究对视频进行行为识别，了解到目前state-of-art的方法都是基于iDT(improved dense trajectories)[1]的。基本思路分两种，一种是手动提取特征（Handcraft feature）然后对特征进行编码，然后分类的过程，还有一种是利用卷积神经网络提取特征，这里的网络一般分为以单个的视频帧表象的形式存在的空域网络，以及包含连续视频帧的堆叠光流位移场来描述视频">
@@ -192,7 +192,7 @@
 <ol>
 <li>首先从图片上提取出特征描述子（如SIFT特征），假设每个描述子是D维的。</li>
 <li>令这些特征描述子符合K个高斯分布的线性组合（即混合高斯分布），并训练出GMM参数,系数$w_i$,均值$\mu_i^d$以及方差$\sigma_i^d$。</li>
-<li>求出该图片（用其特征描述子表示）在某GMM下的概率函数 <script type="math/tex">p(\mathbf{X}|\lambda)=\prod_{t=1}^{T}p(x_t|\lambda)</script>,并可以写出其似然函数 <script type="math/tex">\mathcal{L}(\mathbf{X}|\lambda)=\sum_{t=1}^{T}p(x_t|\lambda)</script></li>
+<li>求出该图片（用其特征描述子表示）在某GMM下的概率函数 $p(\mathbf{X}|\lambda)=\prod<em>{t=1}^{T}p \left( x_t|\lambda \right)$,并可以写出其似然函数 $\mathcal{L}(\mathbf{X}|\lambda)=\sum</em>{t=1}^{T}p(x_t|\lambda \right )$</li>
 <li>用似然函数的梯度vector来表达这幅图像，即$\frac{\partial\mathcal{L}(\mathbf{X}|\lambda)}{\partial w_i}$， $\frac{\partial\mathcal{L}(\mathbf{X}|\lambda)}{\partial \mu_i^d}$ 及 $\frac{\partial\mathcal{L}(\mathbf{X}|\lambda)}{\partial \sigma_i^d}$。这样就把长度不一的图片特征向量转化为长度相等了。</li>
 <li>最后一步通过计算fisher matrix的对角线期望[3]来进行特征向量的归一化,归一化的向量也被称为Fisher kernel，可以用来计算两个点在某个空间内的距离，可直接用于SVM分类中。</li>
 </ol>
