@@ -243,6 +243,89 @@
 
 
   
+    <article id="post-graph-07" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/04/graph-07/">Spectral Graph Algorithm 学习小结</a>
+    </h1>
+  
+
+        
+        <a href="/2017/08/04/graph-07/" class="archive-article-date">
+  	<time datetime="2017-08-04T15:08:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>上周被老师派去了上海交大进行了为期一周的summer school，学习的主题是“算法谱图论”。 由于去之前也没有提前准备图论的知识，上课的过程显得有些被动。万幸是研一还是认真上过矩阵论，也接触过了一些算法，所以勉强能够跟上整个课程的节奏：基本概念还是知道了个大概，但是证明的细节我也确实没有去深究了。这里把我一周学习的内容做一个小结。</p>
+<h2 id="算法谱图论是什么"><a href="#算法谱图论是什么" class="headerlink" title="算法谱图论是什么"></a>算法谱图论是什么</h2><p>wiki给出的解释是：“In mathematics,  spectral graph theory is the study of the properties of a graph in relationship to the characteristic polynomial, eigenvalues, and eigenvectors of matrices associated with the  graph, such as its adjacency matrix or Laplacian matrix. ” 孙老师给我们讲的是，算法谱图论旨在用代数与几何的方法来表示“图”这个数据结构并探究图的内在特征。具体来说算法谱图论需要一些关于矩阵的基础，包括特征值，特征向量，矩阵多项式等；除此之外对解析几何也有一定要求，解析几何部分的内容可以将算法直观化。</p>
+<h2 id="算法谱图论的基本内容"><a href="#算法谱图论的基本内容" class="headerlink" title="算法谱图论的基本内容"></a>算法谱图论的基本内容</h2><p>从7月25日到7月29日，我们每天上午下午各上两个小时课,一共就是上了十节课，学习的内容的涉及面也比较广。总结下可能主要涉及到相关概念，谱性质与谱聚类和谱稀疏这三个大块来讲的。</p>
+<h3 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h3><p>$G = (V,E)$表示一个有$n$个顶点和$m$条边的无向图。 $u$顶点的邻居节点集合用$N(u)$表示，它的度（degree）为$d<em>u = |N(u)|$.对于集合$S\subseteq V$,用$vol(S) = \sum</em>{u \in S}d<em>u$,特别的，$vol(G) = \sum</em>{u \in V[G]} d<em>u$.令$D \in \mathbb{R}^{n \times n}$为一个对角矩阵，其中的每一个对角元素$D</em>{u,u} = d<em>u$。图G的邻接矩阵A定义为:如果点u与点v相连则$A</em>{u,v} = 1$，否则$A_{u,v}=0$。而G的拉普拉斯矩阵表示为$L= D - A$，$A$为G的邻接矩阵。正则化的拉普拉斯矩阵表示为$\mathcal{L} = D^{-\frac{1}{2}}LD^{-\frac{1}{2}} = I - D^{-\frac{1}{2}}AD^{-\frac{1}{2}}$。</p>
+<p>图中的随机游走表现为一系列的点$v<em>0,v_1…,v_l…,v_n$.$v_0$已经固定而每一个$v_i$均匀的从$v</em>{i-1}$的邻居节点中选取。图上的随机游走是马尔科夫链一个特殊的例子，图上的随机游走有时间对称性和可逆性，这意味着从一个方向上或是另一个方向上穿过给定路径的概率之间有关系。</p>
+<h3 id="谱性质"><a href="#谱性质" class="headerlink" title="谱性质"></a>谱性质</h3><h4 id="cheeger常数与cheeger不等式"><a href="#cheeger常数与cheeger不等式" class="headerlink" title="cheeger常数与cheeger不等式"></a>cheeger常数与cheeger不等式</h4><p>一个d-regular图中某个节点集$S \subseteq V$,令$h_G(S)= \frac{|\partial S|}{|S|}$,其中$\partial S= \left { (x,y) \in E(G): x \in S, y \in V(G)\S  \right }$。cheeger常数定义为$h(G) = \min_S h_G(S)$。从概率的角度看，这正是随机选取一个节点集$S$中顶点的边，那么边的‘扩展’到节点集$S$外的概率。使用拉普拉斯矩阵的第二小特征值$\lambda_2$可以将图的cheeger常数进行限定，具体说来可表示为<strong>cheeger不等式</strong>:</p>
+<script type="math/tex; mode=display">\frac{\lambda_2}{2} \leqslant h(G) \leqslant \sqrt{2\lambda_2}</script><p>Cheeger常数为正当且仅当G是完全图(connected graph),cheeger常数是值很小的正数表明该图存在一个”瓶颈”。考虑一个环形网络入图2所示,这个环的节点顺时针编号为1,2,3…顶点集和边的集合可以表示为：</p>
+<script type="math/tex; mode=display">V(G_N) =  \left \{1,2,3...,N-1, N \right \}</script><script type="math/tex; mode=display">E(G_N) = \left \{ (1,2),(2,3),...,(N-1,N),(N,1)\right \}</script><p>令$S$为这个连环链路中的$ \left \lfloor \frac{N}{2} \right \rfloor$个点，即：</p>
+<script type="math/tex; mode=display">S =  \left \{ 1,2,...,\left \lfloor \frac{N}{2} \right \rfloor \right \}</script><script type="math/tex; mode=display">\partial S = \left \{ (\left  \lfloor \frac{N}{2} \right \rfloor,\left \lfloor \frac{N}{2} \right \rfloor+1),(N,1)\right \}</script><p>当N趋近于$\infty$时，$\frac{|\partial S|}{|S|}$趋近于0。事实上，小的Cheeger常数就表示整个图会因为某一个点而影响整个性能。这个环形网络如果有一个节点崩掉了，那整个网络都不能互相通信了，这是我们不愿意发生的。<br><img src="/img/blogImg/NetworkTopology-Ring.png" alt="图3.2 环形网络"></p>
+<h4 id="谱扩展"><a href="#谱扩展" class="headerlink" title="谱扩展"></a>谱扩展</h4><p>扩展图(expand graph)是一系列有高可扩展性的稀疏图。由于稀疏性意味着更少的建造成本，高的可扩展性意味着高的连通性，所以扩展图的技术最开始被应用到<strong>低成本通信网络的构造</strong>。<br>构造扩展图的基本思想就是利用两个图之间顶点，边和度的关系来让新的图尽可能拥有原始图的特征。孙老师上课的时候提到了两种构造图的方法：置换积（Replacement Product）和之子积（Zig-Zag Product）.对于有$N$个定点，$M$条边，$D$度的大图$G$和$n$个定点，$m$条边，$d$度的小图$H$，用置换积构造的图会有$N \times n$个定点，$ M \times m $条边，$D$度；而用之子积构造的图会有$N \times D$个定点，$d^2$度，$M-1$条边。总体来说，置换积的度仅取决于小图的度，它可以用来在不丢失图的连通性的条件下减小图的度，而之子积继承了大图的大小，继承了小图的度，而扩展性则综合了大图和小图的特性，所以之子积可以用来建立具有有界度和良好扩张性质的大图。</p>
+<h3 id="谱聚类和谱稀疏"><a href="#谱聚类和谱稀疏" class="headerlink" title="谱聚类和谱稀疏"></a>谱聚类和谱稀疏</h3><p>谱聚类和谱稀疏是孙老师最后讲的两个部分，这两块在很多方面都有应用，而且也是现在的研究热点。</p>
+<p>一个网络中聚类之间的连通率（conductance）往往可以评判网络之间的通信性能。（原句是Clusters of low conductance in networks appearing in practice usually capture the notation of community），寻找聚类的算法也经常被应用到通信检测和网络分析等方面。K聚类问题就是把一个图分为K部分，每一部分的cheeger 常数（conductance）都很小。谱聚类算法利用了图的割(cut)与图正则化拉普拉斯矩阵的特征向量的关系，即<strong>结构定理(The Structure Theorem )</strong>。</p>
+<p>稀疏图(sparse graph)表示边的数量和点的数量几乎成正比的图。由于大部分算法在稀疏图上运行的时间更少，同时稀疏图也更节省存储空间，所以将一个图G转换为特征相似的稀疏图H是有必要的。 <em>Spielman-Srivastava</em>算法可以通过特定概率来采样原图的边，从而得到稀疏图，但这种方式计算复杂度相对较大。除此之外，孙老师所在的组最近也提出了线性时间的谱稀疏算法。</p>
+<h2 id="算法谱图论的应用"><a href="#算法谱图论的应用" class="headerlink" title="算法谱图论的应用"></a>算法谱图论的应用</h2><p>总的来说，算法谱图论其实就是就是研究图上的一些代数或是几何特性，所以只要某个object可以用graph来表示出来，那么就可以用算法谱图论的一些算法来解决问题。具体来说可能有下面几个方面：</p>
+<ul>
+<li><strong>图像分割(Image segementation)</strong>，用cheeger常数可以算出图的最小割，从而得到相应的分割线，但是这个分割可能并不理想。</li>
+<li><strong>PageRank</strong> 通过将网络中网页之前互联的关系表示成邻接矩阵，可以用矩阵的特征来获得链接的排序。</li>
+<li><strong>网络通信</strong> 前面提到的扩展图与图的分割，涉及到建造优性能网络的问题。</li>
+<li><strong>社交网络</strong> 通过将人与人之间的互联关系建模，对用户进行基于某种特性的分类。(graph clusting)</li>
+<li><strong>数据集合并</strong>  用谱扩展(Construction of Expander Graphs)的方法可以在较短时间内将来源不同的数据集合成新的数据集。</li>
+</ul>
+<h2 id="学习体会"><a href="#学习体会" class="headerlink" title="学习体会"></a>学习体会</h2><p>这次学习的最大体会就是，千万不要高估了自己，有好多比你聪明得多的人比你还要努力。在上交的室友是个大四的妹子，可是去年就已经发了一篇A类的论文还是best paper award，才大四已经在准备托福要研究生毕业出国了。还有上课时坐在前面的一群复旦的妹子，长得好看不说，一下课就在讨论上课的内容，关键是讨论的东西我还不怎么能听得懂（T.T），有一种我的大学四年是不是白学了的感觉~ 诚然，数学功底和英语功底在做研究这个方面至关重要，但是最重要的还是<strong>与优秀的人交流</strong>。如果只是呆在华科，与实验室的学长比，或是跟选同一门课的同学比（没错我说的就是软件无线电课），可能我是会有一些优越感。呆在一个自我感觉良好的地方未必是好事，久而久之毕竟会消磨你的斗志和上进心。在下半年再给自己立一个flag，在自己的研究方向阅读大量文献并思考提出问题，与文章作者进行email交流并有所收获。嗯，愿自己变得更优秀。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技术</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/08/04/graph-07/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-prml-06" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -270,7 +353,7 @@
 <h2 id="线性回归模型"><a href="#线性回归模型" class="headerlink" title="线性回归模型"></a>线性回归模型</h2><p>建立线性模型之后，注意线性模型是将样本的自变量在新的映射空间的值，即初始变量的<strong>基函数</strong>输出做线性组合得到输出值。输出值本质上和样本的因变量target值其实是没有关系的。引入了t=f(y)关系，在回归问题上，我们习惯使用了示性函数t=f(y)将空间输出值与样本的target的值认为是相同的，这样在预测的时候，将待预测的输入变量输入到线性模型中得到的值就可以认为是预测的输出变量。更重要的是，这种示性函数会保持整个模型的线性性质，会带来极大方便。接下来假设观测值存在随机噪声，认为服从高斯分布，建立起似然函数，最大化似然函数得到模型参数（ML）。最大化似然函数会带来过拟合问题，引入先验分布，得到最大后验分布（MAP）。而最大后验分布中又有一些超参数无法很好的确定，所以又引入贝叶斯回归。这里由于都是线性函数，高斯分布的性质反复使用，就可以得到解析解。先验分布引入的时候又会引入超参，超参的选取又引来争议，于是对超参的求解带来了证据近似的迭代方法。</p>
 <h3 id="最大似然法（ML）"><a href="#最大似然法（ML）" class="headerlink" title="最大似然法（ML）"></a>最大似然法（ML）</h3><p>假设目标变量t由确定的函数y(x,w)给出，这个函数被附加了高斯噪声，即</p>
 <script type="math/tex; mode=display">t = y(x,w)+ \epsilon</script><p>其中$\epsilon$是一个零均值的高斯随机变量，精度（方差的倒数）为$\beta$,因此:</p>
-<script type="math/tex; mode=display">p(t|x,w,\beta) = N(t| y(x,w),\beta^(-1))\tag{1}</script><p>如果假设一个平方损失函数，那么对于$x$的一个新值，<strong>最优的预测由目标变量的条件均值给出</strong>。在公式(1)给出的高斯条件分布下，条件均值为：</p>
+<script type="math/tex; mode=display">p(t|x,w,\beta) = N(t| y(x,w),\beta^{-1})\tag{1}</script><p>如果假设一个平方损失函数，那么对于$x$的一个新值，<strong>最优的预测由目标变量的条件均值给出</strong>。在公式(1)给出的高斯条件分布下，条件均值为：</p>
 <script type="math/tex; mode=display">E[t|x] = \int tp(t|x)dt = y(x,w)</script><p>考虑一个输入数据集$X={x_1, …,x_N}$,对应的目标值为$\mathbf{t}={t_1,…t_N}$。假设这些数据点是独立从分布(1)中抽取的，那么可以得到下面的似然函数表达式：</p>
 <script type="math/tex; mode=display">p(t|\mathbf{X},w,\beta) = \prod_{n=1}^{N}N(t_n|w^T\Phi (x_n),\beta^{-1})</script><p>其中$y(\mathbf{x},\mathbf{w}) = \sum_{j=0}^{M-1}w_j\Phi_j(x) =\mathbf{w}^T\mathbf{\Phi(x)} $<br>取似然函数的对数，我们有:</p>
 <script type="math/tex; mode=display">\ln p(\mathbf{t}|\mathbf{w},\beta)=\sum_{n=1}^{N}\ln N(t_n|w^T\Phi(x_n),\beta^{-1})</script><p>平方和误差函数的定义为：</p>
@@ -300,10 +383,10 @@
 <script type="math/tex; mode=display">y(\mathbf{x}) = \mathbf{w}^T\mathbf{x} + w_0</script><p>其中$\mathbf{w}$被称为权向量(weight)，$w_0$被称为偏置(bias)。如果是二分类问题，对于一个输入向量$\mathbf{x}$，如果$y(\mathbf{x})\geq 0$,则它被分到$C_1$中，否则被分到$C_2$中。决策边界由$y(\mathbf{x})=0$确定。对于多分类问题，引入一个K类判别函数:</p>
 <script type="math/tex; mode=display">y_k(\mathbf{x}) = \mathbf{w}_k^T\mathbf{x} + w_{k0} \tag{4}</script><p>对于点$x$, 如果对于所有的$j\neq k$都有$y_k(\mathbf{x}) &gt; y_j \mathbf{x}$就把他分到$C_k$。下面介绍三种学习线性判别函数参数的方法，分别是最小平方法，Fisher线性判别函数以及感知机算法。</p>
 <h4 id="最小平方法"><a href="#最小平方法" class="headerlink" title="最小平方法"></a>最小平方法</h4><p>将公式（4）写成向量形式:</p>
-<script type="math/tex; mode=display">\mathbf{y}(\mathbf{x}) = \tilde{\mathbf{W}} \tilde{\mathbf{x}}</script><p>其中$\tilde{\mathbf{W}}$是一个矩阵，第k列由D+1维向量 $(w_{k0},w_k^T)^T$ 组成，$\tilde{\mathbf{x}}$ 是对应的增广矩阵的输入向量 $(1,x^T)^T$ 。一个新的输入$x$被分配到输出$y_k=\tilde{w_k^T}\tilde{x}$最大的类别中。</p>
-<p>现在通过最小化平方和误差函数来确定参数矩阵$\tilde{\mathbf{W}}$,考虑训练数据集{ $\mathbf{x_n}, \mathbf{t_n}$},然后定义一个矩阵$\mathbf{T}$,它的第n行是向量$\mathbf{t}_n^T$,还定义了矩阵$\tilde{\mathbf{X}}$，它的第n行是向量$\tilde{x}_n^T$,这样，平方函数可以表示为：</p>
+<script type="math/tex; mode=display">\mathbf{y}(\mathbf{x}) = \tilde{\mathbf{W}} \tilde{\mathbf{x}}</script><p>其中$\tilde{\mathbf{W}}$是一个矩阵，第k列由D+1维向量$\tilde{w<em>k} = (w</em>{k0}, w_k^T)^T$组成，$\tilde{\mathbf{x}}$是对应的增广矩阵的输入向量$(1,x^T)^T$。一个新的输入x被分配到输出$y_k = \tilde{w_k^T}\tilde{x}$最大的类别中。</p>
+<p>现在通过最小化平方和误差函数来确定参数矩阵$\tilde{\mathbf{W}}$,考虑训练数据集$\left { \mathbf{x_n}, \mathbf{t_n} \right }$,然后定义一个矩阵$\mathbf{T}$,它的第n行是向量$\mathbf{t}_n^T$,还定义了矩阵$\tilde{\mathbf{X}}$，它的第n行是向量$\tilde{x}_n^T$,这样，平方函数可以表示为：</p>
 <script type="math/tex; mode=display">E_D(\tilde{\mathbf{W}}) = \frac{1}{2}Tr\left \{(\tilde{\mathbf{X}} \tilde{\mathbf{W}} -\mathbf{T})^T (\tilde{\mathbf{X}}\tilde{\mathbf{W}}-\mathbf{T})  \right \}</script><p>令上式关于$\tilde{\mathbf{W}}$的倒数为0，得到关于$\tilde{\mathbf{W}}$的解为$\tilde{\mathbf{W}}=(\tilde{\mathbf{X}}^T \tilde{\mathbf{X}})^{-1}\tilde{\mathbf{X}}\mathbf{T}$<br>根据$\tilde{\mathbf{W}}$这样我们可以得到判别函数。</p>
-<p>最小平方法对于判别函数的参数给出了精确的解析解，但即使作为一个判别函数，他仍然有很严重的问题。最小平方解对于离群点缺少鲁棒性，除此之外，在多分类问题上，即使是线性可分的数据集用最小平方判别函数也不能得到很好的结果。如下图3.1，左边是最小平方法对应的分类结果，右边是逻辑回归对应的结果，可以看到最小平方法的决策边界非常差。</p>
+<p>最小平方法对于判别函数的参数给出了精确的解析解，单即使作为一个判别函数，他仍然有很严重的问题。最小平方解对于离群点缺少鲁棒性，除此之外，在多分类问题上，即使是线性可分的数据集用最小平方判别函数也不能得到很好的结果。如下图3.1，左边是最小平方法对应的分类结果，右边是逻辑回归对应的结果，可以看到最小平方法的决策边界非常差。</p>
 <p><img src="/img/blogImg/square_06.png" alt="图3.1 最小平方与逻辑回归"></p>
 <h4 id="Fisher线性判别函数"><a href="#Fisher线性判别函数" class="headerlink" title="Fisher线性判别函数"></a>Fisher线性判别函数</h4><p>这里只讨论二分类的Fisher线性判别函数。我们可以从维度降低的⾓度考察线性分类模型。考虑二分类的情形。假设我们有一个D维入向量x，然后使用下式投影到一维:</p>
 <script type="math/tex; mode=display">y = \mathbf{w}^T\mathbf{x}</script><p>如果我们在$y$上设置一个阈值，然后把$y\geq -w_0$的样本分为$C_1$类，把其余样本分为$C_2$类，就得到了标准的线性分类器。通常来说，向一维投影会造成相当多的信息丢<br>失，因此在原始的D维空间能够完美地分离开的样本可能在⼀维空间中会相互重叠。但是，通过调整权向量w，我们可以选择让类别之间分开最大的一个投影。<br>考虑一个二分类问题，其中$C_1$类中有$N_1$个点，$C_2$类中有$N_2$个点，两类的均值向量为:</p>
@@ -325,7 +408,7 @@
 <p>对这个误差函数使用随机梯度下降算法。这样权向量的变化为:</p>
 <script type="math/tex; mode=display">w^{(\tau + 1)} = w^{\tau}- \eta\triangledown E_P(w) = w^{(\tau)}+\eta\Phi_n t_n</script><p>其中$\eta$是学习率参数，$\tau$表示运行次数。</p>
 <h3 id="生成模型"><a href="#生成模型" class="headerlink" title="生成模型"></a>生成模型</h3><p>对于每个类别$C_k$,独立地确定类条件密度$p(x|C_k)$。这是一个推断问题。然后，推断先验概率$p(C_k)$。之后利用贝叶斯定理:</p>
-<script type="math/tex; mode=display">p(C_k|x) = \frac{p(x|C_k)p(C_k)}{p(x)}</script><p>求出后验概率$p(C_k|x)$。<br>如果我们具体化了类条件概率$p(x|C_k)$参数化的函数形式，就能使用最大似然法确定参数的值以及先验类概率。这里先对二分类的情况进行建模，假设每个类别都有一个高斯类条件概率密度，且协方差矩阵相同。我们假设有一个数据集{$x_n, t_n$},其中$n = 1,…,N$，这里用$t_n$= 0或者1来表示分类结果为$C_1$或$C_2$。把先验概率记作$p(C_1)=\pi$,从而$p(C_2) = 1 -\pi$，对于一个来自类别$C_1$的数据点$x_n$,有：</p>
+<script type="math/tex; mode=display">p(C_k|x) = \frac{p(x|C_k)p(C_k)}{p(x)}</script><p>求出后验概率$p(C_k|x)$。<br>如果我们具体化了类条件概率$p(x|C_k)$参数化的函数形式，就能使用最大似然法确定参数的值以及先验类概率。这里先对二分类的情况进行建模，假设每个类别都有一个高斯类条件概率密度，且协方差矩阵相同。我们假设有一个数据集\left {x_n, t_n \right },其中$n = 1,…,N$，这里用$t_n$= 0或者1来表示分类结果为$C_1$或$C_2$。把先验概率记作$p(C_1)=\pi$,从而$p(C_2) = 1 -\pi$，对于一个来自类别$C_1$的数据点$x_n$,有：</p>
 <script type="math/tex; mode=display">p(x_n,C_1) = p(C_1)p(x_n|C_1 = \pi N(x_n|\mu_1,\sum)</script><p>对于类别$C_2$:</p>
 <script type="math/tex; mode=display">p(x_n,C_2) = p(C_2)p(x_n|C_2) = (1-\pi)N(x_n|\mu_2,\sum)</script><p>所以似然函数为:</p>
 <script type="math/tex; mode=display">p(\mathbf{t},\mathbf{X}|\pi,\mu_1,\mu_2,\sum) = \prod_{n=1}^{N}[\pi N(x_n|\mu_1,\sum)]^{t_n}[(1-\pi)N(x_n|\mu_2,\sum)]^{1-t_n}</script><p>其中$\mathbf{t}=(t_1,…,t_N)^T$<br>取似然函数的对数，令其关于$\pi$的导数为0,可得:</p>
@@ -337,21 +420,13 @@
 S_1 = \frac{1}{N_1}\sum_{n \in C_1}(x_n - \mu_1)(x_n - \mu_1)^T\\
 S_2 = \frac{1}{N_2}\sum_{n \in C_2}(x_n - \mu_2)(x_n - \mu_2)^T</script><p>它表⽰对一个与两类都有关系的协方差矩阵求加权平均。</p>
 <h3 id="判别模型"><a href="#判别模型" class="headerlink" title="判别模型"></a>判别模型</h3><p>除了生成模型之外，另一种方法是显示的使用一般的线性模型的函数形式，然后使用最大似然法直接确定他的参数。判别式方法的.个优点是通常有更少的可调节参数需要确定，并且预测表现也会提升，尤其是当类条件概率密度的假设没有很好地近似真实的分布的时候。<br>在一些一般的假设条件下，类别$C_1$的后验概率可以写成作用在特征向量$\Phi$的线性函数上的logistic sigmoid函数的形式，即：$p(C_1|\Phi) = y(\Phi) = \sigma(w^T\Phi)$且$p(C_2|\Phi) = 1-p(C_1|\Phi)$，这里$\sigma(\cdot)$是logistic <a href="https://en.wikipedia.org/wiki/Sigmoid_function函数" target="_blank" rel="external">sigmoid 函数</a>。这个模型称为logistic回归，是一个分类模型而不是回归模型。<br>与上一节提到的用最大似然法调节高斯类条件概率密度的方法，逻辑回归需要的参数明显更少，这是它的优势之一。利用最大似然方法来确定logistic回归模型的参数。很容易推导出:</p>
-<script type="math/tex; mode=display">\frac{d\sigma}{da} = \sigma(1-\sigma)</script><p>对于一个数据集{$\Phi_n, t_n$},其中$ \subset$ {0,1} ,$\Phi_n = \Phi(x_n)$且$n = 1,…,N$,似然函数可以写为:</p>
-<script type="math/tex; mode=display">p(\mathbf{t}|w) = \prod_{n=1}^N y_n^{t_n} (1-y_n)^{(1-t_n)}</script><p>其中$\mathbf{t}=(t_1,…,t_N)^T$且$y_n = p(C_1|\Phi_n)$。我们取似然函数的负对数来定义误差函数:</p>
-<script type="math/tex; mode=display">E(w) = -\ln p(\mathbf{t}|w) = -\sum_{n=1}^{N} \left \{ t_n \ln y_n + (1-t_n) \ln(1-y_n)\right \}</script><p>其中$y_n = \sigma(a_n)$且$a_n = w^T\Phi_n$，关于$w$取误差梯度，有:</p>
-<script type="math/tex; mode=display">\triangledown E(w) = \sum_{n=1}^{N}(y_n - t_n)\Phi_n</script><p>从上式我们看到对数似然函数的梯度的形式十分简单。，数据点n对梯度的贡献为目标值和模型预测<br>值之间的“误差”$y_n - t_n$与基函数向量$\Phi_n$相乘，且它的函数形式与线性回归模型中的平方和误差函数的梯度的函数形式完全相同。实际上逻辑回归与线性回归都可以用广义线性模型GLM(Generalized linear models)来描述，选择合适的参数就能分析出线性回归和逻辑回归都是GLM的一种特例。此外，与线性回归相比，逻辑回归对离群点的鲁棒性会更好。</p>
-<p>得到了逻辑回归关于$w$的倒数，可以用牛顿法或随机梯度下降法来求得最佳的参数值。</p>
-<h3 id="生成模型v-s判别模型"><a href="#生成模型v-s判别模型" class="headerlink" title="生成模型v.s判别模型"></a>生成模型v.s判别模型</h3><p>生成方法的特点：上面说到，生成方法学习联合概率密度分布$P(x,y)$，所以就可以从统计的角度表示数据的分布情况，能够反映同类数据本身的相似度。但它不关心到底划分各类的那个分类边界在哪。生成方法可以还原出联合概率分布$p(y|x)$，而判别方法不能。生成方法的学习收敛速度更快，即当样本容量增加的时候，学到的模型可以更快的收敛于真实模型，当存在隐变量时，仍可以用生成方法学习。此时判别方法就不能用。</p>
-<p>判别方法的特点：判别方法直接学习的是决策函数$y=f(x)$或者条件概率分布$p(y|x)$。不能反映训练数据本身的特性。但它寻找不同类别之间的最优分类面，反映的是异类数据之间的差异。直接面对预测，往往学习的准确率更高。由于直接学习$p(y|x)$或$p(x)$，可以对数据进行各种程度上的抽象、定义特征并使用特征，因此可以简化学习问题。<br>此外:由生成模型可以得到判别模型，但由判别模型得不到生成模型。</p>
-<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><ol>
-<li>Bishop C M. Pattern Recognition and Machine Learning (Information Science and Statistics)[M]. Springer-Verlag New York, Inc. 2006.</li>
+<script type="math/tex; mode=display">\frac{d\sigma}{da} = \sigma(1-\sigma)</script><p>对于一个数据集$\left {\Phi_n, t_n\right }$,其中$t\subset \left {0,1\right }$,$\Phi_n = \Phi(x_n)$且$n = 1,…,N$,似然函数可以写为:</p>
+<script type="math/tex; mode=display">p(\mathbf{t}|w) = \prod_{n=1}^N y_n^{t_n} (1-y_n)^{(1-t_n)}</script><h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
 <li><a href="http://blog.csdn.net/simplelove17/article/details/50806210" target="_blank" rel="external">PRML阅读笔记</a></li>
 <li><a href="https://chenrudan.github.io/blog/2016/01/09/logisticregression.html" target="_blank" rel="external">【机器学习算法系列之二】浅析Logistic Regression</a></li>
 <li><a href="https://www.zhihu.com/question/22007264/answer/20014371" target="_blank" rel="external">如何通俗地解释贝叶斯线性回归的基本原理？- 李文哲的回答</a> </li>
 <li><a href="http://www.cnblogs.com/little-YTMM/p/5399532.html" target="_blank" rel="external">贝叶斯思想以及与最大似然估计、最大后验估计的区别 - 江湖小妞 - 博客园</a></li>
 <li><a href="http://blog.csdn.net/zouxy09/article/details/8195017" target="_blank" rel="external">生成模型与判别模型 - zouxy09的专栏</a></li>
-<li><a href="http://cs229.stanford.edu/notes/cs229-notes1.pdf" target="_blank" rel="external">Generalized Linear Models - cs229 lecture notes</a></li>
 </ol>
 
       

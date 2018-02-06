@@ -6,17 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://honey0920.github.io">
-  <title>Tag: 技术 | 野草集</title>
+  <title>Spectral Graph Algorithm 学习小结 | 野草集</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="华中科技大学本科电信12级，研究生16级。喜欢算法也喜欢编程的小姑娘~">
-<meta property="og:type" content="website">
-<meta property="og:title" content="野草集">
-<meta property="og:url" content="https://honey0920.github.io/tags/技术/index.html">
+  <meta name="description" content="上周被老师派去了上海交大进行了为期一周的summer school，学习的主题是“算法谱图论”。 由于去之前也没有提前准备图论的知识，上课的过程显得有些被动。万幸是研一还是认真上过矩阵论，也接触过了一些算法，所以勉强能够跟上整个课程的节奏：基本概念还是知道了个大概，但是证明的细节我也确实没有去深究了。这里把我一周学习的内容做一个小结。 算法谱图论是什么wiki给出的解释是：“In mathemat">
+<meta name="keywords" content="技术">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spectral Graph Algorithm 学习小结">
+<meta property="og:url" content="https://honey0920.github.io/2017/08/04/graph-07/index.html">
 <meta property="og:site_name" content="野草集">
-<meta property="og:description" content="华中科技大学本科电信12级，研究生16级。喜欢算法也喜欢编程的小姑娘~">
+<meta property="og:description" content="上周被老师派去了上海交大进行了为期一周的summer school，学习的主题是“算法谱图论”。 由于去之前也没有提前准备图论的知识，上课的过程显得有些被动。万幸是研一还是认真上过矩阵论，也接触过了一些算法，所以勉强能够跟上整个课程的节奏：基本概念还是知道了个大概，但是证明的细节我也确实没有去深究了。这里把我一周学习的内容做一个小结。 算法谱图论是什么wiki给出的解释是：“In mathemat">
+<meta property="og:image" content="https://honey0920.github.io/img/blogImg/NetworkTopology-Ring.png">
+<meta property="og:updated_time" content="2018-02-06T00:36:10.125Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="野草集">
-<meta name="twitter:description" content="华中科技大学本科电信12级，研究生16级。喜欢算法也喜欢编程的小姑娘~">
+<meta name="twitter:title" content="Spectral Graph Algorithm 学习小结">
+<meta name="twitter:description" content="上周被老师派去了上海交大进行了为期一周的summer school，学习的主题是“算法谱图论”。 由于去之前也没有提前准备图论的知识，上课的过程显得有些被动。万幸是研一还是认真上过矩阵论，也接触过了一些算法，所以勉强能够跟上整个课程的节奏：基本概念还是知道了个大概，但是证明的细节我也确实没有去深究了。这里把我一周学习的内容做一个小结。 算法谱图论是什么wiki给出的解释是：“In mathemat">
+<meta name="twitter:image" content="https://honey0920.github.io/img/blogImg/NetworkTopology-Ring.png">
   
     <link rel="alternative" href="/atom.xml" title="野草集" type="application/atom+xml">
   
@@ -156,84 +160,77 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-graph-07" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/02/05/fisher-08/" class="archive-article-date">
-  	<time datetime="2018-02-04T19:12:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-05</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/02/05/fisher-08/">BOV与Fisher Vector进行特征编码的比较</a>
+    <h1 class="article-title" itemprop="name">
+      Spectral Graph Algorithm 学习小结
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-      
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/08/04/graph-07/" class="archive-article-date">
+        
+        <a href="/2017/08/04/graph-07/" class="archive-article-date">
   	<time datetime="2017-08-04T15:08:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-04</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/08/04/graph-07/">Spectral Graph Algorithm 学习小结</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>上周被老师派去了上海交大进行了为期一周的summer school，学习的主题是“算法谱图论”。 由于去之前也没有提前准备图论的知识，上课的过程显得有些被动。万幸是研一还是认真上过矩阵论，也接触过了一些算法，所以勉强能够跟上整个课程的节奏：基本概念还是知道了个大概，但是证明的细节我也确实没有去深究了。这里把我一周学习的内容做一个小结。</p>
+<h2 id="算法谱图论是什么"><a href="#算法谱图论是什么" class="headerlink" title="算法谱图论是什么"></a>算法谱图论是什么</h2><p>wiki给出的解释是：“In mathematics,  spectral graph theory is the study of the properties of a graph in relationship to the characteristic polynomial, eigenvalues, and eigenvectors of matrices associated with the  graph, such as its adjacency matrix or Laplacian matrix. ” 孙老师给我们讲的是，算法谱图论旨在用代数与几何的方法来表示“图”这个数据结构并探究图的内在特征。具体来说算法谱图论需要一些关于矩阵的基础，包括特征值，特征向量，矩阵多项式等；除此之外对解析几何也有一定要求，解析几何部分的内容可以将算法直观化。</p>
+<h2 id="算法谱图论的基本内容"><a href="#算法谱图论的基本内容" class="headerlink" title="算法谱图论的基本内容"></a>算法谱图论的基本内容</h2><p>从7月25日到7月29日，我们每天上午下午各上两个小时课,一共就是上了十节课，学习的内容的涉及面也比较广。总结下可能主要涉及到相关概念，谱性质与谱聚类和谱稀疏这三个大块来讲的。</p>
+<h3 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h3><p>$G = (V,E)$表示一个有$n$个顶点和$m$条边的无向图。 $u$顶点的邻居节点集合用$N(u)$表示，它的度（degree）为$d<em>u = |N(u)|$.对于集合$S\subseteq V$,用$vol(S) = \sum</em>{u \in S}d<em>u$,特别的，$vol(G) = \sum</em>{u \in V[G]} d<em>u$.令$D \in \mathbb{R}^{n \times n}$为一个对角矩阵，其中的每一个对角元素$D</em>{u,u} = d<em>u$。图G的邻接矩阵A定义为:如果点u与点v相连则$A</em>{u,v} = 1$，否则$A_{u,v}=0$。而G的拉普拉斯矩阵表示为$L= D - A$，$A$为G的邻接矩阵。正则化的拉普拉斯矩阵表示为$\mathcal{L} = D^{-\frac{1}{2}}LD^{-\frac{1}{2}} = I - D^{-\frac{1}{2}}AD^{-\frac{1}{2}}$。</p>
+<p>图中的随机游走表现为一系列的点$v<em>0,v_1…,v_l…,v_n$.$v_0$已经固定而每一个$v_i$均匀的从$v</em>{i-1}$的邻居节点中选取。图上的随机游走是马尔科夫链一个特殊的例子，图上的随机游走有时间对称性和可逆性，这意味着从一个方向上或是另一个方向上穿过给定路径的概率之间有关系。</p>
+<h3 id="谱性质"><a href="#谱性质" class="headerlink" title="谱性质"></a>谱性质</h3><h4 id="cheeger常数与cheeger不等式"><a href="#cheeger常数与cheeger不等式" class="headerlink" title="cheeger常数与cheeger不等式"></a>cheeger常数与cheeger不等式</h4><p>一个d-regular图中某个节点集$S \subseteq V$,令$h_G(S)= \frac{|\partial S|}{|S|}$,其中$\partial S= \left { (x,y) \in E(G): x \in S, y \in V(G)\S  \right }$。cheeger常数定义为$h(G) = \min_S h_G(S)$。从概率的角度看，这正是随机选取一个节点集$S$中顶点的边，那么边的‘扩展’到节点集$S$外的概率。使用拉普拉斯矩阵的第二小特征值$\lambda_2$可以将图的cheeger常数进行限定，具体说来可表示为<strong>cheeger不等式</strong>:</p>
+<script type="math/tex; mode=display">\frac{\lambda_2}{2} \leqslant h(G) \leqslant \sqrt{2\lambda_2}</script><p>Cheeger常数为正当且仅当G是完全图(connected graph),cheeger常数是值很小的正数表明该图存在一个”瓶颈”。考虑一个环形网络入图2所示,这个环的节点顺时针编号为1,2,3…顶点集和边的集合可以表示为：</p>
+<script type="math/tex; mode=display">V(G_N) =  \left \{1,2,3...,N-1, N \right \}</script><script type="math/tex; mode=display">E(G_N) = \left \{ (1,2),(2,3),...,(N-1,N),(N,1)\right \}</script><p>令$S$为这个连环链路中的$ \left \lfloor \frac{N}{2} \right \rfloor$个点，即：</p>
+<script type="math/tex; mode=display">S =  \left \{ 1,2,...,\left \lfloor \frac{N}{2} \right \rfloor \right \}</script><script type="math/tex; mode=display">\partial S = \left \{ (\left  \lfloor \frac{N}{2} \right \rfloor,\left \lfloor \frac{N}{2} \right \rfloor+1),(N,1)\right \}</script><p>当N趋近于$\infty$时，$\frac{|\partial S|}{|S|}$趋近于0。事实上，小的Cheeger常数就表示整个图会因为某一个点而影响整个性能。这个环形网络如果有一个节点崩掉了，那整个网络都不能互相通信了，这是我们不愿意发生的。<br><img src="/img/blogImg/NetworkTopology-Ring.png" alt="图3.2 环形网络"></p>
+<h4 id="谱扩展"><a href="#谱扩展" class="headerlink" title="谱扩展"></a>谱扩展</h4><p>扩展图(expand graph)是一系列有高可扩展性的稀疏图。由于稀疏性意味着更少的建造成本，高的可扩展性意味着高的连通性，所以扩展图的技术最开始被应用到<strong>低成本通信网络的构造</strong>。<br>构造扩展图的基本思想就是利用两个图之间顶点，边和度的关系来让新的图尽可能拥有原始图的特征。孙老师上课的时候提到了两种构造图的方法：置换积（Replacement Product）和之子积（Zig-Zag Product）.对于有$N$个定点，$M$条边，$D$度的大图$G$和$n$个定点，$m$条边，$d$度的小图$H$，用置换积构造的图会有$N \times n$个定点，$ M \times m $条边，$D$度；而用之子积构造的图会有$N \times D$个定点，$d^2$度，$M-1$条边。总体来说，置换积的度仅取决于小图的度，它可以用来在不丢失图的连通性的条件下减小图的度，而之子积继承了大图的大小，继承了小图的度，而扩展性则综合了大图和小图的特性，所以之子积可以用来建立具有有界度和良好扩张性质的大图。</p>
+<h3 id="谱聚类和谱稀疏"><a href="#谱聚类和谱稀疏" class="headerlink" title="谱聚类和谱稀疏"></a>谱聚类和谱稀疏</h3><p>谱聚类和谱稀疏是孙老师最后讲的两个部分，这两块在很多方面都有应用，而且也是现在的研究热点。</p>
+<p>一个网络中聚类之间的连通率（conductance）往往可以评判网络之间的通信性能。（原句是Clusters of low conductance in networks appearing in practice usually capture the notation of community），寻找聚类的算法也经常被应用到通信检测和网络分析等方面。K聚类问题就是把一个图分为K部分，每一部分的cheeger 常数（conductance）都很小。谱聚类算法利用了图的割(cut)与图正则化拉普拉斯矩阵的特征向量的关系，即<strong>结构定理(The Structure Theorem )</strong>。</p>
+<p>稀疏图(sparse graph)表示边的数量和点的数量几乎成正比的图。由于大部分算法在稀疏图上运行的时间更少，同时稀疏图也更节省存储空间，所以将一个图G转换为特征相似的稀疏图H是有必要的。 <em>Spielman-Srivastava</em>算法可以通过特定概率来采样原图的边，从而得到稀疏图，但这种方式计算复杂度相对较大。除此之外，孙老师所在的组最近也提出了线性时间的谱稀疏算法。</p>
+<h2 id="算法谱图论的应用"><a href="#算法谱图论的应用" class="headerlink" title="算法谱图论的应用"></a>算法谱图论的应用</h2><p>总的来说，算法谱图论其实就是就是研究图上的一些代数或是几何特性，所以只要某个object可以用graph来表示出来，那么就可以用算法谱图论的一些算法来解决问题。具体来说可能有下面几个方面：</p>
+<ul>
+<li><strong>图像分割(Image segementation)</strong>，用cheeger常数可以算出图的最小割，从而得到相应的分割线，但是这个分割可能并不理想。</li>
+<li><strong>PageRank</strong> 通过将网络中网页之前互联的关系表示成邻接矩阵，可以用矩阵的特征来获得链接的排序。</li>
+<li><strong>网络通信</strong> 前面提到的扩展图与图的分割，涉及到建造优性能网络的问题。</li>
+<li><strong>社交网络</strong> 通过将人与人之间的互联关系建模，对用户进行基于某种特性的分类。(graph clusting)</li>
+<li><strong>数据集合并</strong>  用谱扩展(Construction of Expander Graphs)的方法可以在较短时间内将来源不同的数据集合成新的数据集。</li>
+</ul>
+<h2 id="学习体会"><a href="#学习体会" class="headerlink" title="学习体会"></a>学习体会</h2><p>这次学习的最大体会就是，千万不要高估了自己，有好多比你聪明得多的人比你还要努力。在上交的室友是个大四的妹子，可是去年就已经发了一篇A类的论文还是best paper award，才大四已经在准备托福要研究生毕业出国了。还有上课时坐在前面的一群复旦的妹子，长得好看不说，一下课就在讨论上课的内容，关键是讨论的东西我还不怎么能听得懂（T.T），有一种我的大学四年是不是白学了的感觉~ 诚然，数学功底和英语功底在做研究这个方面至关重要，但是最重要的还是<strong>与优秀的人交流</strong>。如果只是呆在华科，与实验室的学长比，或是跟选同一门课的同学比（没错我说的就是软件无线电课），可能我是会有一些优越感。呆在一个自我感觉良好的地方未必是好事，久而久之毕竟会消磨你的斗志和上进心。在下半年再给自己立一个flag，在自己的研究方向阅读大量文献并思考提出问题，与文章作者进行email交流并有所收获。嗯，愿自己变得更优秀。</p>
 
-        <div class="article-info info-on-right">
-          
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -245,209 +242,115 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://honey0920.github.io/2017/08/04/graph-07/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/07/11/prml-06/" class="archive-article-date">
-  	<time datetime="2017-07-11T12:30:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-11</time>
-</a>
-        </div>
-    	 
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/07/11/prml-06/">从贝叶斯的观点看线性分类和线性回归</a>
-    </h1>
+    <a href="/2018/02/05/fisher-08/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          BOV与Fisher Vector进行特征编码的比较
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/07/11/prml-06/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">从贝叶斯的观点看线性分类和线性回归</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+  <div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="graph-07" data-title="Spectral Graph Algorithm 学习小结" data-url="https://honey0920.github.io/2017/08/04/graph-07/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"honey0920"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技术</a>
-        		</li>
-      		
-		</ul>
-	</div>
 
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/06/12/optimization-05/" class="archive-article-date">
-  	<time datetime="2017-06-12T12:52:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-12</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/12/optimization-05/">cs231n assignment2-最优化小结</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/05/19/classifier-04/" class="archive-article-date">
-  	<time datetime="2017-05-19T11:21:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/05/19/classifier-04/">cs231n assignment1-几种分类算法</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/04/25/scrapy-03/" class="archive-article-date">
-  	<time datetime="2017-04-25T14:30:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-25</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/25/scrapy-03/">网络爬虫的原理与应用</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/30/depth-02/" class="archive-article-date">
-  	<time datetime="2017-03-30T13:49:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-30</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/30/depth-02/">深度估计&amp;平面检测小结</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -470,9 +373,9 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		root: "/",
